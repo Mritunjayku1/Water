@@ -14,7 +14,7 @@ public class MyHashMap{
 		};
 		System.out.println("before comp: "+l1);
 		Collections.sort(l1,comp);
-		System.out.println("after comp: "+l1);
+		System.out.println(" Test after comp: "+l1);
 	}
 	
 }
