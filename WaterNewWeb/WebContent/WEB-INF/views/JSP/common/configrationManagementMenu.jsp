@@ -171,6 +171,15 @@ $(function(){
 		if(url.indexOf("zoneDivisionManagement")>0){
 			$('ul li:nth-child(4)').addClass('selectionClass');
 			}
+		if(url.indexOf("districtManagement")>0){
+			$('ul li:nth-child(5)').addClass('selectionClass');
+			}
+		if(url.indexOf("districtTalukManagement")>0){
+			$('ul li:nth-child(6)').addClass('selectionClass');
+			}
+		if(url.indexOf("talukVillageManagement")>0){
+			$('ul li:nth-child(7)').addClass('selectionClass');
+			}
 	
 });
 
@@ -184,8 +193,12 @@ $(function(){
 	
 	 <li><a href="configrationManagement.do" id='menu1' > User</a> </li> 
 	 <li><a href="categoryManagement.do" id='menu2'>Category Type</a></li>
-	 <li><a href="reConnectionTypeManagement.do" id='menu2'>Connection Type</a>
-	 </li><li><a href="zoneDivisionManagement.do" id='menu2'>Zone/Division </a></li>  
+	 <li><a href="reConnectionTypeManagement.do" id='menu2'>Connection Type</a></li>
+	 <li><a href="zoneDivisionManagement.do" id='menu2'>Zone/Division </a></li>
+	 <li><a href="districtManagement.do" id='menu2'>District </a></li> 
+	  <li><a href="districtTalukManagement.do" id='menu2'>District/Taluk </a></li> 
+	   <li><a href="talukVillageManagement.do" id='menu2'>Taluk/Village </a></li> 
+	   
 
 	</ul>
 	

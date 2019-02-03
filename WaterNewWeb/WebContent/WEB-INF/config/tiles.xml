@@ -97,7 +97,18 @@
 		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/zoneDivisionManagement.jsp"></put-attribute>
 	</definition>
-	
+	<definition name="districtManagement" extends="ConfigrationManagement.definition">
+		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/districtManagement.jsp"></put-attribute>
+		
+	</definition><definition name="districtTalukManagement" extends="ConfigrationManagement.definition">
+		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/districtTalukManagement.jsp"></put-attribute>
+	</definition>
+	<definition name="talukVillageManagement" extends="ConfigrationManagement.definition">
+		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/talukVillageManagement.jsp"></put-attribute>
+	</definition>
 
 
 	<!-- CE Tiles configuration Start -->

@@ -91,6 +91,12 @@ public class CompanyDtl implements Serializable {
 
 	@Column(name = "REQ_KLD", nullable = false, length = 100)
 	private String reqKld;
+	
+	@Column(name = "GST_AMOUNT", nullable = false, length = 100)
+	private String gstAmount;
+	
+	@Column(name = "TOTAL_AMOUNT", nullable = false, length = 100)
+	private String totalAmount;
 
 	@Column(name = "INTR_PLUM_STATUS", nullable = true, length = 100)
 	private Integer intrPlumStatus;
@@ -117,6 +123,9 @@ public class CompanyDtl implements Serializable {
 
 	@Column(name = "APPLICATION_STATUS", nullable = false, length = 100)
 	private Integer applicatioStatus;
+	
+	@Column(name = "ACTIVE", nullable = false, length = 100)
+	private Integer active;
 
 	// @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "INSPECTION_DATE", nullable = true, length = 26)
@@ -136,317 +145,492 @@ public class CompanyDtl implements Serializable {
 
 	@Column(name = "CAF_ID", length = 100)
 	private String cafId;
+	
+	
+	
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "CREATE_TS", nullable = false, length = 26)
+	private Date createTs;
 
-	public String getPlotNo() {
-		return plotNo;
-	}
+	
+	@Column(name = "CREATE_USERID", nullable = false, length = 30)
+	private String createUserId;
 
-	public void setPlotNo(String plotNo) {
-		this.plotNo = plotNo;
-	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "UPDATE_TS", nullable = false, length = 26)
+	private Date updateTs;
 
-	public String getStreetName() {
-		return streetName;
-	}
+	
+	@Column(name = "UPDATE_USERID", nullable = false, length = 30)
+	private String updateUserId;
 
-	public void setStreetName(String streetName) {
-		this.streetName = streetName;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getInspectionDate() {
-		return inspectionDate;
-	}
-
-	public void setInspectionDate(String inspectionDate) {
-		this.inspectionDate = inspectionDate;
-	}
-
-	public void setTentativeDate(String tentativeDate) {
-		this.tentativeDate = tentativeDate;
-	}
 
 	public String getAppId() {
 		return appId;
 	}
 
+
 	public void setAppId(String appId) {
 		this.appId = appId;
 	}
+
 
 	public String getLegCompName() {
 		return legCompName;
 	}
 
+
 	public void setLegCompName(String legCompName) {
 		this.legCompName = legCompName;
 	}
+
 
 	public String getCdoorNo() {
 		return cdoorNo;
 	}
 
+
 	public void setCdoorNo(String cdoorNo) {
 		this.cdoorNo = cdoorNo;
 	}
+
 
 	public String getCplotNo() {
 		return cplotNo;
 	}
 
+
 	public void setCplotNo(String cplotNo) {
 		this.cplotNo = cplotNo;
 	}
+
 
 	public String getCstreetName() {
 		return cstreetName;
 	}
 
+
 	public void setCstreetName(String cstreetName) {
 		this.cstreetName = cstreetName;
 	}
+
 
 	public String getClocation() {
 		return clocation;
 	}
 
+
 	public void setClocation(String clocation) {
 		this.clocation = clocation;
 	}
+
 
 	public String getCpinCode() {
 		return cpinCode;
 	}
 
+
 	public void setCpinCode(String cpinCode) {
 		this.cpinCode = cpinCode;
 	}
+
 
 	public String getSalutation() {
 		return salutation;
 	}
 
+
 	public void setSalutation(String salutation) {
 		this.salutation = salutation;
 	}
+
 
 	public String getContactPersonName() {
 		return contactPersonName;
 	}
 
+
 	public void setContactPersonName(String contactPersonName) {
 		this.contactPersonName = contactPersonName;
 	}
+
 
 	public Long getMobileNum() {
 		return mobileNum;
 	}
 
+
 	public void setMobileNum(Long mobileNum) {
 		this.mobileNum = mobileNum;
 	}
+
 
 	public Long getLandLineNo() {
 		return landLineNo;
 	}
 
+
 	public void setLandLineNo(Long landLineNo) {
 		this.landLineNo = landLineNo;
 	}
+
 
 	public String getEmailAddr() {
 		return emailAddr;
 	}
 
+
 	public void setEmailAddr(String emailAddr) {
 		this.emailAddr = emailAddr;
 	}
+
 
 	public MasterCategory getCategoryType() {
 		return categoryType;
 	}
 
+
 	public void setCategoryType(MasterCategory categoryType) {
 		this.categoryType = categoryType;
 	}
+
 
 	public String getAddrPremSought() {
 		return addrPremSought;
 	}
 
+
 	public void setAddrPremSought(String addrPremSought) {
 		this.addrPremSought = addrPremSought;
 	}
+
 
 	public String getDoorNo() {
 		return doorNo;
 	}
 
+
 	public void setDoorNo(String doorNo) {
 		this.doorNo = doorNo;
 	}
+
+
+	public String getPlotNo() {
+		return plotNo;
+	}
+
+
+	public void setPlotNo(String plotNo) {
+		this.plotNo = plotNo;
+	}
+
+
+	public String getStreetName() {
+		return streetName;
+	}
+
+
+	public void setStreetName(String streetName) {
+		this.streetName = streetName;
+	}
+
+
+	public String getLocation() {
+		return location;
+	}
+
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 
 	public String getDistrict() {
 		return district;
 	}
 
+
 	public void setDistrict(String district) {
 		this.district = district;
 	}
+
 
 	public String getTaluk() {
 		return taluk;
 	}
 
+
 	public void setTaluk(String taluk) {
 		this.taluk = taluk;
 	}
+
 
 	public String getVillage() {
 		return village;
 	}
 
+
 	public void setVillage(String village) {
 		this.village = village;
 	}
+
 
 	public String getPincode() {
 		return pincode;
 	}
 
+
 	public void setPincode(String pincode) {
 		this.pincode = pincode;
 	}
+
 
 	public String getSurveyFieldNo() {
 		return surveyFieldNo;
 	}
 
+
 	public void setSurveyFieldNo(String surveyFieldNo) {
 		this.surveyFieldNo = surveyFieldNo;
 	}
+
 
 	public Integer getIsNewConnection() {
 		return isNewConnection;
 	}
 
+
 	public void setIsNewConnection(Integer isNewConnection) {
 		this.isNewConnection = isNewConnection;
 	}
+
 
 	public String getReqKld() {
 		return reqKld;
 	}
 
+
 	public void setReqKld(String reqKld) {
 		this.reqKld = reqKld;
 	}
+
 
 	public Integer getIntrPlumStatus() {
 		return intrPlumStatus;
 	}
 
+
 	public void setIntrPlumStatus(Integer intrPlumStatus) {
 		this.intrPlumStatus = intrPlumStatus;
 	}
+
 
 	public Integer getWorkType() {
 		return workType;
 	}
 
+
 	public void setWorkType(Integer workType) {
 		this.workType = workType;
 	}
+
 
 	public String getUploadSitePlan() {
 		return uploadSitePlan;
 	}
 
+
 	public void setUploadSitePlan(String uploadSitePlan) {
 		this.uploadSitePlan = uploadSitePlan;
 	}
+
 
 	public String getUploadSumpDrawing() {
 		return uploadSumpDrawing;
 	}
 
+
 	public void setUploadSumpDrawing(String uploadSumpDrawing) {
 		this.uploadSumpDrawing = uploadSumpDrawing;
 	}
+
 
 	public String getUploadOwnerShip() {
 		return uploadOwnerShip;
 	}
 
+
 	public void setUploadOwnerShip(String uploadOwnerShip) {
 		this.uploadOwnerShip = uploadOwnerShip;
 	}
+
 
 	public String getFromWebSite() {
 		return fromWebSite;
 	}
 
+
 	public void setFromWebSite(String fromWebSite) {
 		this.fromWebSite = fromWebSite;
 	}
+
 
 	public EmployeeDetails getUserId() {
 		return userId;
 	}
 
+
 	public void setUserId(EmployeeDetails userId) {
 		this.userId = userId;
 	}
+
 
 	public SmsTemp getSmsId() {
 		return SmsId;
 	}
 
+
 	public void setSmsId(SmsTemp smsId) {
 		SmsId = smsId;
 	}
+
 
 	public Integer getApplicatioStatus() {
 		return applicatioStatus;
 	}
 
+
 	public void setApplicatioStatus(Integer applicatioStatus) {
 		this.applicatioStatus = applicatioStatus;
 	}
+
+
+	public String getInspectionDate() {
+		return inspectionDate;
+	}
+
+
+	public void setInspectionDate(String inspectionDate) {
+		this.inspectionDate = inspectionDate;
+	}
+
 
 	public Date getCompletionDate() {
 		return completionDate;
 	}
 
+
 	public void setCompletionDate(Date completionDate) {
 		this.completionDate = completionDate;
 	}
+
 
 	public Date getCommissionDate() {
 		return commissionDate;
 	}
 
+
 	public void setCommissionDate(Date commissionDate) {
 		this.commissionDate = commissionDate;
 	}
 
-	public String getCafId() {
-		return cafId;
-	}
-
-	public void setCafId(String cafId) {
-		this.cafId = cafId;
-	}
 
 	public String getTentativeDate() {
 		return tentativeDate;
 	}
 
+
+	public void setTentativeDate(String tentativeDate) {
+		this.tentativeDate = tentativeDate;
+	}
+
+
+	public String getCafId() {
+		return cafId;
+	}
+
+
+	public void setCafId(String cafId) {
+		this.cafId = cafId;
+	}
+
+
+	public Date getCreateTs() {
+		return createTs;
+	}
+
+
+	public void setCreateTs(Date createTs) {
+		this.createTs = createTs;
+	}
+
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+
+	public Date getUpdateTs() {
+		return updateTs;
+	}
+
+
+	public void setUpdateTs(Date updateTs) {
+		this.updateTs = updateTs;
+	}
+
+
+	public String getUpdateUserId() {
+		return updateUserId;
+	}
+
+
+	public void setUpdateUserId(String updateUserId) {
+		this.updateUserId = updateUserId;
+	}
+
+
+	public String getGstAmount() {
+		return gstAmount;
+	}
+
+
+	public void setGstAmount(String gstAmount) {
+		this.gstAmount = gstAmount;
+	}
+
+
+	public String getTotalAmount() {
+		return totalAmount;
+	}
+
+
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+	public Integer getActive() {
+		return active;
+	}
+
+
+	public void setActive(Integer active) {
+		this.active = active;
+	}
+
+
+	
 }

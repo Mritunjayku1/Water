@@ -116,7 +116,7 @@ public class ApplicationController {
 		}
 	@RequestMapping(value = "/companyRegister", method = RequestMethod.POST)
 	@ResponseBody
-	public String appRegister(AppFormBean appFormBean,HttpServletRequest request) {
+	public String companyRegister(AppFormBean appFormBean,HttpServletRequest request) {
 
 		RestTemplate restTemplate = new RestTemplate();
 	

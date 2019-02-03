@@ -24,6 +24,7 @@ import com.water.bean.TransactionFormBean;
 import com.water.dao.ApplicationDao;
 import com.water.daoImpl.ApplicationDaoImpl;
 import com.water.model.Application;
+import com.water.model.CompanyDtl;
 import com.water.model.ComplaintDetails;
 import com.water.model.MasterCategory;
 import com.water.model.MasterDivision;
@@ -80,7 +81,7 @@ public class ApplicationService {
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		AppDao = new ApplicationDaoImpl();
-		Application applicationDtls = new Application();
+		CompanyDtl applicationDtls = new CompanyDtl();
 		SmsTemp smstemp = new SmsTemp();
 		smstemp.setSmsId(1);
 
@@ -89,72 +90,41 @@ public class ApplicationService {
 		applicationDtls.setCstreetName(appFormBean.getCstreetName());
 		applicationDtls.setClocation(appFormBean.getClocation());
 		applicationDtls.setCpinCode(appFormBean.getCpinCode());
-		applicationDtls.setWebAddress(appFormBean.getWebAddress());
 		applicationDtls.setIsNewConnection(appFormBean.getIsNewConnection());
 		applicationDtls.setLandLineNo(appFormBean.getLandLineNo());
 
-		applicationDtls.setAnnAssmtVal(appFormBean.getAnnAssmtVal());
-		applicationDtls.setBillNo1(appFormBean.getBillNo1());
-		applicationDtls.setBillNo2(appFormBean.getBillNo2());
 		applicationDtls.setSalutation(appFormBean.getSalutation());
 		applicationDtls
 				.setContactPersonName(appFormBean.getContactPersonName());
 
-		applicationDtls.setDdNum(appFormBean.getDdNum());
-		if (appFormBean.getDivId() != null
-				&& !appFormBean.getDivId().equals("")) {
-			applicationDtls.setDivId((MasterDivision) session.get(
-					MasterDivision.class, appFormBean.getDivId()));
-		}
+		
 		applicationDtls.setEmailAddr(appFormBean.getEmailAddr());
 
 		applicationDtls.setFromWebSite("Industry");
-		applicationDtls.setInsStatusId(1);
 		applicationDtls.setIntrPlumStatus(appFormBean.getIntrPlumStatus());
 
-		applicationDtls.setIsExistConnectionForAlteration(appFormBean
-				.getIsExistConnectionForAlteration());
-		applicationDtls.setIsReconnectionForService(appFormBean
-				.getIsReconnectionForService());
 		applicationDtls.setLegCompName(appFormBean.getLegCompName());
 		applicationDtls.setMobileNum(appFormBean.getMobileNum());
 
-		applicationDtls.setPayDtls(null);
-		applicationDtls.setReqMld(appFormBean.getReqMld());
-		applicationDtls.setStatusFlag('E');
+		//applicationDtls.setPayDtls(null);
+		applicationDtls.setReqKld(appFormBean.getReqMld());
+		applicationDtls.setActive(0);
 		applicationDtls.setUserId(null);
-		applicationDtls.setWatSevProp(appFormBean.getWatSevProp());
 		applicationDtls.setWorkType(appFormBean.getWorkType());
 		applicationDtls.setSmsId(smstemp);
 		applicationDtls.setCategoryType((MasterCategory) session.get(
 				MasterCategory.class, appFormBean.getCategoryType()));
-		if (appFormBean.getReconnectionType() != null
-				&& !appFormBean.getReconnectionType().equals("")) {
-			applicationDtls.setReconnectionType((MasterReconnection) session
-					.get(MasterReconnection.class,
-							appFormBean.getReconnectionType()));
-		}
-		applicationDtls.setCeStatus((MasterStatus) session.get(
-				MasterStatus.class, 1));
-		applicationDtls.setEeStatus((MasterStatus) session.get(
-				MasterStatus.class, 1));
-		applicationDtls.setMcStatus((MasterStatus) session.get(
-				MasterStatus.class, 1));
-		if (appFormBean.getCmwssbZoneNum() != null
-				&& !appFormBean.getCmwssbZoneNum().equals("")) {
-			applicationDtls.setCmwssbZoneNum((MasterZone) session.get(
-					MasterZone.class, appFormBean.getCmwssbZoneNum()));
-		}
+		
 		applicationDtls.setCreateTs(new Date());
 
 		applicationDtls.setDoorNo(appFormBean.getDoorNo());
 		applicationDtls.setPlotNo(appFormBean.getPlotNo());
 		applicationDtls.setStreetName(appFormBean.getStreetName());
 		applicationDtls.setLocation(appFormBean.getLocation());
-		applicationDtls.setPinCode(appFormBean.getPinCode());
+		applicationDtls.setPincode(appFormBean.getPinCode());
 		applicationDtls.setCafId(appFormBean.getCafId());
-		applicationDtls.setGstAmount(Integer.parseInt(appFormBean.getGstAmount()));
-		applicationDtls.setTotalAmount(Integer.parseInt(appFormBean.getTotalAmount()));
+		applicationDtls.setGstAmount(appFormBean.getGstAmount());
+		applicationDtls.setTotalAmount(appFormBean.getTotalAmount());
 		session.save(applicationDtls);
 		session.beginTransaction().commit();
         return String.valueOf(applicationDtls.getAppId());

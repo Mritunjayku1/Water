@@ -17,16 +17,22 @@ import com.water.bean.ApplicationBean;
 import com.water.bean.CategoryFormBean;
 import com.water.bean.CmwWaterConnBean;
 import com.water.bean.ConnectionFormBean;
+import com.water.bean.DistrictFormBean;
+import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.EmployeeFormBean;
+import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 import com.water.dao.DashboardDao;
 import com.water.model.Application;
 import com.water.model.EmployeeDetails;
 import com.water.model.MasterCategory;
+import com.water.model.MasterDistrict;
 import com.water.model.MasterDivision;
 import com.water.model.MasterReconnection;
 import com.water.model.MasterRole;
 import com.water.model.MasterStatus;
+import com.water.model.MasterTaluk;
+import com.water.model.MasterVillage;
 import com.water.model.MasterZone;
 import com.water.model.SmsTemp;
 import com.water.util.Constant;
@@ -1570,6 +1576,225 @@ public String editDivision(ZoneDivisionFormBean zoneDivisionFormBean ){
 		.setResultTransformer(Transformers.aliasToBean(ZoneDivisionFormBean.class));
 			return cr.list();
 		}
+	
+	
+	
+	
+	
+	
+	
+	
+
+public String addDistrict(DistrictFormBean categoryFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterDistrict masterDistrict = new MasterDistrict();
+	masterDistrict.setDistrictName(categoryFormBean.getDistrictName());
+	masterDistrict.setUpdateTs(new Date());
+	masterDistrict.setCreateTs(new Date());
+	masterDistrict.setUpdateUserId("Administrator");
+	masterDistrict.setCreateUserId("Administrator");
+	session.save(masterDistrict);
+	tx.commit();
+		return "District Added Successfully";
+	}
+public String editDistrict(DistrictFormBean categoryFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterDistrict masterDistrict = (MasterDistrict)session.get(MasterDistrict.class,Integer.parseInt(categoryFormBean.getDistrictId()));
+	masterDistrict.setDistrictName(categoryFormBean.getDistrictName());
+	
+	masterDistrict.setUpdateTs(new Date());
+	session.update(masterDistrict);
+	tx.commit();
+		return "District Updated Successfully";
+	}
+	
+	public String deleteDistrict(DistrictFormBean categoryFormBean ){
+		
+		String[] categoryArray = categoryFormBean.getDistrictId().split(",");
+		
+		for(int i=0;i<categoryArray.length;i++){
+			Session session = sessionFactory.openSession();
+			Transaction tx =  session.beginTransaction();
+			int userid=Integer.parseInt(categoryArray[i]);
+			MasterDistrict masterDistrict = (MasterDistrict)session.get(MasterDistrict.class,userid);
+		session.delete(masterDistrict);
+		tx.commit();
+		}
+			return "District deleted Successfully";
+		}
+	public List<MasterDistrict> getDistrictDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterDistrict.class,"app");
+			return cr.list();
+		}
+	
+
+	
+	
+	
+	
+	
+	
+	
+
+public String addTaluk(DistrictTalukFormBean districtTalukFormBean ){
+	
+	String[] talukArray = districtTalukFormBean.getTalukName().split(",");
+	
+	for(int i=0;i<talukArray.length;i++){
+	
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterTaluk masterTaluk = new MasterTaluk();
+	masterTaluk.setDistrictId((MasterDistrict)session2.get(MasterDistrict.class,Integer.parseInt(districtTalukFormBean.getDistrictTalukId())));
+	masterTaluk.setTalukName(talukArray[i]);
+	masterTaluk.setUpdateTs(new Date());
+	masterTaluk.setCreateTs(new Date());
+	masterTaluk.setUpdateUserId("Administrator");
+	masterTaluk.setCreateUserId("Administrator");
+	
+	session2.save(masterTaluk);
+	tx2.commit();
+	}
+		return "Taluk Added Successfully";
+	}
+public String editTaluk(DistrictTalukFormBean districtTalukFormBean ){
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterTaluk masterTaluk = (MasterTaluk)session2.get(MasterTaluk.class,Integer.parseInt(districtTalukFormBean.getDistrictTalukId()));
+	masterTaluk.setTalukName(districtTalukFormBean.getTalukName());
+	masterTaluk.setUpdateTs(new Date());
+	masterTaluk.setUpdateUserId("Administrator");
+	session2.update(masterTaluk);
+	tx2.commit();
+		return "District Taluk Updated Successfully";
+	}
+	
+	public String deleteTaluk(DistrictTalukFormBean districtTalukFormBean ){
+		
+		String[] talukArray = districtTalukFormBean.getDistrictTalukId().split(",");
+		
+		for(int i=0;i<talukArray.length;i++){
+			Session session = sessionFactory.openSession();
+			Transaction tx =  session.beginTransaction();
+			int talukid=Integer.parseInt(talukArray[i]);
+			MasterTaluk masterTaluk = (MasterTaluk)session.get(MasterTaluk.class,talukid);
+		session.delete(masterTaluk);
+		tx.commit();
+		}
+			return "District Taluk deleted Successfully";
+		}
+	public List<DistrictTalukFormBean> getTalukDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterTaluk.class,"app")
+				.createCriteria("app.districtId","district")
+				.setProjection(Projections.projectionList()
+			            .add(Projections.property("district.districtName"),"districtName")
+			            .add(Projections.property("app.talukName"),"talukName")  
+			            
+			            .add(Projections.property("district.districtId"),"districtId")  
+			            .add(Projections.property("app.talukId"),"talukId"))
+			
+		.setResultTransformer(Transformers.aliasToBean(DistrictTalukFormBean.class));
+			return cr.list();
+		}
+	
+	
+
+	
+	
+	
+	
+	
+	
+
+public String addVillage(TalukVillageFormBean talukVillageFormBean ){
+	
+	String[] villageArray = talukVillageFormBean.getVillageName().split(",");
+	
+	for(int i=0;i<villageArray.length;i++){
+	
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterVillage masterVillage = new MasterVillage();
+	masterVillage.setTalukId((MasterTaluk)session2.get(MasterTaluk.class,Integer.parseInt(talukVillageFormBean.getTalukVillageId())));
+	masterVillage.setVillageName(villageArray[i]);
+
+	masterVillage.setUpdateTs(new Date());
+	masterVillage.setCreateTs(new Date());
+	masterVillage.setUpdateUserId("Administrator");
+	masterVillage.setCreateUserId("Administrator");
+	
+	session2.save(masterVillage);
+	tx2.commit();
+	}
+		return "Village Added Successfully";
+	}
+public String editVillage(TalukVillageFormBean talukVillageFormBean ){
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterVillage masterVillage = (MasterVillage)session2.get(MasterVillage.class,Integer.parseInt(talukVillageFormBean.getTalukVillageId()));
+	masterVillage.setVillageName(talukVillageFormBean.getVillageName());
+	masterVillage.setUpdateTs(new Date());
+	masterVillage.setUpdateUserId("Administrator");
+	session2.update(masterVillage);
+	tx2.commit();
+		return "Taluk Village Updated Successfully";
+	}
+	
+	public String deleteVillage(TalukVillageFormBean talukVillageFormBean ){
+		
+		String[] villageArray = talukVillageFormBean.getTalukVillageId().split(",");
+		
+		for(int i=0;i<villageArray.length;i++){
+			Session session = sessionFactory.openSession();
+			Transaction tx =  session.beginTransaction();
+			int villageid=Integer.parseInt(villageArray[i]);
+			MasterVillage masterVillage = (MasterVillage)session.get(MasterVillage.class,villageid);
+		session.delete(masterVillage);
+		tx.commit();
+		}
+			return "Taluk Village deleted Successfully";
+		}
+	public List<TalukVillageFormBean> getVillageDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterVillage.class,"app")
+				.createCriteria("app.talukId","taluk")
+				.setProjection(Projections.projectionList()
+			            .add(Projections.property("taluk.talukName"),"talukName")
+			            .add(Projections.property("app.villageName"),"villageName")  
+			            
+			            
+			            .add(Projections.property("taluk.talukId"),"talukId")  
+			            .add(Projections.property("app.villageId"),"villageId"))
+			
+		.setResultTransformer(Transformers.aliasToBean(TalukVillageFormBean.class));
+			return cr.list();
+		}
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

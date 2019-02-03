@@ -39,9 +39,12 @@ import com.water.bean.ComplaintBean;
 import com.water.bean.ConnectionFormBean;
 import com.water.bean.DashboardBean;
 import com.water.bean.DashboardCountBean;
+import com.water.bean.DistrictFormBean;
+import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.DocumentBean;
 import com.water.bean.EmployeeFormBean;
 import com.water.bean.OracleDbBean;
+import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 import com.water.dao.ComplaintDao;
 import com.water.dao.DashboardDao;
@@ -52,6 +55,7 @@ import com.water.model.ComplaintDetails;
 import com.water.model.Documents;
 import com.water.model.EmployeeDetails;
 import com.water.model.MasterCategory;
+import com.water.model.MasterDistrict;
 import com.water.model.MasterReconnection;
 import com.water.model.MasterZone;
 import com.water.util.Common;
@@ -2561,6 +2565,162 @@ DashboardCountBean dashboardBean;
 	
 	
 	
+	
+	
+	
+	
+	
+	
+
+	@POST
+	@Path("addDistrict")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addDistrict(DistrictFormBean districtFormBean) {
+		
+	return new DashboardDaoImpl().addDistrict(districtFormBean);
+	}
+	@POST
+	@Path("editDistrict")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editDistrict(DistrictFormBean districtFormBean) {
+		
+	return new DashboardDaoImpl().editDistrict(districtFormBean);
+	}
+	@POST
+	@Path("deleteDistrict")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteDistrict(DistrictFormBean districtFormBean) {
+		
+	return new DashboardDaoImpl().deleteDistrict(districtFormBean);
+	}
+	
+	@POST
+	@Path("/getDistrictDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getDistrictDtl() {
+		gson = new Gson();
+		
+		List<MasterDistrict> masterDistrictList =  new DashboardDaoImpl().getDistrictDtl();
+		List<DistrictFormBean> districtFormBeanList = new ArrayList<>();
+		
+		for(MasterDistrict masterDistrict:masterDistrictList){
+		
+			DistrictFormBean employeeFormBean = new DistrictFormBean();
+			
+			employeeFormBean.setDistrictId(String.valueOf(masterDistrict.getDistrictId()));
+			employeeFormBean.setDistrictName(masterDistrict.getDistrictName());
+			districtFormBeanList.add(employeeFormBean);
+		}
+            return gson.toJson(districtFormBeanList);
+	}
+
+		
+	
+	
+	@POST
+	@Path("addTaluk")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addTaluk(DistrictTalukFormBean districtTalukFormBean) {
+		
+	return new DashboardDaoImpl().addTaluk(districtTalukFormBean);
+	}
+	@POST
+	@Path("editTaluk")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editTaluk(DistrictTalukFormBean districtTalukFormBean) {
+		
+	return new DashboardDaoImpl().editTaluk(districtTalukFormBean);
+	}
+	@POST
+	@Path("deleteTaluk")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteTaluk(DistrictTalukFormBean districtTalukFormBean) {
+		
+	return new DashboardDaoImpl().deleteTaluk(districtTalukFormBean);
+	}
+	
+	@POST
+	@Path("/getTalukDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTalukDtl() {
+		gson = new Gson();
+		
+		List<DistrictTalukFormBean> districtTalukFormBeanList =  new DashboardDaoImpl().getTalukDtl();
+		/*List<DistrictTalukFormBean> districtTalukFormBeanList = new ArrayList<>();
+		
+		for(MasterReconnection masterReconnection:masterReconnectionList){
+			DistrictTalukFormBean districtTalukFormBean = new DistrictTalukFormBean();
+			districtTalukFormBean.setConnectionId(String.valueOf(masterReconnection.getReConnId()));
+			districtTalukFormBean.setConnectionName(masterReconnection.getConnectionType());
+			districtTalukFormBean.setConnectionDesc(masterReconnection.getReConnDes());
+			districtTalukFormBeanList.add(districtTalukFormBean);
+		}*/
+            return gson.toJson(districtTalukFormBeanList);
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	@POST
+	@Path("addVillage")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addVillage(TalukVillageFormBean talukVillageFormBean) {
+		
+	return new DashboardDaoImpl().addVillage(talukVillageFormBean);
+	}
+	@POST
+	@Path("editVillage")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editVillage(TalukVillageFormBean talukVillageFormBean) {
+		
+	return new DashboardDaoImpl().editVillage(talukVillageFormBean);
+	}
+	@POST
+	@Path("deleteVillage")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteVillage(TalukVillageFormBean talukVillageFormBean) {
+		
+	return new DashboardDaoImpl().deleteVillage(talukVillageFormBean);
+	}
+	
+	@POST
+	@Path("/getVillageDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getVillageDtl() {
+		gson = new Gson();
+		
+		List<TalukVillageFormBean> talukVillageFormBeanList =  new DashboardDaoImpl().getVillageDtl();
+		/*List<TalukVillageFormBean> talukVillageFormBeanList = new ArrayList<>();
+		
+		for(MasterReconnection masterReconnection:masterReconnectionList){
+			TalukVillageFormBean talukVillageFormBean = new TalukVillageFormBean();
+			talukVillageFormBean.setConnectionId(String.valueOf(masterReconnection.getReConnId()));
+			talukVillageFormBean.setConnectionName(masterReconnection.getConnectionType());
+			talukVillageFormBean.setConnectionDesc(masterReconnection.getReConnDes());
+			talukVillageFormBeanList.add(talukVillageFormBean);
+		}*/
+            return gson.toJson(talukVillageFormBeanList);
+	}
+
+
 	
 	
 	
