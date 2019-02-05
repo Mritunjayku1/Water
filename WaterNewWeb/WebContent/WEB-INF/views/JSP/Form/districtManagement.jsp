@@ -151,7 +151,7 @@ $('#editDistrict').click(function(){
 	$('#dataTables-example td input:checkbox:checked').each(function(){
 		$('#editDistrictId').val($(this).closest('tr').find('td:nth-child(1)').find('input[type="checkbox"]').attr('id').trim());
 		$('#editDistrictNameId').val($(this).closest('tr').find('td:nth-child(3)').text());
-		$('#editDistrictDescId').val($(this).closest('tr').find('td:nth-child(4)').text());
+		//$('#editDistrictDescId').val($(this).closest('tr').find('td:nth-child(4)').text());
 		
 		districtlist = districtlist.replace($(this).closest('tr').find('td:nth-child(3)').text().trim(),"");
 		
@@ -275,7 +275,7 @@ $('#deleteDistrict').click(function(){
                                             <th style="color:black !important"><input type="checkbox" id="all" style="width:15px;"/></th>
                                             <th style="color:black !important"><b> #</b></th>
                                             <th style="color:black !important"><b>District Name</b></th>
-                                            <th style="color:black !important"><b>Description</b></th>
+                                            <!-- <th style="color:black !important"><b>Description</b></th> -->
                                            
                                         
                                         </tr>
@@ -292,7 +292,7 @@ $('#deleteDistrict').click(function(){
                                             <td><input type="checkbox" id="${app.getDistrictId()}" style="width:15px;"/></td>
                                             <td>${count.count}</td>
                                              <td>${app.getDistrictName()}</td>
-                                             <td>${app.getDistrictDesc()}</td>
+                                             <%-- <td>${app.getDistrictDesc()}</td> --%>
                                            
                                            
                                         </tr>	

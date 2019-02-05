@@ -228,11 +228,15 @@ div.tabArrow {
     width:200px;
     text-align:center;
     line-height:40px;
-    display: inline-block;
-    margin-right:15px;
+    cursor: pointer;
     
 }
-div.tabArrow:after{
+
+div.tabArrow:hover{
+   background: #FF7F27;
+    }
+
+/* div.tabArrow:after{
     content:"";
     position:absolute;
     height:0;
@@ -246,7 +250,7 @@ div.tabArrow:after{
 .rightArrow:after{
 border-left:20px solid green;
 }
-
+ */
 </style>
 <script type="text/javascript">
 
@@ -268,13 +272,11 @@ border-left:20px solid green;
 		
 		
 		
-		$('#personalId').addClass('rightArrow');
+		
 		$('#personalId').css({'background':'#FF7F27'});
-		//$('#personalId').after().css({'border-left':'20px solid #FF7F27 !important'});
 		$('#siteId').css({'background':'lightgrey'});
-		//$('#siteId:after').css({'border-left':'20px solid lightgrey'});
-		$('#paymentId').css({'background':'lightgrey'});
-		$('#paymentId:after').css({'border-left':'20px solid lightgrey'});
+		
+		
 		
 			//document.getElementById("isNewConnectionId").style.visibility = "hidden";
 	var hcafid = 	$('#HCafId').val();
@@ -379,7 +381,7 @@ border-left:20px solid green;
 				/* $
 				.ajax({
 					type : "GET",
-					url : "/WaterNew/library/ZoneDivision.json",
+					url : "/WaterNewWeb/library/ZoneDivision.json",
 					success : function(response) {
 						var divValue = response[registeredDataLocal.cmwssbZoneNum];
 						var option = '<option value="">--Select--</option>';
@@ -408,7 +410,72 @@ border-left:20px solid green;
 				} 
 		
 		
+			 $('#districtId').change(function(){
+				 
+			 
 		
+			 $
+				.ajax({
+					type : "GET",
+					url : "library/DistrictTaluk.json",
+					success : function(response) {
+						//alert(JSON.stringify(response));
+						var districtSelectedValue = $('#districtId option:selected').val();
+						//alert(districtSelectedValue);
+						var taluk = response[districtSelectedValue];//response[registeredDataLocal.cmwssbZoneNum];
+						//alert(JSON.stringify(taluk));
+						var option = '<option value="">--Select Taluk--</option>';
+						if(taluk!=undefined)
+						for (var i = 0; i < taluk.length; i++) {
+
+							$.each(taluk[i], function(key, value){
+								option = option
+								+ '<option value="'+key+'">'
+								+ value
+								+ '</option>';
+							});
+							
+						}
+						$('#talukId').find('option')
+								.remove();
+						$('#talukId').append(option);
+						//$('#taluk option[value="'+registeredDataLocal.divId+'"]').attr('selected', 'selected');
+
+					}
+				});
+			 });
+			 
+			 $('#talukId').change(function(){
+				 
+			 
+			 
+			 $
+				.ajax({
+					type : "GET",
+					url : "library/TalukVillage.json",
+					success : function(response) {
+						var talukSelectedValue = $('#talukId option:selected').val();
+						var village =  response[talukSelectedValue];//response[registeredDataLocal.cmwssbZoneNum];
+						var option = '<option value="">--Select Village--</option>';
+						if(village!=undefined)
+						for (var i = 0; i < village.length; i++) {
+
+							$.each(village[i], function(key, value){
+							option = option
+									+ '<option value="'+key+'">'
+									+ value
+									+ '</option>';
+							});
+						}
+						$('#villageId').find('option')
+								.remove();
+						$('#villageId').append(option);
+						//$('#villageId option[value="'+registeredDataLocal.divId+'"]').attr('selected', 'selected');
+
+					}
+				});
+			 
+			 });
 		
 		$('#reqMldId').blur(function(){
 			
@@ -465,12 +532,16 @@ border-left:20px solid green;
 				$('.tab1').show();
 				$('#tabchangeId').prop('value','Next');
 				$('#registrationbtnId').attr('disabled','true');
+				$('#personalId').css({'background':'#FF7F27'});
+				$('#siteId').css({'background':'lightgrey'});
 			});
             $('#siteId').click(function(){
 				$('.tab1').hide();
 				$('.tab2').show();
 				$('#tabchangeId').prop('value','Back');
 				$('#registrationbtnId').removeAttr('disabled');
+				$('#personalId').css({'background':'lightgrey'});
+				$('#siteId').css({'background':'#FF7F27'});
 			});
             $('#tabchangeId').click(function(){
             	var nextBackBtnVal = $(this).prop('value');
@@ -510,6 +581,8 @@ border-left:20px solid green;
 										 var form = $('#formId')[0];
 										var paymentMode='initial';
 						        	        var formdata = new FormData(form);
+						        	        
+						        	        alert(JSON.stringify(formdata));
 						        	        var isUpload=false;
 						        	        
 						        	        $(".uploadClass").each(function(){
@@ -524,7 +597,7 @@ border-left:20px solid green;
 
 										$.ajax({
 													type : "POST",
-													url : "/WaterNew/companyRegister.do",
+													url : "companyRegister.do",
 													data : dataString,
 													async : false,
 													
@@ -711,7 +784,7 @@ border-left:20px solid green;
 			
 
 <tr><td>
-<div id="LoadingImage" style="display: none">
+<div id="LoadingImage" style="display: none;position:absolute;top:300px;left:650px;">
   <img src="library/img/loaderTn.gif" />
 </div>
 </td></tr>
@@ -809,7 +882,26 @@ border-left:20px solid green;
 					<input placeholder="Ex: Location" type="text"
 					id="locationId" name="location" /><br/>
 					<input placeholder="Ex: PinCode" type="text" id="pinCodeId" onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-					name="pinCode" maxlength="6" />
+					name="pinCode" maxlength="6" /><br/>
+					
+					<select class="classCategory" title="Select District"
+					id="districtId" name="district" style="margin-right: 10px;">
+						<option value="">--Select District--</option>
+						 <c:forEach items="${list.districtDtl}" var="app" varStatus="count" >
+						  <option value="${app.getDistrictId()}">${app.getDistrictName()}</option>
+						 </c:forEach>
+					</select>
+					
+					<select class="classCategory" title="Select Taluk"
+					id="talukId" name="taluk" style="margin-right: 10px;">
+						 <option value="">--Select Taluk--</option>
+					</select>
+				
+				<select class="classCategory" title="Select Village"
+					id="villageId" name="village" style="margin-right: 10px;">
+						 <option value="">--Select Village--</option>
+				</select>
+					
 					</div>
 					</td>
 			
@@ -835,13 +927,14 @@ border-left:20px solid green;
 				<br/>
 				<select class="classCategory"
 					id="categoryTypeId" name="categoryType" style="margin-right: 10px;">
-						<option value="">--Select--</option>
+						<option value="">--Select Category--</option>
 						 <c:forEach items="${list.categoryDtl}" var="app" varStatus="count" >
 						  <option value="${app.getCategoryId()}">${app.getCategoryName()}</option>
 						 </c:forEach>
 						
 					
-				</select><a href="library/TypeOfCategory.pdf" download><img src="library/img/pdf-image.jpg" width="35px" height="40px"
+				</select>
+				<a href="library/TypeOfCategory.pdf" download><img src="library/img/pdf-image.jpg" width="35px" height="40px"
 					style="position: absolute; cursor: pointer;"></a>
 					
 					</div>
@@ -953,7 +1046,7 @@ border-left:20px solid green;
 	
 			<tr  class="tab2">
 				<td ><b>Site plan <font style="color: rgb(128,128,128);font-size: 12px;">(Scale not less than 1:400,.dwg file, 5 MB)</font>:</b></td>
-				<td><input type="file" class="uploadClass" name="file" accept=".dwg"/></td>
+				<td><input type="file" class="uploadClass" name="file" accept=".pdf"/></td>
 			</tr>
 			<tr  class="tab2">
 				<td ><b>Sump drawing specifying height of sump<font style="color: rgb(128,128,128);font-size: 12px;">(.dwg file, 5 MB)</font>:</b></td>

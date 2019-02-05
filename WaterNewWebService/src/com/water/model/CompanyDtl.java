@@ -83,7 +83,7 @@ public class CompanyDtl implements Serializable {
 	private String village;
 	@Column(name = "PINCODE", nullable = false, length = 100)
 	private String pincode;
-	@Column(name = "SURVEY_FIELDNO", nullable = false, length = 100)
+	@Column(name = "SURVEY_FIELDNO", nullable = true, length = 100)
 	private String surveyFieldNo;
 
 	@Column(name = "IS_NEW_CONNECTION", nullable = false, length = 100)
@@ -104,11 +104,11 @@ public class CompanyDtl implements Serializable {
 	@Column(name = "WORK_TYPE", nullable = false, length = 100)
 	private Integer workType;
 
-	@Column(name = "UPLOAD_SITE_PLAN", nullable = false, length = 100)
+	@Column(name = "UPLOAD_SITE_PLAN", nullable = true, length = 100)
 	private String uploadSitePlan;
-	@Column(name = "UPLOAD_SUMP_DRAWING", nullable = false, length = 100)
+	@Column(name = "UPLOAD_SUMP_DRAWING", nullable = true, length = 100)
 	private String uploadSumpDrawing;
-	@Column(name = "UPLOAD_OWNERSHIP", nullable = false, length = 100)
+	@Column(name = "UPLOAD_OWNERSHIP", nullable = true, length = 100)
 	private String uploadOwnerShip;
 
 	@Column(name = "FROM_WEBSITE", nullable = false, length = 100)
@@ -122,10 +122,10 @@ public class CompanyDtl implements Serializable {
 	private SmsTemp SmsId;
 
 	@Column(name = "APPLICATION_STATUS", nullable = false, length = 100)
-	private Integer applicatioStatus;
+	private Integer applicationStatus=0;
 	
 	@Column(name = "ACTIVE", nullable = false, length = 100)
-	private Integer active;
+	private Integer active=0;
 
 	// @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "INSPECTION_DATE", nullable = true, length = 26)
@@ -159,11 +159,11 @@ public class CompanyDtl implements Serializable {
 
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "UPDATE_TS", nullable = false, length = 26)
+	@Column(name = "UPDATE_TS", nullable = true, length = 26)
 	private Date updateTs;
 
 	
-	@Column(name = "UPDATE_USERID", nullable = false, length = 30)
+	@Column(name = "UPDATE_USERID", nullable = true, length = 30)
 	private String updateUserId;
 
 
@@ -496,17 +496,6 @@ public class CompanyDtl implements Serializable {
 		SmsId = smsId;
 	}
 
-
-	public Integer getApplicatioStatus() {
-		return applicatioStatus;
-	}
-
-
-	public void setApplicatioStatus(Integer applicatioStatus) {
-		this.applicatioStatus = applicatioStatus;
-	}
-
-
 	public String getInspectionDate() {
 		return inspectionDate;
 	}
@@ -629,6 +618,16 @@ public class CompanyDtl implements Serializable {
 
 	public void setActive(Integer active) {
 		this.active = active;
+	}
+
+
+	public Integer getApplicationStatus() {
+		return applicationStatus;
+	}
+
+
+	public void setApplicationStatus(Integer applicationStatus) {
+		this.applicationStatus = applicationStatus;
 	}
 
 

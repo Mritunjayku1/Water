@@ -1611,16 +1611,24 @@ public String editDistrict(DistrictFormBean categoryFormBean ){
 	}
 	
 	public String deleteDistrict(DistrictFormBean categoryFormBean ){
-		
+		Session session = sessionFactory.openSession();
+		try{
 		String[] categoryArray = categoryFormBean.getDistrictId().split(",");
-		
-		for(int i=0;i<categoryArray.length;i++){
-			Session session = sessionFactory.openSession();
-			Transaction tx =  session.beginTransaction();
-			int userid=Integer.parseInt(categoryArray[i]);
-			MasterDistrict masterDistrict = (MasterDistrict)session.get(MasterDistrict.class,userid);
-		session.delete(masterDistrict);
-		tx.commit();
+			for (int i = 0; i < categoryArray.length; i++) {
+
+				Transaction tx = session.beginTransaction();
+				int userid = Integer.parseInt(categoryArray[i]);
+				MasterDistrict masterDistrict = (MasterDistrict) session.get(MasterDistrict.class, userid);
+				session.delete(masterDistrict);
+
+				tx.commit();
+			}
+		}
+		catch(Exception e){
+			return "District can't be deleted, First delete Village and Taluk then district";
+		}
+		finally {
+			session.close();
 		}
 			return "District deleted Successfully";
 		}
@@ -1671,22 +1679,31 @@ public String editTaluk(DistrictTalukFormBean districtTalukFormBean ){
 	masterTaluk.setUpdateUserId("Administrator");
 	session2.update(masterTaluk);
 	tx2.commit();
-		return "District Taluk Updated Successfully";
+		return "Taluk Updated Successfully";
 	}
 	
 	public String deleteTaluk(DistrictTalukFormBean districtTalukFormBean ){
-		
+		Session session = sessionFactory.openSession();
+		try{
 		String[] talukArray = districtTalukFormBean.getDistrictTalukId().split(",");
 		
-		for(int i=0;i<talukArray.length;i++){
-			Session session = sessionFactory.openSession();
-			Transaction tx =  session.beginTransaction();
-			int talukid=Integer.parseInt(talukArray[i]);
-			MasterTaluk masterTaluk = (MasterTaluk)session.get(MasterTaluk.class,talukid);
-		session.delete(masterTaluk);
-		tx.commit();
+			for (int i = 0; i < talukArray.length; i++) {
+
+				Transaction tx = session.beginTransaction();
+				int talukid = Integer.parseInt(talukArray[i]);
+				MasterTaluk masterTaluk = (MasterTaluk) session.get(MasterTaluk.class, talukid);
+				session.delete(masterTaluk);
+
+				tx.commit();
+			}
+		
+		}catch(Exception e){
+			return "Taluk can't be deleted, First delete Village then Taluk";
 		}
-			return "District Taluk deleted Successfully";
+		finally {
+			session.close();
+		}
+			return "Taluk deleted Successfully";
 		}
 	public List<DistrictTalukFormBean> getTalukDtl(){
 		Session session = sessionFactory.openSession();
@@ -1745,22 +1762,30 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 	masterVillage.setUpdateUserId("Administrator");
 	session2.update(masterVillage);
 	tx2.commit();
-		return "Taluk Village Updated Successfully";
+		return "Village Updated Successfully";
 	}
 	
 	public String deleteVillage(TalukVillageFormBean talukVillageFormBean ){
-		
+		Session session = sessionFactory.openSession();
+		try{
 		String[] villageArray = talukVillageFormBean.getTalukVillageId().split(",");
 		
-		for(int i=0;i<villageArray.length;i++){
-			Session session = sessionFactory.openSession();
-			Transaction tx =  session.beginTransaction();
-			int villageid=Integer.parseInt(villageArray[i]);
-			MasterVillage masterVillage = (MasterVillage)session.get(MasterVillage.class,villageid);
-		session.delete(masterVillage);
-		tx.commit();
+			for (int i = 0; i < villageArray.length; i++) {
+
+				Transaction tx = session.beginTransaction();
+				int villageid = Integer.parseInt(villageArray[i]);
+				MasterVillage masterVillage = (MasterVillage) session.get(MasterVillage.class, villageid);
+				session.delete(masterVillage);
+				tx.commit();
+			}
 		}
-			return "Taluk Village deleted Successfully";
+		catch(Exception e){
+			return "Village isn't deleted";
+		}
+		finally{
+			session.close();
+		}
+			return "Village deleted Successfully";
 		}
 	public List<TalukVillageFormBean> getVillageDtl(){
 		Session session = sessionFactory.openSession();

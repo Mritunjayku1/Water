@@ -33,6 +33,7 @@ import com.water.bean.AppFormBean;
 import com.water.bean.CategoryFormBean;
 import com.water.bean.ChangePasswordBean;
 import com.water.bean.ConnectionFormBean;
+import com.water.bean.DistrictFormBean;
 import com.water.bean.ForgotPasswordBean;
 import com.water.bean.LoginBean;
 import com.water.bean.ZoneDivisionFormBean;
@@ -135,7 +136,7 @@ public class AdminController {
 		
 	
 		
-		ResponseEntity<String> out1 = restTemplate.exchange(
+		/*ResponseEntity<String> out1 = restTemplate.exchange(
 				WaterDashboardService + "getConnectionTypeDtl",
 				HttpMethod.POST, entity, String.class);
 
@@ -154,7 +155,30 @@ public class AdminController {
 		
 		
 		model.put("connectionTypeDtl", connectionFormBeanList);
+		*/
 		
+		
+		
+		
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getDistrictDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<DistrictFormBean> districtFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			DistrictFormBean districtFormBean = gson.fromJson(
+					jsonArray1.getString(i), DistrictFormBean.class);
+			districtFormBeanList.add(districtFormBean);
+		}
+
+		
+		
+		model.put("districtDtl", districtFormBeanList);
 		
 		
 

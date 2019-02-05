@@ -1607,15 +1607,12 @@ public class DashboardController {
 			TalukVillageFormBean talukVillageFormBean = gson.fromJson(
 					jsonArray.getString(i), TalukVillageFormBean.class);
 			
-			/*if(!talukMap.containsKey(String.valueOf(talukVillageFormBean.getTalukId()))){
-			talukMap.put(String.valueOf(talukVillageFormBean.getTalukId()), talukVillageFormBean.getTalukName());
-			}*/
 			
 			
 			talukVillageFormBeanList.add(talukVillageFormBean);
 		}
 
-		//updateTalukVillageFile(talukVillageFormBeanList);
+		updateTalukVillageFile(talukVillageFormBeanList);
 		
 		model.put("talukVillageDtl", talukVillageFormBeanList);
 		model.put("talukMap", talukMap);
@@ -1846,217 +1843,131 @@ public class DashboardController {
 	
 	
 	
-	public void updateDistrictTalukFile(List<DistrictTalukFormBean> districtTalukFormBeanList) throws IOException, JSONException{
+	public void updateDistrictTalukFile(List<DistrictTalukFormBean> districtTalukFormBeanList)
+			throws IOException, JSONException {
 
 		String path = this.getClass().getClassLoader().getResource("").getPath();
 		String fullPath = URLDecoder.decode(path, "UTF-8");
 		String pathArr[] = fullPath.split("WEB-INF/");
-		
-		/*Font redFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL, new CMYKColor(0, 1f, 1f, 0));
-		Font blackFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL, new CMYKColor(0, 0, 0, 255));
-		Font blueFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD, new CMYKColor(1f, 0.498f, 0, 0));
-		Font greyFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9, Font.NORMAL, new CMYKColor(0, 0, 0, 255));
-		Font blackHeaderFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9, Font.BOLD, new CMYKColor(0, 0, 0, 255));
-		*/
-		
-		//Document document = new Document();
-	      try
-	      {
-	        /* PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pathArr[0]+"library/HelloWorld.pdf"));
-	         document.open();
-	         
-	         document.add(new Paragraph("Area Offices:",redFont));
-	         PdfPTable zoneTable = new PdfPTable(1);
-	         PdfPCell zoneCell=null;
-	         
-	         PdfPTable headerTable = new PdfPTable(1);
-	         headerTable.setWidthPercentage(100);
-	         PdfPCell headerCell=new PdfPCell(new Paragraph("Depot Offices and Mobile no's",blueFont));
-	         headerCell.setBorder(Rectangle.NO_BORDER);
-	         headerCell.setPadding(10);
-	         headerTable.addCell(headerCell);
-	         PdfPTable zoneDivisionTable = new PdfPTable(5);
-	         zoneDivisionTable.setWidthPercentage(100);
-	        zoneDivisionTable.setWidths(new int[]{9,7,44,20,20});
-	         PdfPCell zoneDivisionCell=null;*/
-	         
-	        
-		FileWriter fw = new FileWriter(pathArr[0]+"library/test1.json");
-		BufferedWriter bw = new BufferedWriter(fw);
-		
-		Map<String,List<String>> districtTalukMap = new HashMap<>();
-		List<String> li = null;
-		int count = 0;
-		for(DistrictTalukFormBean districtTalukFormBean:districtTalukFormBeanList){
-		
-			String key = String.valueOf(districtTalukFormBean.getDistrictId());
-			
-			if(districtTalukMap.containsKey(key)){
-				li = districtTalukMap.get(key);
-				li.add(districtTalukFormBean.getTalukName());
-				// String areaName = ZoneConstants.getZoneAreaName(districtTalukFormBean.getDistrictName().split("-")[0].trim());
-				 /* zoneDivisionCell = new PdfPCell(new Paragraph(areaName,greyFont));
-				  zoneDivisionCell.setMinimumHeight(30f);
-			         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-			         if(count%2==0){
-			             zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-			         }
-			         zoneDivisionTable.addCell(zoneDivisionCell);
-			         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionNo(),greyFont));
-			         zoneDivisionCell.setMinimumHeight(30f);
-			         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-			         if(count%2==0){
-			             zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-			         }
-			         zoneDivisionTable.addCell(zoneDivisionCell);
-			         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionAddr(),greyFont));
-			         zoneDivisionCell.setMinimumHeight(30f);
-			         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-			         if(count%2==0){
-			             zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-			         }
-			         zoneDivisionTable.addCell(zoneDivisionCell);
-			         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionPhone(),greyFont));
-			         zoneDivisionCell.setMinimumHeight(30f);
-			         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-			         if(count%2==0){
-			             zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-			         }
-			         zoneDivisionTable.addCell(zoneDivisionCell);
-			         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionMobile(),greyFont));
-			         zoneDivisionCell.setMinimumHeight(30f);
-			         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-			         if(count%2==0){
-			             zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-			         }
-			         zoneDivisionTable.addCell(zoneDivisionCell);
-			*/         count++;
-				
+
+		try {
+
+			FileWriter fw = new FileWriter(pathArr[0] + "library/test1.json");
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			Map<String, List<Map<Integer,String>>> districtTalukMap = new HashMap<String, List<Map<Integer,String>>>();
+			List<Map<Integer,String>> talukList = null;
+			Map<Integer,String> talukMap = null;
+			for (DistrictTalukFormBean districtTalukFormBean : districtTalukFormBeanList) {
+
+				String key = String.valueOf(districtTalukFormBean.getDistrictId());
+
+				if (districtTalukMap.containsKey(key)) {
+					talukList = districtTalukMap.get(key);
+					talukMap = new HashMap<Integer,String>();
+					talukMap.put(districtTalukFormBean.getTalukId(),districtTalukFormBean.getTalukName());
+					talukList.add(talukMap);
+
+				} else {
+					talukList = new ArrayList<Map<Integer,String>>();
+					talukMap = new HashMap<Integer,String>();
+					talukMap.put(districtTalukFormBean.getTalukId(),districtTalukFormBean.getTalukName());
+					talukList.add(talukMap);
+					districtTalukMap.put(key, talukList);
+
+				}
+
 			}
-			else{
-				
-				count=0;
-				 li = new ArrayList<String>(); 
-				 li.add(districtTalukFormBean.getTalukName());
-				 districtTalukMap.put(key, li);
-				/* zoneCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getZoneName(),blackFont));
-				 zoneCell.setBorder(Rectangle.NO_BORDER);
-				 zoneCell.setPadding(3);
-		         zoneTable.addCell(zoneCell);
-		         zoneTable.setWidthPercentage(75);
-		         zoneTable.setHorizontalAlignment(Element.ALIGN_CENTER);
-		         
-		         
-		          zoneDivisionCell = new PdfPCell(new Paragraph("Area No.",blackHeaderFont));
-		          zoneDivisionCell.setMinimumHeight(40f);
-		          zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		          zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-		          zoneDivisionTable.addCell(zoneDivisionCell);
-		          zoneDivisionCell = new PdfPCell(new Paragraph("Depot No.",blackHeaderFont));
-		         
-		          zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		          zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-		          zoneDivisionTable.addCell(zoneDivisionCell);
-		          zoneDivisionCell = new PdfPCell(new Paragraph("Office Address",blackHeaderFont));
-		         
-		          zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		          zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-		          zoneDivisionTable.addCell(zoneDivisionCell);
-		          zoneDivisionCell = new PdfPCell(new Paragraph("Phone No.",blackHeaderFont));
-		         
-		          zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		          zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-		          zoneDivisionTable.addCell(zoneDivisionCell);
-		          zoneDivisionCell = new PdfPCell(new Paragraph("Mobile No.",blackHeaderFont));
-		         
-		          zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		          zoneDivisionCell.setBackgroundColor(new BaseColor(245,245,245));
-		          zoneDivisionTable.addCell(zoneDivisionCell);
-		         
-		          String areaName = ZoneConstants.getZoneAreaName(zoneDivisionFormBean.getZoneName().split("-")[0].trim());
-		         zoneDivisionCell = new PdfPCell(new Paragraph(areaName,greyFont));
-		         zoneDivisionCell.setMinimumHeight(30f);
-		         zoneDivisionCell.setNoWrap(false);
-		         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		         zoneDivisionTable.addCell(zoneDivisionCell);
-		         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionNo(),greyFont));
-		       
-		         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		         zoneDivisionTable.addCell(zoneDivisionCell);
-		         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionAddr(),greyFont));
-		         
-		         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		         zoneDivisionTable.addCell(zoneDivisionCell);
-		         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionPhone(),greyFont));
-		         
-		         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		         zoneDivisionTable.addCell(zoneDivisionCell);
-		         zoneDivisionCell = new PdfPCell(new Paragraph(zoneDivisionFormBean.getDivisionMobile(),greyFont));
-		         
-		         zoneDivisionCell.setVerticalAlignment(Element.ALIGN_TOP);
-		         zoneDivisionTable.addCell(zoneDivisionCell);*/
-		         
-			}
+			Gson gson = new Gson(); 
+			String json = gson.toJson(districtTalukMap); 
+			//System.out.println(json);
 			
-		
-		
+			bw.write(json);
+			bw.close();
+			fw.close();
+
+			File newFile = new File(pathArr[0] + "library/test1.json");
+			File oldFile = new File(pathArr[0] + "library/DistrictTaluk.json");
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+			newFile.renameTo(oldFile);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+
 		}
-		
-		Iterator itr = districtTalukMap.entrySet().iterator();
-		String str = "";
-		String str1 ="{";
-		while (itr.hasNext()) {
-			Map.Entry<String, List<Integer>>   mapEntry =  (Map.Entry<String, List<Integer>>)itr.next();
-			List<Integer> divisionNo = mapEntry.getValue();
-			Collections.sort(divisionNo);
-		    str = str + ",\n\""+mapEntry.getKey()+"\":"+divisionNo;
-		  
+
+	}
+	
+	
+
+	public void updateTalukVillageFile(List<TalukVillageFormBean> talukVillageFormBeanList)
+			throws IOException, JSONException {
+
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String fullPath = URLDecoder.decode(path, "UTF-8");
+		String pathArr[] = fullPath.split("WEB-INF/");
+
+		try {
+
+			FileWriter fw = new FileWriter(pathArr[0] + "library/test2.json");
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			Map<String, List<Map<Integer,String>>> talukVillageMap = new HashMap<String, List<Map<Integer,String>>>();
+			List<Map<Integer,String>> villageList = null;
+			Map<Integer,String> villageMap = null;
+			for (TalukVillageFormBean talukVillageFormBean : talukVillageFormBeanList) {
+
+				String key = String.valueOf(talukVillageFormBean.getTalukId());
+
+				if (talukVillageMap.containsKey(key)) {
+					villageList = talukVillageMap.get(key);
+					villageMap = new HashMap<Integer,String>();
+					villageMap.put(talukVillageFormBean.getVillageId(),talukVillageFormBean.getVillageName());
+					villageList.add(villageMap);
+
+				} else {
+					villageList = new ArrayList<Map<Integer,String>>();
+					villageMap = new HashMap<Integer,String>();
+					villageMap.put(talukVillageFormBean.getVillageId(),talukVillageFormBean.getVillageName());
+					villageList.add(villageMap);
+					talukVillageMap.put(key, villageList);
+
+				}
+
+			}
+			Gson gson = new Gson(); 
+			String json = gson.toJson(talukVillageMap); 
+			//System.out.println(json);
+			
+			bw.write(json);
+			bw.close();
+			fw.close();
+
+			File newFile = new File(pathArr[0] + "library/test2.json");
+			File oldFile = new File(pathArr[0] + "library/TalukVillage.json");
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+			newFile.renameTo(oldFile);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+
 		}
-		if(!str.equals(""))
-		 bw.write(str1+str.substring(1)+"\n");
-		   bw.write("}");
-		
-		bw.close();
-		fw.close();
-		
-		
-		
-		
-		File newFile = new File(pathArr[0]+"library/test1.json");
-		File oldFile = new File(pathArr[0]+"library/DistrictTaluk.json");
-		if(oldFile.exists()){
-			oldFile.delete();
-		}
-		newFile.renameTo(oldFile);
-		
-		
-		/* document.add(zoneTable);
-		 document.add(headerTable);
-		 document.add(zoneDivisionTable);
-         document.close();
-         writer.close();
-         
-         
-         File newZoneFile = new File(pathArr[0]+"library/HelloWorld.pdf");
- 		File oldZoneFile = new File(pathArr[0]+"library/ZoneDivisionRelationship.pdf");
- 		if(oldZoneFile.exists()){
- 			oldZoneFile.delete();
- 		}
- 		newZoneFile.renameTo(oldZoneFile);
-         */
-	      } catch (FileNotFoundException e)
-	      {
-	         e.printStackTrace(); 
-      } catch (Exception e)
-      {
-         e.printStackTrace();
-      
-      }
-		
+
 	}
 	
 	
 	
+	
+	
+
 	
 	
 	
@@ -2625,14 +2536,14 @@ public class DashboardController {
 
 	@RequestMapping(value = "/deleteVillage", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteVillage(TalukVillageFormBean VillageVillageFormBean) {
+	public String deleteVillage(TalukVillageFormBean talukVillageFormBean) {
 
 		RestTemplate restTemplate = new RestTemplate();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<?> entity = new HttpEntity(VillageVillageFormBean,headers);
+		HttpEntity<?> entity = new HttpEntity(talukVillageFormBean,headers);
 
 		ResponseEntity<String> out = restTemplate.exchange(
 				WaterDashboardService + "deleteVillage", HttpMethod.POST,

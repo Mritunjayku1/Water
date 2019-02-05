@@ -53,8 +53,37 @@ public class AppFormBean {
      private String totalAmount;
  
      private String paymentAmount;
+     
+     private String surveyFieldNo;
+     private String district;
+     private String taluk;
+     private String village;
 
      
+	public String getSurveyFieldNo() {
+		return surveyFieldNo;
+	}
+	public void setSurveyFieldNo(String surveyFieldNo) {
+		this.surveyFieldNo = surveyFieldNo;
+	}
+	public String getDistrict() {
+		return district;
+	}
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+	public String getTaluk() {
+		return taluk;
+	}
+	public void setTaluk(String taluk) {
+		this.taluk = taluk;
+	}
+	public String getVillage() {
+		return village;
+	}
+	public void setVillage(String village) {
+		this.village = village;
+	}
 	public String getPaymentAmount() {
 		return paymentAmount;
 	}

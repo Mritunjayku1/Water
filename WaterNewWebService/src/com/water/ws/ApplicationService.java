@@ -116,6 +116,12 @@ public class ApplicationService {
 				MasterCategory.class, appFormBean.getCategoryType()));
 		
 		applicationDtls.setCreateTs(new Date());
+		applicationDtls.setCreateUserId(appFormBean.getLegCompName());
+		applicationDtls.setSurveyFieldNo(appFormBean.getSurveyFieldNo());
+		
+		applicationDtls.setDistrict(appFormBean.getDistrict());
+		applicationDtls.setTaluk(appFormBean.getTaluk());
+		applicationDtls.setVillage(appFormBean.getVillage());
 
 		applicationDtls.setDoorNo(appFormBean.getDoorNo());
 		applicationDtls.setPlotNo(appFormBean.getPlotNo());
