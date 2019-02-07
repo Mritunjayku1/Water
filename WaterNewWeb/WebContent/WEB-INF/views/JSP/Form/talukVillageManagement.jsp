@@ -532,7 +532,7 @@ $('#deleteVillage').click(function(){
 
 <span><b>Select Taluk Name:</b></span><span style="color: red;">*</span>
 <select id="villageTalukId" name="villageTalukName">
-<option value="">---</option>
+<option value="">--Select Taluk--</option>
 <c:forEach var="var" items="${list.talukMap}">
 <option value="${var.key}">${var.value}</option>
 </c:forEach>

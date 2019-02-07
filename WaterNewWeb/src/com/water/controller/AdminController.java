@@ -1,6 +1,7 @@
 package com.water.controller;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -34,8 +35,10 @@ import com.water.bean.CategoryFormBean;
 import com.water.bean.ChangePasswordBean;
 import com.water.bean.ConnectionFormBean;
 import com.water.bean.DistrictFormBean;
+import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.ForgotPasswordBean;
 import com.water.bean.LoginBean;
+import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 
 /**
@@ -82,12 +85,76 @@ public class AdminController {
 
 	/**
 	 * @return ModelAndView - index page
+	 * @throws IOException 
+	 * @throws JSONException 
 	 */
 	// welcome menu to login to the application
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public ModelAndView welcome(
 			@ModelAttribute("loginForm") LoginBean loginBean,
-			HttpSession session) {
+			HttpSession session) throws JSONException, IOException {
+		
+		DashboardController dashboardController = new DashboardController();
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String fullPath = URLDecoder.decode(path, "UTF-8");
+		String pathArr[] = fullPath.split("WEB-INF/");
+
+		
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+
+		File oldFile = new File(pathArr[0] + "library/DistrictTaluk.json");
+		if (!oldFile.exists()) {
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getTalukDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DistrictTalukFormBean> districtTalukFormBeanList = new ArrayList<>();
+
+		
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DistrictTalukFormBean districtTalukFormBean = gson.fromJson(
+					jsonArray.getString(i), DistrictTalukFormBean.class);
+			districtTalukFormBeanList.add(districtTalukFormBean);
+		}
+
+		dashboardController.updateDistrictTalukFile(districtTalukFormBeanList);
+	}
+	
+		 oldFile = new File(pathArr[0] + "library/TalukVillage.json");
+		if (!oldFile.exists()) {
+		
+		
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getVillageDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<TalukVillageFormBean> talukVillageFormBeanList = new ArrayList<>();
+
+		
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			TalukVillageFormBean talukVillageFormBean = gson.fromJson(
+					jsonArray1.getString(i), TalukVillageFormBean.class);
+			
+			
+			
+			talukVillageFormBeanList.add(talukVillageFormBean);
+		}
+
+		dashboardController.updateTalukVillageFile(talukVillageFormBeanList);
+		}
 		return new ModelAndView("index");
 	}
 
@@ -96,6 +163,13 @@ public class AdminController {
 		public ModelAndView adminLogin(@ModelAttribute("loginForm") LoginBean loginBean,HttpSession session) {
 			return new ModelAndView("adminLogin");
 		}
+		
+		
+		@RequestMapping(value = "/acknowledgement", method = RequestMethod.GET)
+		public ModelAndView acknowledgement() {
+			return new ModelAndView("acknowledgement");
+		}
+		
 		
 		@RequestMapping(value = "/changePasswordPage", method = RequestMethod.GET)
 		public ModelAndView changePassword() {

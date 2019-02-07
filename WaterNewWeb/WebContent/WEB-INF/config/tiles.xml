@@ -347,6 +347,15 @@
 			value="/WEB-INF/views/JSP/Form/OnlinePaymentResponse.jsp"></put-attribute>
 	</definition>
 	
+	<definition name="acknowledgement" template="/WEB-INF/views/JSP/Form/acknowledgement.jsp">
+		
+		<!-- <put-attribute name="body" 
+			value="/WEB-INF/views/JSP/Form/acknowledgement.jsp"></put-attribute> -->
+	</definition>
+	
+	
+	
+	
 	<definition name="onlinePaymentResponseFailure" template="/WEB-INF/views/JSP/Form/onlinePaymentResponseFailure.jsp">
 		
 		<put-attribute name="body" 

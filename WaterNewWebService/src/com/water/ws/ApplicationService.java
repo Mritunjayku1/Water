@@ -129,6 +129,7 @@ public class ApplicationService {
 		applicationDtls.setLocation(appFormBean.getLocation());
 		applicationDtls.setPincode(appFormBean.getPinCode());
 		applicationDtls.setCafId(appFormBean.getCafId());
+		applicationDtls.setCost(appFormBean.getCost());
 		applicationDtls.setGstAmount(appFormBean.getGstAmount());
 		applicationDtls.setTotalAmount(appFormBean.getTotalAmount());
 		session.save(applicationDtls);

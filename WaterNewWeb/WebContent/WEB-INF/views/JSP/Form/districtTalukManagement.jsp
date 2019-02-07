@@ -532,7 +532,7 @@ $('#deleteTaluk').click(function(){
 
 <span><b>Select District Name:</b></span><span style="color: red;">*</span>
 <select id="talukDistrictId" name="talukDistrictName">
-<option value="">---</option>
+<option value="">--Select District--</option>
 <c:forEach var="var" items="${list.districtMap}">
 <option value="${var.key}">${var.value}</option>
 </c:forEach>

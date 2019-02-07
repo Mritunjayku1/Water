@@ -2,7 +2,6 @@ package com.water.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -92,6 +90,9 @@ public class CompanyDtl implements Serializable {
 	@Column(name = "REQ_KLD", nullable = false, length = 100)
 	private String reqKld;
 	
+	@Column(name = "COST", nullable = false, length = 100)
+	private String cost;
+	
 	@Column(name = "GST_AMOUNT", nullable = false, length = 100)
 	private String gstAmount;
 	
@@ -130,6 +131,24 @@ public class CompanyDtl implements Serializable {
 	// @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "INSPECTION_DATE", nullable = true, length = 26)
 	private String inspectionDate;
+	
+	@Column(name = "STATUS_FLAG", length = 1)
+	private Character statusFlag;
+
+	@ManyToOne(targetEntity = MasterStatus.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "EE_STATUS")
+	private MasterStatus eeStatus;
+
+	@ManyToOne(targetEntity = MasterStatus.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "CE_STATUS")
+	private MasterStatus ceStatus;
+
+	@ManyToOne(targetEntity = MasterStatus.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "MC_STATUS")
+	private MasterStatus mcStatus;
+
+	@Column(name = "INS_STATUS_ID", length = 1)
+	private Integer insStatusId;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "COMPLETION_DATE", nullable = true, length = 26)
@@ -628,6 +647,66 @@ public class CompanyDtl implements Serializable {
 
 	public void setApplicationStatus(Integer applicationStatus) {
 		this.applicationStatus = applicationStatus;
+	}
+
+
+	public Character getStatusFlag() {
+		return statusFlag;
+	}
+
+
+	public void setStatusFlag(Character statusFlag) {
+		this.statusFlag = statusFlag;
+	}
+
+
+	public MasterStatus getEeStatus() {
+		return eeStatus;
+	}
+
+
+	public void setEeStatus(MasterStatus eeStatus) {
+		this.eeStatus = eeStatus;
+	}
+
+
+	public MasterStatus getCeStatus() {
+		return ceStatus;
+	}
+
+
+	public void setCeStatus(MasterStatus ceStatus) {
+		this.ceStatus = ceStatus;
+	}
+
+
+	public MasterStatus getMcStatus() {
+		return mcStatus;
+	}
+
+
+	public void setMcStatus(MasterStatus mcStatus) {
+		this.mcStatus = mcStatus;
+	}
+
+
+	public Integer getInsStatusId() {
+		return insStatusId;
+	}
+
+
+	public void setInsStatusId(Integer insStatusId) {
+		this.insStatusId = insStatusId;
+	}
+
+
+	public String getCost() {
+		return cost;
+	}
+
+
+	public void setCost(String cost) {
+		this.cost = cost;
 	}
 
 

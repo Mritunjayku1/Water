@@ -924,6 +924,7 @@ appbean.setReqMld(String.valueOf(MldId));
 			MultipartFile file = files[i];
 			String name = file.getOriginalFilename();
 			try {
+				if(!name.equals("")){
 				byte[] bytes = file.getBytes();
 
 				
@@ -939,6 +940,7 @@ appbean.setReqMld(String.valueOf(MldId));
 
 				
 				message = message + "\n"+name;
+				}
 			} catch (Exception e) {
 				return "You failed to upload " + name + " => " + e.getMessage();
 			}

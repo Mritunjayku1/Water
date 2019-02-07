@@ -1552,6 +1552,39 @@ public class DashboardController {
 		return new ModelAndView("districtTalukManagement", "list", model);
 	}
 	
+	
+	@RequestMapping(value = "/updateDistrictTalukJsonFile", method = RequestMethod.GET)
+	public void updateDistrictTalukJsonFile() throws JSONException, IOException {
+		
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getTalukDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DistrictTalukFormBean> districtTalukFormBeanList = new ArrayList<>();
+
+		
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DistrictTalukFormBean districtTalukFormBean = gson.fromJson(
+					jsonArray.getString(i), DistrictTalukFormBean.class);
+			districtTalukFormBeanList.add(districtTalukFormBean);
+		}
+
+		updateDistrictTalukFile(districtTalukFormBeanList);
+		
+	}
+	
 	@RequestMapping(value = "/talukVillageManagement", method = RequestMethod.GET)
 	public ModelAndView talukVillageManagement() throws JSONException, IOException {
 
@@ -1621,7 +1654,37 @@ public class DashboardController {
 	}
 
 	
-	
+	@RequestMapping(value = "/updateTalukVillageJsonFile", method = RequestMethod.GET)
+	public void updateTalukVillageJsonFile() throws JSONException, IOException {
+		
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getVillageDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<TalukVillageFormBean> talukVillageFormBeanList = new ArrayList<>();
+
+		
+		for (int i = 0; i < jsonArray.length(); i++) {
+			TalukVillageFormBean talukVillageFormBean = gson.fromJson(
+					jsonArray.getString(i), TalukVillageFormBean.class);
+			
+			
+			
+			talukVillageFormBeanList.add(talukVillageFormBean);
+		}
+
+		updateTalukVillageFile(talukVillageFormBeanList);
+	}
 	
 	
 	

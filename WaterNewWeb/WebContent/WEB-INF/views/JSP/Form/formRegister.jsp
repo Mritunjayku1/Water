@@ -526,12 +526,14 @@ border-left:20px solid green;
 			$('.tab2').hide();
 			$('#tabchangeId').prop('value','Next');
 			$('#registrationbtnId').attr('disabled','true');
+			$('#registrationbtnId').css({'background-color':'lightgrey'});
 			
 			$('#personalId').click(function(){
 				$('.tab2').hide();
 				$('.tab1').show();
 				$('#tabchangeId').prop('value','Next');
 				$('#registrationbtnId').attr('disabled','true');
+				$('#registrationbtnId').css({'background-color':'lightgrey'});
 				$('#personalId').css({'background':'#FF7F27'});
 				$('#siteId').css({'background':'lightgrey'});
 			});
@@ -540,6 +542,8 @@ border-left:20px solid green;
 				$('.tab2').show();
 				$('#tabchangeId').prop('value','Back');
 				$('#registrationbtnId').removeAttr('disabled');
+				$('#registrationbtnId').css({'background-color':'#2DAAE1'});
+				
 				$('#personalId').css({'background':'lightgrey'});
 				$('#siteId').css({'background':'#FF7F27'});
 			});
@@ -548,10 +552,12 @@ border-left:20px solid green;
             	if(nextBackBtnVal=='Next'){
             		$('#siteId').click();
             		$('#registrationbtnId').removeAttr('disabled');
+            		$('#registrationbtnId').css({'background-color':'#2DAAE1'});
             	}
             	else{
             		$('#personalId').click();
             		$('#registrationbtnId').attr('disabled','true');
+            		$('#registrationbtnId').css({'background-color':'lightgrey'});
             	}
             });
 
@@ -582,7 +588,6 @@ border-left:20px solid green;
 										var paymentMode='initial';
 						        	        var formdata = new FormData(form);
 						        	        
-						        	        alert(JSON.stringify(formdata));
 						        	        var isUpload=false;
 						        	        
 						        	        $(".uploadClass").each(function(){
@@ -616,6 +621,11 @@ border-left:20px solid green;
 									        	           
 									        	            success: function (data) {
 									        	            	 $("#LoadingImage").hide();
+									        	            	 $('#ackApplicationRef').val(response);
+									        			        	$('#ackCompanyName').val($('#legCompNameId').val());
+									        			        	$('#ackApplicantName').val($('#salutationId').val()+" "+$('#contactPersonNameId').val());
+									        			        	$('#ackHiddenForm').submit();
+									        	            	 //window.location.href="acknowledgement.do?applicantName";
 									        	            	//window.location.href="saveOnlinePaymentsDetails.do?paymentMode=initial&appId="+response+"&initialPayment="+$('#totalAmount').val();
 									        	            //	window.location.href="saveOnlinePaymentsDetails.do?paymentMode=initial&appId="+response+"&initialPayment="+$('#ipf').val();
 									        	            },
@@ -623,6 +633,10 @@ border-left:20px solid green;
 													}
 													else{
 														 $("#LoadingImage").hide();
+														 $('#ackApplicationRef').val(response);
+							        			        	$('#ackCompanyName').val($('#legCompNameId').val());
+							        			        	$('#ackApplicantName').val($('#salutationId').val()+" "+$('#contactPersonNameId').val());
+							        			        	$('#ackHiddenForm').submit();
 														//window.location.href="saveOnlinePaymentsDetails.do?paymentMode=initial&appId="+response+"&initialPayment="+$('#ipf').val();
 													}
 														
@@ -795,7 +809,7 @@ border-left:20px solid green;
 				<td width="50%">
 				<div>
 				<label><b>Legal Name of Company:</b></label>
-				<span style="color: red;">*</span>
+				<span style="color: red;">*</span><br/>
 				
 				<input placeholder="Ex: ABC Company" type="text" id="legCompNameId" name="legCompName" />
 				
@@ -843,7 +857,7 @@ border-left:20px solid green;
 					</td>
 			</tr>
 			<tr class="tab1">
-				<td><div>
+				<td valign="top"><div>
 				<label><b>Email Id:</b></label>
 				<span style="color: red;">*</span>
 				<br/>
@@ -984,7 +998,7 @@ border-left:20px solid green;
 				<label><b>Cost:</b></label> 
 					<div class="input-group">
 				<span class="input-group-addon"><img src="library/img/RupeeImage.png"/></span>
-				<input class="form-control" placeholder="Auto Genearated" type="text" id="ipf" name="ipf" readonly  style="width: 125px;" maxlength="3" />
+				<input class="form-control" placeholder="Auto Genearated" type="text" id="ipf" name="cost" readonly  style="width: 125px;" maxlength="3" />
 					</div>
 				</div>
 				<div style="margin-left: 10px;display: inline-block;">
@@ -1046,7 +1060,7 @@ border-left:20px solid green;
 	
 			<tr  class="tab2">
 				<td ><b>Site plan <font style="color: rgb(128,128,128);font-size: 12px;">(Scale not less than 1:400,.dwg file, 5 MB)</font>:</b></td>
-				<td><input type="file" class="uploadClass" name="file" accept=".pdf"/></td>
+				<td><input type="file" class="uploadClass" name="file" accept=".dwg"/></td>
 			</tr>
 			<tr  class="tab2">
 				<td ><b>Sump drawing specifying height of sump<font style="color: rgb(128,128,128);font-size: 12px;">(.dwg file, 5 MB)</font>:</b></td>
@@ -1068,7 +1082,7 @@ border-left:20px solid green;
 				<td align="center" valign="middle" colspan="2" height="70px;">
 				
 				<input type="button" id="tabchangeId" />
-				<input type="button" id="registrationbtnId" name="industrialistSubmitBtn" value="Submit" />
+				<input type="button" id="registrationbtnId" name="industrialistSubmitBtn" value="Submit" style="margin-right: 185px;" />
 				
 				</td>
 				
@@ -1096,6 +1110,13 @@ border-left:20px solid green;
 			name="mobNo" value="" />
 
 	</form>
+	
+	<form style="display: hidden" action="acknowledgement.jsp" method="POST" id="ackHiddenForm">
+  <input type="hidden" id="ackApplicationRef" name="applicationRef" value=""/>
+  <input type="hidden" id="ackCompanyName" name="companyName" value=""/>
+   <input type="hidden" id="ackApplicantName" name="applicantName" value=""/>
+ 
+</form>
 
 
 </body>

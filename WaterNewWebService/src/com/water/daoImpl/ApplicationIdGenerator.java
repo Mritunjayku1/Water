@@ -31,7 +31,7 @@ public class ApplicationIdGenerator implements IdentifierGenerator{
         try {
             Statement statement=connection.createStatement();
 
-            ResultSet rs=statement.executeQuery("select count(APP_ID) as Id from APP");
+            ResultSet rs=statement.executeQuery("select count(APP_ID) as Id from CompanyDtl");
 
             if(rs.next())
             {

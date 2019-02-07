@@ -318,7 +318,7 @@ $('#deleteDistrict').click(function(){
 		<h2 class="bg_heading">Add New District</h2>
 <span><b>District Name:</b></span><span style="color: red;">*</span>
 				<input placeholder="Ex: ABC" type="text" id="districtNameId" name="districtName" style="margin-left:35px;"/>
-				<!-- <br/>
+				<br/><!-- 
 <span><b>District Description:</b></span>
 				<input placeholder="Ex: ABC" type="text" id="districtDescId" name="districtDesc" style="margin-left: 5px;"/><br/> -->
 				<input type="button" value="Save" id="districtSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/>
@@ -334,7 +334,7 @@ $('#deleteDistrict').click(function(){
 				<input type="hidden" id="editDistrictId"/>
 <span><b>District Name:</b></span><span style="color: red;">*</span>
 				<input placeholder="Ex: ABC" type="text" id="editDistrictNameId" name="editDistrictName" style="margin-left:43px;" />
-				<!-- <br/>
+				<br/><!-- 
 <span><b>District Description:</b></span>
 				<input placeholder="Ex: ABC" type="text" id="editDistrictDescId" name="editDistrictDesc" style="margin-left: 13px;"/><br/> -->
 				

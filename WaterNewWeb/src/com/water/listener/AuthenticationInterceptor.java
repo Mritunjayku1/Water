@@ -44,7 +44,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 				&& !uri.equals("savePaymentsDetails.do") && !uri.equals("uploadMultipleFile.do") &&  !uri.equals("getPaymentAmount.do") &&  !uri.equals("InitialPayment.do") &&   !uri.equals("getIpfAmount.do")
 				&&  !uri.equals("withdrawApp.do") &&  !uri.equals("saveOnlinePaymentsDetails.do") &&  !uri.equals("onlinePaymentResponse.do")  &&  !uri.equals("onlinePaymentResponseFailure.do") 
 				&&  !uri.equals("downloadTypePdf.do") &&  !uri.equals("onlineFinalResponseFailure.do") &&  !uri.equals("callEasyBusiness.do") && !uri.equals("ApplicationDetails.do") && !uri.equals("forgotPassword.do") 
-				&& !uri.equals("downloadPDF.do")   ) {
+				&& !uri.equals("downloadPDF.do") && !uri.equals("acknowledgement.do")   ) {
 			
 			if (request.getSession().getAttribute("LoginID") == null) {
 				response.sendRedirect("index.do");

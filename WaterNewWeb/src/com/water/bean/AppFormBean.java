@@ -58,6 +58,7 @@ public class AppFormBean {
      private String district;
      private String taluk;
      private String village;
+     private String cost;
 
      
 	public String getSurveyFieldNo() {
@@ -383,6 +384,12 @@ public class AppFormBean {
 	}
 	public void setTotalAmount(String totalAmount) {
 		this.totalAmount = totalAmount;
+	}
+	public String getCost() {
+		return cost;
+	}
+	public void setCost(String cost) {
+		this.cost = cost;
 	}
 
 	
