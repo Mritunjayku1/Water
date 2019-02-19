@@ -1,0 +1,71 @@
+package com.water.dao;
+
+import java.util.List;
+
+import com.water.bean.ApplicationBean;
+import com.water.bean.CmwWaterConnBean;
+import com.water.bean.CompanyDtlBean;
+import com.water.bean.DDPaymentFormBean;
+import com.water.model.Application;
+import com.water.model.CompanyDtl;
+
+public interface DashboardDao {
+	
+	
+	public Application getApplicationDtls(ApplicationBean appFormBean);
+	public Application getApplicationDetails(ApplicationBean appFormBean);
+	public List<Application> listCePendingApplicationDtls();
+	public List<Application> listceApprovedApplicationDtls();
+	public List<Application> listEeApprovedApplicationDtls();
+	public List<DDPaymentFormBean> paymentPendingList();
+	public List<DDPaymentFormBean> paymentRejectedList();
+	public List<DDPaymentFormBean> paymentApprovedList();
+	public List<DDPaymentFormBean> ddPaymentViewAllList();
+	public List<Application> listViewAllApplication();
+	
+	public List<CompanyDtl> listBeforeInspection();
+	public List<CompanyDtl> listMOU();
+	public List<CompanyDtl> listEstimate();
+	public List<CompanyDtl> listAfterInspection();
+	public List<Application> listConPaidDtls();
+	public List<Application> listConPendingPayment();
+	public List<Application> listInitialPendingPayment();
+	
+	public List<Application> listProsFeePendingPayment();
+	public String  ceApproved(ApplicationBean applicationBean);
+	public String  paymentApproved(ApplicationBean applicationBean);
+	
+	public List<Object[]> getceDashboardCount();
+	public List<Object[]> geteeDashboardCount();
+	public List<Object[]> getmcDashboardCount();
+	public List<Object[]> getPaymentDashboardCount();
+	
+	
+	public List<Object[]> getPublicDashboardCount(ApplicationBean applicationBean);
+	
+	
+	public List<Application> listEePaymentPendingApplicationDtls();
+	public List<Application> listMcPendingApplicationDtls();
+	public List<Application> listTrackApplication();
+	public List<Application> listMcApprovedApplicationDtls();
+	public List<Application> listEePendingApplicationDtls();
+	public String  sendInitialPaymentCost(ApplicationBean applicationBean);
+	public String  isMcDicision(ApplicationBean applicationBean);
+	public String  isMcTrckDicision(ApplicationBean applicationBean);
+	
+	
+	
+	public String  SendInspectionDate(CompanyDtlBean applicationBean);
+	
+	public String  sendBeforeInspectionDate(ApplicationBean applicationBean);
+	public String  eeAfterInspectionApproved(ApplicationBean applicationBean);
+	public String  eeAfterInspectionRejected(ApplicationBean applicationBean);
+	public String  eeFinalApproved(ApplicationBean applicationBean);
+	public String  eeRejected(ApplicationBean applicationBean);
+	public String  eeWidthdraw(ApplicationBean applicationBean);
+	public String  SendEstimationCost(ApplicationBean applicationBean);
+	public String  SendOracleDb(CmwWaterConnBean cmwWaterConnBean);
+	
+	
+
+}

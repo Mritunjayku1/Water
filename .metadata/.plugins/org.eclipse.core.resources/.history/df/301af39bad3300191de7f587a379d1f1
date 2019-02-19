@@ -1,0 +1,102 @@
+package com.water.bean;
+
+import java.util.Date;
+
+public class DDPaymentFormBean {
+
+	
+	private String appId;
+	private String paymentType;
+	private String paymentAmount;
+	private String managementComments;
+	private Character paymentStatusFlag;
+	private String ddNo;
+	private String ddDate;
+	private String ddBankName;
+	private String ddBankBranch;
+	private String contactPersonName;
+	private String legCompName;
+	private Date createTs;
+	private Integer companyPaymentDtlID;
+	
+	
+	public String getContactPersonName() {
+		return contactPersonName;
+	}
+	public void setContactPersonName(String contactPersonName) {
+		this.contactPersonName = contactPersonName;
+	}
+	public String getLegCompName() {
+		return legCompName;
+	}
+	public void setLegCompName(String legCompName) {
+		this.legCompName = legCompName;
+	}
+	public String getCreateTs() {
+		return createTs;
+	}
+	public void setCreateTs(String createTs) {
+		this.createTs = createTs;
+	}
+	public String getAppId() {
+		return appId;
+	}
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+	public String getPaymentType() {
+		return paymentType;
+	}
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+	public String getPaymentAmount() {
+		return paymentAmount;
+	}
+	public void setPaymentAmount(String paymentAmount) {
+		this.paymentAmount = paymentAmount;
+	}
+	public String getManagementComments() {
+		return managementComments;
+	}
+	public void setManagementComments(String managementComments) {
+		this.managementComments = managementComments;
+	}
+	public Character getPaymentStatusFlag() {
+		return paymentStatusFlag;
+	}
+	public void setPaymentStatusFlag(Character paymentStatusFlag) {
+		this.paymentStatusFlag = paymentStatusFlag;
+	}
+	public String getDdNo() {
+		return ddNo;
+	}
+	public void setDdNo(String ddNo) {
+		this.ddNo = ddNo;
+	}
+	public String getDdDate() {
+		return ddDate;
+	}
+	public void setDdDate(String ddDate) {
+		this.ddDate = ddDate;
+	}
+	public String getDdBankName() {
+		return ddBankName;
+	}
+	public void setDdBankName(String ddBankName) {
+		this.ddBankName = ddBankName;
+	}
+	public String getDdBankBranch() {
+		return ddBankBranch;
+	}
+	public void setDdBankBranch(String ddBankBranch) {
+		this.ddBankBranch = ddBankBranch;
+	}
+	public String getCompanyPaymentDtlID() {
+		return companyPaymentDtlID;
+	}
+	public void setCompanyPaymentDtlID(String companyPaymentDtlID) {
+		this.companyPaymentDtlID = companyPaymentDtlID;
+	}
+
+}

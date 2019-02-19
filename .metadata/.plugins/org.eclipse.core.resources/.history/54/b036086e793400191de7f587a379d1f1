@@ -1,0 +1,10 @@
+WaterEmployeeService=http://localhost:9080/TwadService/Services/EmployeeService/
+WaterUtilService=http://localhost:9080/TwadService/Services/UtilService/
+
+
+ApplicationService=http://localhost:9080/TwadService/Services/ApplicationService/
+
+
+
+WaterDashboardService=http://localhost:9080/TwadService/Services/DashboardService/
+

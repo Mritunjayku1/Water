@@ -1,0 +1,3191 @@
+package com.water.ws;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import org.apache.commons.io.FileUtils;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+
+import com.google.gson.Gson;
+import com.sun.jersey.core.header.ContentDisposition;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.water.bean.AppFormBean;
+import com.water.bean.ApplicationBean;
+import com.water.bean.CategoryFormBean;
+import com.water.bean.CmwWaterConnBean;
+import com.water.bean.CompanyDtlBean;
+import com.water.bean.ComplaintBean;
+import com.water.bean.ConnectionFormBean;
+import com.water.bean.DashboardBean;
+import com.water.bean.DashboardCountBean;
+import com.water.bean.DistrictFormBean;
+import com.water.bean.DistrictTalukFormBean;
+import com.water.bean.DocumentBean;
+import com.water.bean.EmployeeFormBean;
+import com.water.bean.OracleDbBean;
+import com.water.bean.TalukVillageFormBean;
+import com.water.bean.ZoneDivisionFormBean;
+import com.water.dao.ComplaintDao;
+import com.water.dao.DashboardDao;
+import com.water.daoImpl.ComplaintDaoImpl;
+import com.water.daoImpl.DashboardDaoImpl;
+import com.water.model.Application;
+import com.water.model.CompanyDtl;
+import com.water.model.ComplaintDetails;
+import com.water.model.Documents;
+import com.water.model.EmployeeDetails;
+import com.water.model.MasterCategory;
+import com.water.model.MasterDistrict;
+import com.water.model.MasterReconnection;
+import com.water.model.MasterZone;
+import com.water.util.Common;
+import com.water.util.HibernateUtil;
+
+/**
+ * @author Mahalingam Created on 02-June-2017 for DashboardService :
+ * 
+ */
+@Path("DashboardService")
+public class DashboardService {
+
+	/*ComplaintDao complaintDao;*/
+	DashboardDao dashboardDao;
+
+	Gson gson;
+
+	ResourceBundle rb = ResourceBundle.getBundle("resources/constant");
+
+	String EC_Folder = rb.getString("EC_Folder");
+	private ApplicationBean applicationBean;
+
+	
+	@POST
+	@Path("/getviewApp")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getviewApp( ApplicationBean appFormBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		//System.out.println(appid);
+//AppFormBean appFormBean=new AppFormBean();
+		Application appDtls =  dashboardDao.getApplicationDtls(appFormBean);
+		
+		
+		
+		
+		//for (Application app : appDtls) {
+			/*MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");*/
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(appDtls.getAppId());
+			applicationBean.setCategoryType(appDtls.getCategoryType().getCategoryName());
+			
+			
+			//applicationBean.setContactPersonName(appDtls.getContactPersonName());
+			if(appDtls.getCmwssbZoneNum()!=null && appDtls.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("");
+			}
+			else if(appDtls.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(appDtls.getCmwssbZoneNum().getZoneDesc());
+			}
+			
+			
+			
+			if(appDtls.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(appDtls.getIsReconnectionForService()!= null && appDtls.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(appDtls.getIsReconnectionForService()!= null && appDtls.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			
+			
+		
+			applicationBean.setCdoorNo(appDtls.getCdoorNo());
+			applicationBean.setCplotNo(appDtls.getCplotNo());
+			applicationBean.setCstreetName(appDtls.getCstreetName());
+			applicationBean.setClocation(appDtls.getClocation());
+			applicationBean.setCpinCode(appDtls.getCpinCode());
+			applicationBean.setWebAddress(appDtls.getWebAddress());
+			
+			if(appDtls.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(appDtls.getLandLineNo().toString());
+			}
+			
+			
+			if(appDtls.getIsNewConnection()!=null && appDtls.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(appDtls.getIsNewConnection()!=null && appDtls.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(appDtls.getDivId()!=null  && appDtls.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(appDtls.getDivId()!=null)
+			{
+				applicationBean.setDivId(appDtls.getDivId().getDivDesc());
+			}
+			applicationBean.setDoorNo(appDtls.getDoorNo());
+			applicationBean.setPlotNo(appDtls.getPlotNo());
+			applicationBean.setStreetName(appDtls.getStreetName());
+			applicationBean.setLocation(appDtls.getLocation());
+			applicationBean.setPinCode(appDtls.getPinCode());
+			
+			if(appDtls.getIsExistConnectionForAlteration()!=null && appDtls.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(appDtls.getIsExistConnectionForAlteration()!=null && appDtls.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+			}
+			applicationBean.setSalutation(appDtls.getSalutation());
+			applicationBean.setContactPersonName(appDtls.getContactPersonName());
+			applicationBean.setLegCompName(appDtls.getLegCompName());
+			applicationBean.setMobileNum(appDtls.getMobileNum().toString());
+
+			applicationBean.setEmailAddr(appDtls.getEmailAddr());
+			applicationBean.setAddrPremSought(appDtls.getAddrPremSought());
+			
+			if(appDtls.getReqMld()!=null)
+			applicationBean.setReqMld(appDtls.getReqMld().toString());
+			if(appDtls.getAnnAssmtVal()!=null)
+				applicationBean.setAnnAssmtVal(appDtls.getAnnAssmtVal().toString());
+			if(appDtls.getBillNo1()!=null)
+				applicationBean.setBillNo1(appDtls.getBillNo1().toString());
+			if(appDtls.getBillNo2()!=null)
+				applicationBean.setBillNo2(appDtls.getBillNo2().toString());
+
+			if(appDtls.getIntrPlumStatus()!=null && appDtls.getIntrPlumStatus()==0){
+				applicationBean.setIntrPlumStatus("NO");
+			}
+			if(appDtls.getIntrPlumStatus()!=null && appDtls.getIntrPlumStatus()==1){
+				applicationBean.setIntrPlumStatus("YES");
+			}
+			
+			if(appDtls.getWatSevProp()!=null && appDtls.getWatSevProp()==0){
+				applicationBean.setWatSevProp("NO");
+			}
+			if(appDtls.getWatSevProp()!=null && appDtls.getWatSevProp()==1){
+				applicationBean.setWatSevProp("YES");
+			}
+
+			if(appDtls.getWorkType()==0){
+				applicationBean.setWorkType("Treated (Chloronated)");
+			}
+			if(appDtls.getWorkType()==1){
+				applicationBean.setWorkType("Raw Water");
+			}
+			if(appDtls.getWorkType()==2){
+				applicationBean.setWorkType("Secondary treated water");
+			}
+			
+			if(appDtls.getPaymentType() != null && appDtls.getPaymentType()==0){
+				applicationBean.setPaymentType("Offline");
+				applicationBean.setDdNum(appDtls.getDdNum().toString());
+			}
+			else if(appDtls.getPaymentType() != null){
+				applicationBean.setPaymentType("Online");
+			}
+			
+			applicationBean.setCreateDate(appDtls.getCreateTs().toString());
+applicationBean.setCreateDate(appDtls.getCreateTs().toString());
+            return gson.toJson(applicationBean);
+
+
+
+	}
+	
+	
+	@POST
+	@Path("/listViewAllApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listViewAllApplication() {
+	dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listViewAllApplication();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType().getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			if(app.getStatusFlag().toString().equals("Y") && app.getInsStatusId()==1)
+			{
+				applicationBean.setAppStatus("Yet to Start");
+			}
+			if(app.getStatusFlag().toString().equals("Y") && app.getInsStatusId()!=1 )
+			{
+				applicationBean.setAppStatus("Approved");
+			}
+			if(app.getStatusFlag().toString().equals("R"))
+			{
+				applicationBean.setAppStatus("Rejected");
+			}
+			if(app.getStatusFlag().toString().equals("C"))
+			{
+				applicationBean.setAppStatus("Connection Completed");
+			}
+			if(app.getStatusFlag().toString().equals("P"))
+			{
+				applicationBean.setAppStatus("Payment Paid");
+			}
+			
+			//applicationBean.setCorrespondenceAddr(app.getCorrespondenceAddr());
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	@POST
+	@Path("/listCePendingApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listCePendingApplication() {
+	dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listCePendingApplicationDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType().getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+		
+			
+			
+			//applicationBean.setCorrespondenceAddr(app.getCorrespondenceAddr());
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+		
+	
+	@POST
+	@Path("/getApplicationDetails")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getApplicationDetails( ApplicationBean appFormBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		//System.out.println(appid);
+//AppFormBean appFormBean=new AppFormBean();
+		Application appDtls =  dashboardDao.getApplicationDetails(appFormBean);
+		ApplicationBean applicationBean = new ApplicationBean();
+		
+		if(appDtls!=null)
+		{
+		
+		
+		//for (Application app : appDtls) {
+			/*MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");*/
+			
+			applicationBean.setAppId(appDtls.getAppId());
+			applicationBean.setCategoryType(appDtls.getCategoryType().getCategoryName());
+			
+			//applicationBean.setContactPersonName(appDtls.getContactPersonName());
+			if(appDtls.getCmwssbZoneNum()!=null && appDtls.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("");
+			}
+			else if(appDtls.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(appDtls.getCmwssbZoneNum().getZoneDesc());
+			}
+			
+			/*if(appDtls.getReconnectionType() !=null && appDtls.getReconnectionType().getReConnDesc()==null)
+			{
+			
+				applicationBean.setReconnectionType("");
+			}
+			else
+			{
+				applicationBean.setReconnectionType(appDtls.getReconnectionType().getReConnDesc());
+			}*/
+			
+			/*if(appDtls.getIsReconnectionForService()==0){
+				applicationBean.setIsReconnectionForService("No");
+			}
+			else{
+				applicationBean.setIsReconnectionForService("Yes");
+				applicationBean.setReconnectionType(appDtls.getReconnectionType().getReConnDesc());
+				
+			}*/
+			/////////////
+			
+			if(appDtls.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(appDtls.getIsReconnectionForService()!= null && appDtls.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(appDtls.getIsReconnectionForService()!= null && appDtls.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+		
+		
+			applicationBean.setCdoorNo(appDtls.getCdoorNo());
+			applicationBean.setCplotNo(appDtls.getCplotNo());
+			applicationBean.setCstreetName(appDtls.getCstreetName());
+			applicationBean.setClocation(appDtls.getClocation());
+			applicationBean.setCpinCode(appDtls.getCpinCode());
+			applicationBean.setWebAddress(appDtls.getWebAddress());
+			if(appDtls.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(appDtls.getLandLineNo().toString());
+			}
+			
+			if(appDtls.getIsNewConnection()!=null && appDtls.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(appDtls.getIsNewConnection()!=null && appDtls.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(appDtls.getDivId()!=null  && appDtls.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(appDtls.getDivId()!=null)
+			{
+				applicationBean.setDivId(appDtls.getDivId().getDivDesc());
+			}
+			
+			applicationBean.setDoorNo(appDtls.getDoorNo());
+			applicationBean.setPlotNo(appDtls.getPlotNo());
+			applicationBean.setStreetName(appDtls.getStreetName());
+			applicationBean.setLocation(appDtls.getLocation());
+			applicationBean.setPinCode(appDtls.getPinCode());
+			
+			if(appDtls.getIsExistConnectionForAlteration()!=null && appDtls.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(appDtls.getIsExistConnectionForAlteration()!=null && appDtls.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+			}
+			applicationBean.setSalutation(appDtls.getSalutation());
+			applicationBean.setContactPersonName(appDtls.getContactPersonName());
+			applicationBean.setLegCompName(appDtls.getLegCompName());
+			applicationBean.setMobileNum(appDtls.getMobileNum().toString());
+
+			applicationBean.setEmailAddr(appDtls.getEmailAddr());
+			applicationBean.setAddrPremSought(appDtls.getAddrPremSought());
+			
+			if(appDtls.getReqMld()!=null)
+			applicationBean.setReqMld(appDtls.getReqMld().toString());
+			
+			if(appDtls.getAnnAssmtVal()!=null)
+				applicationBean.setAnnAssmtVal(appDtls.getAnnAssmtVal().toString());
+			if(appDtls.getBillNo1()!=null)
+				applicationBean.setBillNo1(appDtls.getBillNo1().toString());
+			if(appDtls.getBillNo2()!=null)
+				applicationBean.setBillNo2(appDtls.getBillNo2().toString());
+
+			if(appDtls.getIntrPlumStatus()!=null && appDtls.getIntrPlumStatus()==0){
+				applicationBean.setIntrPlumStatus("NO");
+			}
+			if(appDtls.getIntrPlumStatus()!=null && appDtls.getIntrPlumStatus()==1){
+				applicationBean.setIntrPlumStatus("YES");
+			}
+			
+			if(appDtls.getWatSevProp()!=null && appDtls.getWatSevProp()==0){
+				applicationBean.setWatSevProp("NO");
+			}
+			if(appDtls.getWatSevProp()!=null && appDtls.getWatSevProp()==1){
+				applicationBean.setWatSevProp("YES");
+			}
+
+			if(appDtls.getWorkType()==0){
+				applicationBean.setWorkType("Treated (Chloronated)");
+			}
+			if(appDtls.getWorkType()==1){
+				applicationBean.setWorkType("Raw Water");
+			}
+			if(appDtls.getWorkType()==2){
+				applicationBean.setWorkType("Secondary treated water");
+			}
+			
+			if(appDtls.getPaymentType() != null && appDtls.getPaymentType()==0){
+				applicationBean.setPaymentType("Offline");
+				applicationBean.setDdNum(appDtls.getDdNum().toString());
+			}
+			else if(appDtls.getPaymentType() != null){
+				applicationBean.setPaymentType("Online");
+			}
+			
+			
+			if(appDtls.getMcStatus().getStatusId()==2 && (appDtls.getPaidfinalFee()!=null) ){
+				applicationBean.setCeStatus("Approved by MC");
+			//	applicationBean.setRemarks("Work is going to  Start");
+			}
+			if(appDtls.getMcStatus().getStatusId()==2 && (appDtls.getPaidfinalFee()==null ) ){
+				applicationBean.setCeStatus("Tendering process underway.");
+				//applicationBean.setRemarks("Connection payment not yet received.");
+			}
+			/*else if(appDtls.getEeStatus().getStatusId()==2){
+				applicationBean.setCeStatus("Approved by EE. It is under MC for Final Settlement");
+				applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}*/
+			else if(appDtls.getCeStatus().getStatusId()==2){
+				applicationBean.setCeStatus("payment successful");
+			//	applicationBean.setCeStatus("Application submitted; verification and inspection pending1.");
+				//applicationBean.setRemarks("");
+			}
+		
+			else if(appDtls.getEeStatus().getStatusId()==1 && appDtls.getInsStatusId()==2 && appDtls.getPaidProcessFee()!=null && appDtls.getStatusFlag()=='Y'){
+				//applicationBean.setCeStatus("Under by EE. Initial processing cost Rs "+appDtls.getInitialPayment()+" received successfully , "+" you will receive inspection date  shortly  your registered mobile and email.");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+				applicationBean.setCeStatus("Inspection completed; pending approval/ tendering process.");
+			}
+			else if(appDtls.getEeStatus().getStatusId()==2 && appDtls.getInsStatusId()==2  && appDtls.getStatusFlag()=='Y'){
+				applicationBean.setCeStatus("Inspection completed; pending approval/ tendering process.");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}
+			else if(appDtls.getEeStatus().getStatusId()==2 && appDtls.getStatusFlag()=='R'){
+				applicationBean.setCeStatus("EE Rejected your Application");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}
+			else if(appDtls.getMcStatus().getStatusId()==2 && appDtls.getStatusFlag()=='R'){
+				applicationBean.setCeStatus("MC Rejected your Application");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}
+			else if(appDtls.getEeStatus().getStatusId()==3 && appDtls.getInsStatusId()==3 && (appDtls.getPaidfinalFee()==null) ){
+				applicationBean.setCeStatus("Tender awarded; Please Pay Connection Payment.");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}
+			else if(appDtls.getEeStatus().getStatusId()==3 && appDtls.getInsStatusId()==3 && (appDtls.getPaidfinalFee()!=null)){
+				applicationBean.setCeStatus("Tendering process underway.");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}
+			else if(appDtls.getMcStatus().getStatusId()==3 && appDtls.getInsStatusId()==3 && (appDtls.getPaidfinalFee()!=null)){
+				applicationBean.setCeStatus("Tender awarded; Work under progress.");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}
+			else if(appDtls.getEeStatus().getStatusId()==2 && appDtls.getInsStatusId()==1 && appDtls.getPaidProcessFee()==null){
+				applicationBean.setCeStatus("Under by EE. Initial processing cost Rs "+appDtls.getInitialPayment()+"  send it to Your registered mobile and email.Please pay this url :  http://localhost:8080/TwadWeb/initialPayment.do");
+				//applicationBean.setRemarks(appDtls.getRemarks().toString());
+			}
+			else{
+				applicationBean.setCeStatus("payment successful");
+				//applicationBean.setCeStatus("Application submitted; verification and inspection pending.");
+				//applicationBean.setRemarks("Address Verification going on");
+			}
+			
+			
+			applicationBean.setCreateDate(appDtls.getCreateTs().toString());
+
+
+		}
+		else
+		{
+			applicationBean.setAppId("Application No Invalid!");
+			applicationBean.setCreateDate("Application No Invalid!");
+			applicationBean.setCeStatus("Application No Invalid!");
+		}
+		
+		//}
+		//System.out.println("app:"+appDtls);
+
+		return gson.toJson(applicationBean);
+
+		
+		//return gson.toJson(appDtls);
+		//return "NoData";
+
+	}
+	
+	
+	@POST
+	@Path("/listEePendingApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listEePendingApplication() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listEePendingApplicationDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType().getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			
+			if(app.getRemarks()!=null )
+			{
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			
+			/*if(app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+		*/
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+		
+			
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	
+	
+	@POST
+	@Path("/listTrackApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listTrackApplication() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listTrackApplication();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType().getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			
+			if(app.getRemarks()!=null )
+			{
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			
+			if(app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+		
+			
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	@POST
+	@Path("/listMcPendingApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listMcPendingApplication() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listMcPendingApplicationDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType().getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			
+			if(app.getRemarks()!=null )
+			{
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			
+			
+		
+///
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+		
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			applicationBean.setInitialPayment(app.getPaidProcessFee());
+			applicationBean.setEstimationCost(app.getFixedFinalFee().toString());
+			applicationBean.setPaymentAmount(app.getPaymentAmount().toString());
+			applicationBean.setGstAmount(app.getGstAmount().toString());
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	@POST
+	@Path("/listAfterInspection")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listAfterInspection() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<CompanyDtl> appDtls = dashboardDao.listAfterInspection();
+		List<CompanyDtlBean> applicationBeanList = new ArrayList<CompanyDtlBean>();
+		for (CompanyDtl app : appDtls) {
+			//MasterZone mastr=new MasterZone();
+			//mastr.setZoneDesc("other");
+			CompanyDtlBean applicationBean = new CompanyDtlBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+		//	applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum()!=null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			/*if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}*/
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			//applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			/*if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}*/
+			/*if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}*/
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+		//	applicationBean.setPinCode(app.getCpinCode());
+			
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+		//	applicationBean.setCreateDate(app.getCreateTs().toString());
+			/*if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==1){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==2){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}*/
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	@POST
+	@Path("/listEstimate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listEstimate() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<CompanyDtl> appDtls = dashboardDao.listEstimate();
+		List<CompanyDtlBean> applicationBeanList = new ArrayList<CompanyDtlBean>();
+		for (CompanyDtl app : appDtls) {
+			//MasterZone mastr=new MasterZone();
+			//mastr.setZoneDesc("other");
+			CompanyDtlBean applicationBean = new CompanyDtlBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+		//	applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum()!=null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			/*if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}*/
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			//applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			/*if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}*/
+			/*if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}*/
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+		//	applicationBean.setPinCode(app.getCpinCode());
+			
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+		//	applicationBean.setCreateDate(app.getCreateTs().toString());
+			/*if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==1){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==2){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}*/
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	@POST
+	@Path("/listMOU")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listMOU() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<CompanyDtl> appDtls = dashboardDao.listMOU();
+		List<CompanyDtlBean> applicationBeanList = new ArrayList<CompanyDtlBean>();
+		for (CompanyDtl app : appDtls) {
+			//MasterZone mastr=new MasterZone();
+			//mastr.setZoneDesc("other");
+			CompanyDtlBean applicationBean = new CompanyDtlBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+		//	applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum()!=null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			/*if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}*/
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			//applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			/*if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}*/
+			/*if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}*/
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+		//	applicationBean.setPinCode(app.getCpinCode());
+			
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+		//	applicationBean.setCreateDate(app.getCreateTs().toString());
+			/*if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==1){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==2){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}*/
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	@POST
+	@Path("/listBeforeInspection")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listBeforeInspection() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<CompanyDtl> appDtls = dashboardDao.listBeforeInspection();
+		List<CompanyDtlBean> applicationBeanList = new ArrayList<CompanyDtlBean>();
+		for (CompanyDtl companyDtl : appDtls) {
+			//MasterZone mastr=new MasterZone();
+			//mastr.setZoneDesc("other");
+			CompanyDtlBean applicationBean = new CompanyDtlBean();
+			applicationBean.setAppId(companyDtl.getAppId());
+			applicationBean.setCategoryType(companyDtl.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(companyDtl.getSalutation());
+			applicationBean.setContactPersonName(companyDtl.getContactPersonName());
+			//applicationBean.setReqMld(app.getReqMld().toString());
+			
+	
+			/*if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}*/
+			
+			applicationBean.setCdoorNo(companyDtl.getCdoorNo());
+			applicationBean.setCplotNo(companyDtl.getCplotNo());
+			applicationBean.setCstreetName(companyDtl.getCstreetName());
+			applicationBean.setClocation(companyDtl.getClocation());
+			applicationBean.setCpinCode(companyDtl.getCpinCode());
+		//	applicationBean.setWebAddress(companyDtl.getWebAddress());
+			if(companyDtl.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(companyDtl.getLandLineNo().toString());
+			}
+			
+			/*if(companyDtl.getIsNewConnection()!=null && companyDtl.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}*/
+			/*if(companyDtl.getIsNewConnection()!=null && companyDtl.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}*/
+			/*if(companyDtl.getDivId()!=null  && companyDtl.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}*/
+			/*else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}*/
+			applicationBean.setDoorNo(companyDtl.getDoorNo());
+			applicationBean.setPlotNo(companyDtl.getPlotNo());
+			applicationBean.setStreetName(companyDtl.getStreetName());
+			applicationBean.setLocation(companyDtl.getLocation());
+			//applicationBean.setPinCode(companyDtl.getCpinCode());
+			
+			applicationBean.setLegCompName(companyDtl.getLegCompName());
+			//applicationBean.setCreateDate(companyDtl.getCreateTs().toString());
+			/*if(app.getIsExistConnectionForAlteration()!=null && companyDtl.getIsExistConnectionForAlteration()==0){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}*/
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	@POST
+	@Path("/listProsFeePendingPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listProsFeePendingPayment() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listProsFeePendingPayment();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum()!=null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	
+	@POST
+	@Path("/listeeConPendingPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listeeConPendingPayment() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listEePaymentPendingApplicationDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum()!=null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	@POST
+	@Path("/listConPendingPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listConPendingPayment() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listConPendingPayment();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum()!=null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	@POST
+	@Path("/listConPaidDtls")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listConPaidDtls() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listConPaidDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			
+			
+			applicationBean.setEstimationCost(String.valueOf(app.getPaidfinalFee()));
+			
+			applicationBean.setInitialPayment(app.getPaidProcessFee());
+			
+			/*if(app.getCmwssbZoneNum()!=null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum()!=null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	
+	
+	@GET
+	@Path("/listEeApprovedApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listEeApprovedApplication() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listEeApprovedApplicationDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==1){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==2){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+	
+	
+	@GET
+	@Path("/listMcApprovedApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listMcApprovedApplication() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listMcApprovedApplicationDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==1){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==2){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+
+	@GET
+	@Path("/listCeApprovedApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listCeApprovedApplication() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.listceApprovedApplicationDtls();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==1){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==2){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+
+	
+	@POST
+	@Path("/CeApproved")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String CeApproved(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.ceApproved(applicationBean));
+
+	}
+	
+	@POST
+	@Path("/paymentApproved")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String paymentApproved(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.paymentApproved(applicationBean));
+
+	}
+	
+	@POST
+	@Path("/eeRejcted")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eeRejcted(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.eeRejected(applicationBean));
+
+	}
+	
+	@POST
+	@Path("/SendEstimationCost")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String SendEstimationCost(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return dashboardDao.SendEstimationCost(applicationBean);
+
+	}
+	
+	@POST
+	@Path("/SendOracleDb")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String SendOracleDb(OracleDbBean oracleDbBean) throws ParseException {
+		
+		SimpleDateFormat source = new SimpleDateFormat("dd-mm-yyyy");
+		
+		SimpleDateFormat target = new SimpleDateFormat("yyyy-mm-dd");
+		
+		
+		CmwWaterConnBean cmwWaterConnBean = new CmwWaterConnBean();
+		
+		cmwWaterConnBean.setChALLAN_NO(oracleDbBean.getAppId());
+		cmwWaterConnBean.setAdDITIONAL_AMT(((Float)Float.parseFloat(oracleDbBean.getInitialPaymentCost())).intValue());
+		cmwWaterConnBean.setChALLAN_AMT(((Float)Float.parseFloat(oracleDbBean.getEstimationCost())).intValue());
+		cmwWaterConnBean.setDaTE_OF_CONN(target.parse(target.format(source.parse(oracleDbBean.getCompletionDate()))));
+		cmwWaterConnBean.setDaTE_OF_SANC(target.parse(target.format(source.parse(oracleDbBean.getCommissionDate()))));
+		cmwWaterConnBean.setAdDITION_DATE(target.parse(target.format(source.parse(oracleDbBean.getCommissionDate()))));
+		cmwWaterConnBean.setGst_AMT(((Float)Float.parseFloat(oracleDbBean.getGstAmount())).intValue());
+		cmwWaterConnBean.setTotal_AMT(((Float)Float.parseFloat(oracleDbBean.getTotalAmount())).intValue());
+		
+		
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return dashboardDao.SendOracleDb(cmwWaterConnBean);
+
+	}
+	@POST
+	@Path("/eeWidthdraw")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eeWidthdraw(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.eeWidthdraw(applicationBean));
+
+	}
+	
+	
+	@POST
+	@Path("/SendinitialPaymentCost")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String SendinitialPaymentCost(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.sendInitialPaymentCost(applicationBean));
+
+	}
+	@POST
+	@Path("/isMcDicision")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String isMcDicision(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.isMcDicision(applicationBean));
+
+	}
+	
+	@POST
+	@Path("/isMcTrckDicision")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String isMcTrckDicision(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.isMcTrckDicision(applicationBean));
+
+	}
+	
+	
+	
+	
+	/*@POST
+	@Path("/SendInspectionDateOLD")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String SendInspectionDateOLD(ApplicationBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.SendInspectionDate(applicationBean));
+
+	}*/
+	@POST
+	@Path("/SendInspectionDate")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String SendInspectionDate(CompanyDtlBean applicationBean) {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		return gson.toJson(dashboardDao.SendInspectionDate(applicationBean));
+
+	}
+	
+	
+
+	
+	@POST
+	@Path("/getceDashboardCount")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getceDashboardCount() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+
+		//DashboardBean dashboardBean = new DashboardBean();
+		DashboardCountBean dashboardCountBean=new DashboardCountBean();
+
+		for (Object[] rowData : dashboardDao.getceDashboardCount()) {
+			dashboardCountBean.setTotalRegister(Integer.parseInt(rowData[0]
+					.toString()));
+			dashboardCountBean.setPenndingApplication(Integer.parseInt(rowData[1]
+					.toString()));
+			dashboardCountBean.setApprovedApplication(Integer.parseInt(rowData[2]
+					.toString()));
+
+			dashboardCountBean.setPaidApplication(Integer.parseInt(rowData[3]
+					.toString()));
+
+			dashboardCountBean.setYesCount(3);
+
+			dashboardCountBean.setNoCount(30);
+
+			dashboardCountBean.setNACount(20);
+			dashboardCountBean.setNACount(20);
+			
+
+		}
+		return gson.toJson(dashboardCountBean);
+	}
+
+
+	@POST
+	@Path("/getPaymentDashboardCount")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getPaymentDashboardCount() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+
+		//DashboardBean dashboardBean = new DashboardBean();
+		DashboardCountBean dashboardCountBean=new DashboardCountBean();
+
+		for (Object[] rowData : dashboardDao.getPaymentDashboardCount()) {
+			dashboardCountBean.setTotalRegister(Integer.parseInt(rowData[0]
+					.toString()));
+			dashboardCountBean.setPenndingApplication(Integer.parseInt(rowData[1]
+					.toString()));
+			dashboardCountBean.setApprovedApplication(Integer.parseInt(rowData[2]
+					.toString()));
+
+			dashboardCountBean.setPaidApplication(Integer.parseInt(rowData[3]
+					.toString()));
+
+			dashboardCountBean.setYesCount(3);
+
+			dashboardCountBean.setNoCount(30);
+
+			dashboardCountBean.setNACount(20);
+			dashboardCountBean.setNACount(20);
+			
+
+		}
+		return gson.toJson(dashboardCountBean);
+	}
+
+	@POST
+	@Path("/paymentPendingList")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String paymentPendingList() {
+	dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<CompanyDtl> appDtls = dashboardDao.paymentPendingList();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (CompanyDtl app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType().getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			/*if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+		
+		*/	
+			
+			//applicationBean.setCorrespondenceAddr(app.getCorrespondenceAddr());
+			
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			/*if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+			}
+			*/
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
+				applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+		
+	@GET
+	@Path("/paymentApprovedList")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String paymentApprovedList() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+		
+
+		List<Application> appDtls = dashboardDao.paymentApprovedList();
+		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
+		for (Application app : appDtls) {
+			MasterZone mastr=new MasterZone();
+			mastr.setZoneDesc("other");
+			ApplicationBean applicationBean = new ApplicationBean();
+			applicationBean.setAppId(app.getAppId());
+			applicationBean.setCategoryType(app.getCategoryType()
+					.getCategoryName());
+			applicationBean.setSalutation(app.getSalutation());
+			applicationBean.setContactPersonName(app.getContactPersonName());
+			applicationBean.setReqMld(app.getReqMld().toString());
+			/*if(app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}*/
+			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
+			{
+			
+				applicationBean.setCmwssbZoneNum("other");
+			}
+			else if(app.getCmwssbZoneNum() != null)
+			{
+				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
+						.getZoneDesc());
+			}
+			
+			if(app.getIsReconnectionForService() == null )
+			{
+				applicationBean.setIsReconnectionForService("NO");	
+			}
+			
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
+			{
+				applicationBean.setIsReconnectionForService("NO");
+			}
+			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
+			{
+				applicationBean.setIsReconnectionForService("YES");
+			}
+			applicationBean.setCdoorNo(app.getCdoorNo());
+			applicationBean.setCplotNo(app.getCplotNo());
+			applicationBean.setCstreetName(app.getCstreetName());
+			applicationBean.setClocation(app.getClocation());
+			applicationBean.setCpinCode(app.getCpinCode());
+			applicationBean.setWebAddress(app.getWebAddress());
+			if(app.getLandLineNo()!=null){
+				applicationBean.setLandLineNo(app.getLandLineNo().toString());
+			}
+			
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
+				applicationBean.setIsNewConnection("NO");
+			}
+			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
+				applicationBean.setIsNewConnection("YES");
+			}
+			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
+				applicationBean.setDivId("");
+			}
+			else if(app.getDivId()!=null)
+			{
+				applicationBean.setDivId(app.getDivId().getDivDesc());
+				applicationBean.setRemarks(app.getRemarks());
+			}
+			
+			applicationBean.setDoorNo(app.getDoorNo());
+			applicationBean.setPlotNo(app.getPlotNo());
+			applicationBean.setStreetName(app.getStreetName());
+			applicationBean.setLocation(app.getLocation());
+			applicationBean.setPinCode(app.getPinCode());
+			
+			applicationBean.setLegCompName(app.getLegCompName());
+			applicationBean.setCreateDate(app.getCreateTs().toString());
+			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==1){
+			applicationBean.setIsExistConnectionForAlteration("NO");
+			}
+			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==2){
+				applicationBean.setIsExistConnectionForAlteration("YES");
+				}
+			applicationBeanList.add(applicationBean);
+		
+
+		}
+		
+
+		return gson.toJson(applicationBeanList);
+
+	}
+
+
+	
+	
+	@POST
+	@Path("/geteeDashboardCount")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getDashboardCount() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+
+		//DashboardBean dashboardBean = new DashboardBean();
+		DashboardCountBean dashboardCountBean=new DashboardCountBean();
+
+		for (Object[] rowData : dashboardDao.geteeDashboardCount()) {
+			dashboardCountBean.setTotalRegister(Integer.parseInt(rowData[0]
+					.toString()));
+			dashboardCountBean.setPenndingApplication(Integer.parseInt(rowData[1]
+					.toString()));
+			dashboardCountBean.setApprovedApplication(Integer.parseInt(rowData[2]
+					.toString()));
+
+			/*dashboardCountBean.setApprovedApplication(Integer.parseInt(rowData[3]
+					.toString()));*/
+			dashboardCountBean.setPaidApplication(Integer.parseInt(rowData[3]
+					.toString()));
+
+			dashboardCountBean.setYesCount(3);
+
+			dashboardCountBean.setNoCount(30);
+
+			dashboardCountBean.setNACount(20);
+			dashboardCountBean.setNACount(20);
+
+		}
+		return gson.toJson(dashboardCountBean);
+	}
+	
+	@POST
+	@Path("/getmcDashboardCount")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getmcDashboardCount() {
+
+		dashboardDao = new DashboardDaoImpl();
+		gson = new Gson();
+
+		//DashboardBean dashboardBean = new DashboardBean();
+		DashboardCountBean dashboardCountBean=new DashboardCountBean();
+
+		for (Object[] rowData : dashboardDao.getmcDashboardCount()) {
+			dashboardCountBean.setTotalRegister(Integer.parseInt(rowData[0]
+					.toString()));
+			dashboardCountBean.setPenndingApplication(Integer.parseInt(rowData[1]
+					.toString()));
+			dashboardCountBean.setApprovedApplication(Integer.parseInt(rowData[2]
+					.toString()));
+			dashboardCountBean.setPaidApplication(Integer.parseInt(rowData[3]
+					.toString()));
+			
+
+			dashboardCountBean.setYesCount(3);
+
+			dashboardCountBean.setNoCount(30);
+
+			dashboardCountBean.setNACount(20);
+			dashboardCountBean.setNACount(20);
+
+		}
+		return gson.toJson(dashboardCountBean);
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+/*
+	@POST
+	@Path("updateDocumentInfo")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String updateDocumentInfo(ComplaintBean complaintBean) {
+		gson = new Gson();
+		complaintDao = new ComplaintDaoImpl();
+		ComplaintDetails complaintDetails = new ComplaintDetails();
+		complaintDetails = complaintDao.updateDocumentInfo(complaintBean);
+		return gson.toJson(complaintDetails);
+	}*/
+
+
+
+
+	@SuppressWarnings("resource")
+	@POST
+	@Path("/fileUpload")
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String fileUpload(FormDataMultiPart multipartdata) {
+		InputStream inputstream = null;
+		OutputStream outputstream = null;
+		Session session = null;
+		Transaction transaction = null;
+		String result = null;
+
+		try {
+			if (multipartdata != null) {
+
+				Integer userId = Integer.parseInt(multipartdata.getField(
+						"userId").getValue());
+
+				String complaintNumber = multipartdata.getField(
+						"complaintNumber").getValue();
+
+				Integer complaintID = Integer.parseInt(multipartdata.getField(
+						"complaint_No").getValue());
+
+				FormDataBodyPart bodypartdata = multipartdata
+						.getField("fileObject");
+				ContentDisposition contentdisposition = bodypartdata
+						.getContentDisposition();
+
+				InputStream uploadedInputStream = bodypartdata
+						.getValueAs(InputStream.class);
+				try {
+
+					if (!new File(EC_Folder + complaintNumber + "//").exists())
+						new File(EC_Folder + complaintNumber).mkdirs();
+
+					OutputStream outpuStream = new FileOutputStream(new File(
+							EC_Folder + complaintNumber + "//"
+									+ contentdisposition.getFileName()));
+
+					int read = 0;
+
+					byte[] bytes = new byte[1024];
+
+					outpuStream = new FileOutputStream(new File(EC_Folder
+							+ complaintNumber + "//"
+							+ contentdisposition.getFileName()));
+
+					while ((read = uploadedInputStream.read(bytes)) != -1) {
+						outpuStream.write(bytes, 0, read);
+					}
+					outpuStream.flush();
+					outpuStream.close();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+
+				}
+
+				// FileUtils.copyFileToDirectory(bodypartdata,
+				// directoryPath);
+				Long filesize = Long.valueOf(multipartdata.getField("filesize")
+						.getValue());
+
+				if (filesize == null) {
+					return result = "Folder size has exceeded";
+				} else {
+					String filepath = EC_Folder + complaintNumber + "//"
+							+ contentdisposition.getFileName();
+
+					session = HibernateUtil.getSessionFactory().openSession();
+					transaction = session.beginTransaction();
+					transaction.begin();
+					Integer complaintId = (Integer) session
+							.createCriteria(ComplaintDetails.class)
+							.add(Restrictions.eq("complaintID", complaintID))
+							.setProjection(Projections.property("complaintID"))
+							.setMaxResults(1).uniqueResult();
+					System.out.println("ComplainId : " + complaintId);
+
+					if (complaintId != null) {
+						inputstream = bodypartdata
+								.getValueAs(InputStream.class);
+						outputstream = new FileOutputStream(filepath);
+						int read = 0;
+						byte[] bytes = new byte[2048];
+						while ((read = inputstream.read(bytes)) != -1) {
+							outputstream.write(bytes, 0, read);
+						}
+						outputstream.flush();
+
+						Documents document = new Documents();
+						if (userId > 0)
+							document.setDocumentOwner(userId);
+						else
+							document.setDocumentOwner(0);
+
+						document.setComplaintID(complaintId);
+						document.setCreatedDate(new Date());
+						document.setDocumentPath(complaintNumber + "//"
+								+ contentdisposition.getFileName());
+						document.setIsActive(true);
+						session.save(document);
+						result = "success";
+					} else {
+						result = "error";
+					}
+
+					transaction.commit();
+				}
+
+			}
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (transaction != null)
+				transaction.rollback();
+			return null;
+		} finally {
+			if (inputstream != null) {
+				try {
+					inputstream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (outputstream != null) {
+				try {
+					outputstream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			if (session != null) {
+				session.flush();
+				session.close();
+			}
+		}
+	}
+
+	
+
+	@POST
+	@Path("/getPublicDashboardCount")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getPublicDashboardCount(ApplicationBean applicationBean) {
+
+//		complaintDao = new ComplaintDaoImpl();
+		dashboardDao=new DashboardDaoImpl();
+		gson = new Gson();
+
+DashboardCountBean dashboardBean;
+
+		List<DashboardCountBean> dashboardBeanList = new ArrayList<DashboardCountBean>();
+
+		
+		 for (Object[] rowData : dashboardDao
+		  .getPublicDashboardCount(applicationBean)) {
+		 
+		dashboardBean = new DashboardCountBean();
+		dashboardBean.setCategoryID(23);
+		dashboardBean.setCategoryName("CE");
+		dashboardBean.setCategoryCount(30);
+		dashboardBean.setIcon("test");
+		dashboardBean.setBgColor("red");
+		dashboardBeanList.add(dashboardBean);
+		 }
+		return gson.toJson(dashboardBeanList);
+	}
+	@POST
+	@Path("addNewUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addNewUser(EmployeeFormBean employeeFormBean) {
+		
+	return new DashboardDaoImpl().addNewUser(employeeFormBean);
+	}
+	@POST
+	@Path("editUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editUser(EmployeeFormBean employeeFormBean) {
+		
+	return new DashboardDaoImpl().editUser(employeeFormBean);
+	}
+	@POST
+	@Path("deleteUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteUser(EmployeeFormBean employeeFormBean) {
+		
+	return new DashboardDaoImpl().deleteUser(employeeFormBean);
+	}
+	
+	@POST
+	@Path("/getUserDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getUserDtl() {
+		gson = new Gson();
+		
+		List<EmployeeDetails> employeeDetailsList =  new DashboardDaoImpl().getUserDtl();
+		List<EmployeeFormBean> employeeFormBeanList = new ArrayList<>();
+		
+		for(EmployeeDetails employeeDetails:employeeDetailsList){
+		
+			EmployeeFormBean employeeFormBean = new EmployeeFormBean();
+			employeeFormBean.setEmail(employeeDetails.getEmailAddr());
+			employeeFormBean.setMobile(String.valueOf(employeeDetails.getPhoneNum()));
+			employeeFormBean.setName(employeeDetails.getUserFirstName());
+			employeeFormBean.setPassword(employeeDetails.getLoginPassword());
+			employeeFormBean.setRole(employeeDetails.getUserRole().getRoleName());
+			employeeFormBean.setRoleId(String.valueOf(employeeDetails.getUserRole().getRoleId()));
+			employeeFormBean.setUserId(String.valueOf(employeeDetails.getUserId()));
+			employeeFormBean.setUsername(employeeDetails.getLoginUserName());
+			employeeFormBeanList.add(employeeFormBean);
+		}
+            return gson.toJson(employeeFormBeanList);
+	}
+	
+
+	@POST
+	@Path("addCategory")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addCategory(CategoryFormBean categoryFormBean) {
+		
+	return new DashboardDaoImpl().addCategory(categoryFormBean);
+	}
+	@POST
+	@Path("editCategory")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editCategory(CategoryFormBean categoryFormBean) {
+		
+	return new DashboardDaoImpl().editCategory(categoryFormBean);
+	}
+	@POST
+	@Path("deleteCategory")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteCategory(CategoryFormBean categoryFormBean) {
+		
+	return new DashboardDaoImpl().deleteCategory(categoryFormBean);
+	}
+	
+	@POST
+	@Path("/getCategoryDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getCategoryDtl() {
+		gson = new Gson();
+		
+		List<MasterCategory> masterCategoryList =  new DashboardDaoImpl().getCategoryDtl();
+		List<CategoryFormBean> categoryFormBeanList = new ArrayList<>();
+		
+		for(MasterCategory masterCategory:masterCategoryList){
+		
+			CategoryFormBean employeeFormBean = new CategoryFormBean();
+			
+			employeeFormBean.setCategoryId(String.valueOf(masterCategory.getCategoyId()));
+			employeeFormBean.setCategoryName(masterCategory.getCategoryName());
+			employeeFormBean.setCategoryDesc(masterCategory.getCategoryDesc());
+			categoryFormBeanList.add(employeeFormBean);
+		}
+            return gson.toJson(categoryFormBeanList);
+	}
+	
+	
+	@POST
+	@Path("addConnectionType")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addConnectionType(ConnectionFormBean connectionFormBean) {
+		
+	return new DashboardDaoImpl().addConnectionType(connectionFormBean);
+	}
+	@POST
+	@Path("editConnectionType")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editConnectionType(ConnectionFormBean connectionFormBean) {
+		
+	return new DashboardDaoImpl().editConnectionType(connectionFormBean);
+	}
+	@POST
+	@Path("deleteConnectionType")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteConnectionType(ConnectionFormBean connectionFormBean) {
+		
+	return new DashboardDaoImpl().deleteConnectionType(connectionFormBean);
+	}
+	
+	@POST
+	@Path("/getConnectionTypeDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getConnectionTypeDtl() {
+		gson = new Gson();
+		
+		List<MasterReconnection> masterReconnectionList =  new DashboardDaoImpl().getConnectionTypeDtl();
+		List<ConnectionFormBean> connectionFormBeanList = new ArrayList<>();
+		
+		for(MasterReconnection masterReconnection:masterReconnectionList){
+			ConnectionFormBean connectionFormBean = new ConnectionFormBean();
+			connectionFormBean.setConnectionId(String.valueOf(masterReconnection.getReConnId()));
+			connectionFormBean.setConnectionName(masterReconnection.getConnectionType());
+			connectionFormBean.setConnectionDesc(masterReconnection.getReConnDes());
+			connectionFormBeanList.add(connectionFormBean);
+		}
+            return gson.toJson(connectionFormBeanList);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	@POST
+	@Path("addZone")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addZone(ZoneDivisionFormBean zoneDivisionFormBean) {
+		
+	return new DashboardDaoImpl().addZone(zoneDivisionFormBean);
+	}
+	
+	
+	
+	@POST
+	@Path("addDivision")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addDivision(ZoneDivisionFormBean zoneDivisionFormBean) {
+		
+	return new DashboardDaoImpl().addDivision(zoneDivisionFormBean);
+	}
+	@POST
+	@Path("editDivision")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editDivision(ZoneDivisionFormBean zoneDivisionFormBean) {
+		
+	return new DashboardDaoImpl().editDivision(zoneDivisionFormBean);
+	}
+	@POST
+	@Path("deleteDivision")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteDivision(ZoneDivisionFormBean zoneDivisionFormBean) {
+		
+	return new DashboardDaoImpl().deleteDivision(zoneDivisionFormBean);
+	}
+	
+	@POST
+	@Path("/getDivisionDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getDivisionDtl() {
+		gson = new Gson();
+		
+		List<ZoneDivisionFormBean> zoneDivisionFormBeanList =  new DashboardDaoImpl().getDivisionDtl();
+		/*List<ZoneDivisionFormBean> zoneDivisionFormBeanList = new ArrayList<>();
+		
+		for(MasterReconnection masterReconnection:masterReconnectionList){
+			ZoneDivisionFormBean zoneDivisionFormBean = new ZoneDivisionFormBean();
+			zoneDivisionFormBean.setConnectionId(String.valueOf(masterReconnection.getReConnId()));
+			zoneDivisionFormBean.setConnectionName(masterReconnection.getConnectionType());
+			zoneDivisionFormBean.setConnectionDesc(masterReconnection.getReConnDes());
+			zoneDivisionFormBeanList.add(zoneDivisionFormBean);
+		}*/
+            return gson.toJson(zoneDivisionFormBeanList);
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	@POST
+	@Path("addDistrict")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addDistrict(DistrictFormBean districtFormBean) {
+		
+	return new DashboardDaoImpl().addDistrict(districtFormBean);
+	}
+	@POST
+	@Path("editDistrict")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editDistrict(DistrictFormBean districtFormBean) {
+		
+	return new DashboardDaoImpl().editDistrict(districtFormBean);
+	}
+	@POST
+	@Path("deleteDistrict")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteDistrict(DistrictFormBean districtFormBean) {
+		
+	return new DashboardDaoImpl().deleteDistrict(districtFormBean);
+	}
+	
+	@POST
+	@Path("/getDistrictDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getDistrictDtl() {
+		gson = new Gson();
+		
+		List<MasterDistrict> masterDistrictList =  new DashboardDaoImpl().getDistrictDtl();
+		List<DistrictFormBean> districtFormBeanList = new ArrayList<>();
+		
+		for(MasterDistrict masterDistrict:masterDistrictList){
+		
+			DistrictFormBean employeeFormBean = new DistrictFormBean();
+			
+			employeeFormBean.setDistrictId(String.valueOf(masterDistrict.getDistrictId()));
+			employeeFormBean.setDistrictName(masterDistrict.getDistrictName());
+			districtFormBeanList.add(employeeFormBean);
+		}
+            return gson.toJson(districtFormBeanList);
+	}
+
+		
+	
+	
+	@POST
+	@Path("addTaluk")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addTaluk(DistrictTalukFormBean districtTalukFormBean) {
+		
+	return new DashboardDaoImpl().addTaluk(districtTalukFormBean);
+	}
+	@POST
+	@Path("editTaluk")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editTaluk(DistrictTalukFormBean districtTalukFormBean) {
+		
+	return new DashboardDaoImpl().editTaluk(districtTalukFormBean);
+	}
+	@POST
+	@Path("deleteTaluk")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteTaluk(DistrictTalukFormBean districtTalukFormBean) {
+		
+	return new DashboardDaoImpl().deleteTaluk(districtTalukFormBean);
+	}
+	
+	@POST
+	@Path("/getTalukDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getTalukDtl() {
+		gson = new Gson();
+		
+		List<DistrictTalukFormBean> districtTalukFormBeanList =  new DashboardDaoImpl().getTalukDtl();
+		/*List<DistrictTalukFormBean> districtTalukFormBeanList = new ArrayList<>();
+		
+		for(MasterReconnection masterReconnection:masterReconnectionList){
+			DistrictTalukFormBean districtTalukFormBean = new DistrictTalukFormBean();
+			districtTalukFormBean.setConnectionId(String.valueOf(masterReconnection.getReConnId()));
+			districtTalukFormBean.setConnectionName(masterReconnection.getConnectionType());
+			districtTalukFormBean.setConnectionDesc(masterReconnection.getReConnDes());
+			districtTalukFormBeanList.add(districtTalukFormBean);
+		}*/
+            return gson.toJson(districtTalukFormBeanList);
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+		
+	
+	@POST
+	@Path("addVillage")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addVillage(TalukVillageFormBean talukVillageFormBean) {
+		
+	return new DashboardDaoImpl().addVillage(talukVillageFormBean);
+	}
+	@POST
+	@Path("editVillage")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editVillage(TalukVillageFormBean talukVillageFormBean) {
+		
+	return new DashboardDaoImpl().editVillage(talukVillageFormBean);
+	}
+	@POST
+	@Path("deleteVillage")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteVillage(TalukVillageFormBean talukVillageFormBean) {
+		
+	return new DashboardDaoImpl().deleteVillage(talukVillageFormBean);
+	}
+	
+	@POST
+	@Path("/getVillageDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getVillageDtl() {
+		gson = new Gson();
+		
+		List<TalukVillageFormBean> talukVillageFormBeanList =  new DashboardDaoImpl().getVillageDtl();
+		/*List<TalukVillageFormBean> talukVillageFormBeanList = new ArrayList<>();
+		
+		for(MasterReconnection masterReconnection:masterReconnectionList){
+			TalukVillageFormBean talukVillageFormBean = new TalukVillageFormBean();
+			talukVillageFormBean.setConnectionId(String.valueOf(masterReconnection.getReConnId()));
+			talukVillageFormBean.setConnectionName(masterReconnection.getConnectionType());
+			talukVillageFormBean.setConnectionDesc(masterReconnection.getReConnDes());
+			talukVillageFormBeanList.add(talukVillageFormBean);
+		}*/
+            return gson.toJson(talukVillageFormBeanList);
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+}
