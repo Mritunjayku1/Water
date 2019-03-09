@@ -119,7 +119,7 @@ div.tabArrow {
 		$('#personalId').css({
 			'background': '#FF7F27'
 		});
-		$('#siteId').css({
+		$('#siteId,#additionalInfoId').css({
 			'background': 'lightgrey'
 		});
 
@@ -298,33 +298,83 @@ div.tabArrow {
 		$('[data-toggle="popover"]').popover();
 
 		$('.tab2').hide();
+		$('.tab3').hide();
+		$('#tabBackId').prop('value', 'Back');
 		$('#tabchangeId').prop('value', 'Next');
-		$('#registrationbtnId').attr('disabled', 'true');
-		$('#registrationbtnId').css({
+		$('#registrationbtnId,#tabBackId').attr('disabled', 'true');
+		$('#registrationbtnId,#tabBackId').css({
 			'background-color' : 'lightgrey'
 		});
 
 		$('#personalId').click(function() {
+			tabCount = 0;
 			$('.tab2').hide();
+			$('.tab3').hide();
 			$('.tab1').show();
+			$('#tabBackId').prop('value', 'Back');
+			
 			$('#tabchangeId').prop('value', 'Next');
-			$('#registrationbtnId').attr('disabled', 'true');
-			$('#registrationbtnId').css({
+			$('#tabchangeId').css({
+				'background-color' : '#2DAAE1'
+			});
+			$('#tabchangeId').removeAttr('disabled');
+			
+			$('#registrationbtnId,#tabBackId').attr('disabled', 'true');
+			$('#registrationbtnId,#tabBackId').css({
 				'background-color' : 'lightgrey'
 			});
+			
 			$('#personalId').css({
 				'background' : '#FF7F27'
 			});
 			$('#siteId').css({
 				'background' : 'lightgrey'
 			});
+			$('#additionalInfoId').css({
+				'background' : 'lightgrey'
+			});
 		});
 		$('#siteId').click(function() {
+			tabCount = 1;
 			$('.tab1').hide();
 			$('.tab2').show();
-			$('#tabchangeId').prop('value', 'Back');
-			$('#registrationbtnId').removeAttr('disabled');
+			$('.tab3').hide();
+			$('#tabBackId').prop('value', 'Back');
+			$('#tabchangeId').prop('value', 'Next');
+			$('#tabBackId,#tabchangeId').removeAttr('disabled');
+			$('#tabBackId,#tabchangeId').css({
+				'background-color' : '#2DAAE1'
+			});
+			
+			$('#registrationbtnId').attr('disabled', 'true');
 			$('#registrationbtnId').css({
+				'background-color' : 'lightgrey'
+			});
+
+			$('#personalId').css({
+				'background' : 'lightgrey'
+			});
+			$('#siteId').css({
+				'background' : '#FF7F27'
+			});
+			$('#additionalInfoId').css({
+				'background' : 'lightgrey'
+			});
+		});
+		
+		$('#additionalInfoId').click(function() {
+			tabCount = 2;
+			$('.tab1').hide();
+			$('.tab2').hide();
+			$('.tab3').show();
+			$('#tabBackId').prop('value', 'Back');
+			$('#tabchangeId').prop('value', 'Next');
+			$('#tabchangeId').attr('disabled', 'true');
+			$('#tabchangeId').css({
+				'background-color' : 'lightgrey'
+			});
+			$('#registrationbtnId,#tabBackId').removeAttr('disabled');
+			$('#registrationbtnId,#tabBackId').css({
 				'background-color' : '#2DAAE1'
 			});
 
@@ -332,28 +382,47 @@ div.tabArrow {
 				'background' : 'lightgrey'
 			});
 			$('#siteId').css({
+				'background' : 'lightgrey'
+			});
+			$('#additionalInfoId').css({
 				'background' : '#FF7F27'
 			});
 		});
-		$('#tabchangeId').click(function() {
-			var nextBackBtnVal = $(this).prop('value');
-			if (nextBackBtnVal == 'Next') {
-				isSubmitBtnClicked=false;
-				if(validateForm()){
-				   $('#siteId').click();
-				   $('#registrationbtnId').removeAttr('disabled');
-				   $('#registrationbtnId').css({
-					  'background-color' : '#2DAAE1'
-				   });
-				}
-			} else {
-				$('#personalId').click();
-				$('#registrationbtnId').attr('disabled', 'true');
-				$('#registrationbtnId').css({
-					'background-color' : 'lightgrey'
-				});
+		
+		var tabCount = 0;
+		
+		$('#tabBackId').click(function() {
+			
+			if(tabCount==1){
+				tabCount--;
+               $('#personalId').click();
+				
+			}
+            if(tabCount==2){
+            	tabCount--;
+            	 $('#siteId').click();
 			}
 		});
+		
+		$('#tabchangeId').click(function() {
+			
+			 if(tabCount==1){
+	            	isSubmitBtnClicked=true;
+	            	if(validateForm()){
+	            		tabCount++;
+	            	 $('#additionalInfoId').click();
+	            	}
+				}
+			if(tabCount==0){
+				
+				isSubmitBtnClicked=false;
+				if(validateForm()){
+					tabCount++;
+				 $('#siteId').click();
+				}
+			}
+           
+				});
 
 		$('#registrationbtnId').click(function() {
 			isSubmitBtnClicked=true;
@@ -455,7 +524,7 @@ div.tabArrow {
 		var pinCode = $("#pinCodeId");
 		var isNewConnection = $("#isNewConnectionId");
 		var cpinCode = $("#cpinCodeId");
-
+		
 		var inputVal = new Array(legCompName, cpinCode, contactPersonName,mobileNum, emailAddr, pinCode);
 		if(isSubmitBtnClicked){
 		   inputVal = new Array(categoryType,surveyFieldNoId, isNewConnection,reqMld, workType);
@@ -590,10 +659,13 @@ div.tabArrow {
                     <div id="siteId" class="tabArrow">
                         Site Details <span class="activeSpan"></span>
                     </div>
+                     <div id="additionalInfoId" class="tabArrow">
+                        Additional Information  <span class="activeSpan"></span>
+                    </div>
                 </div>
             </td>
             <td style="width: 75%;">
-                <table>
+                <table width="100%">
 
                     <tr>
                         <td>
@@ -704,7 +776,7 @@ div.tabArrow {
 
                     <tr class="tab2">
 
-                        <td>
+                        <td width="50%">
                             <div>
                                 <label><b>Survey Field No:</b></label> <span style="color: red;">*</span>
                                 <br />
@@ -712,7 +784,7 @@ div.tabArrow {
                             </div>
                             <br />
                         </td>
-                        <td>
+                        <td  width="50%">
                             <div>
                                 <label><b>Type of category:</b></label> <span style="color: red;">*</span>
                                 <br />
@@ -827,7 +899,7 @@ div.tabArrow {
                         </td>
                     </tr>
 
-                    <tr class="tab2">
+                    <tr class="tab3">
                         <td><b>Site plan <font
 								style="color: rgb(128, 128, 128); font-size: 12px;">(Scale
 									not less than 1:400,.dwg file, 5 MB)</font>:
@@ -836,7 +908,7 @@ div.tabArrow {
                             <input type="file" class="uploadClass" name="file" accept=".dwg" />
                         </td>
                     </tr>
-                    <tr class="tab2">
+                    <tr class="tab3">
                         <td><b>Sump drawing specifying height of sump<font
 								style="color: rgb(128, 128, 128); font-size: 12px;">(.dwg
 									file, 5 MB)</font>:
@@ -845,7 +917,7 @@ div.tabArrow {
                             <input type="file" class="uploadClass" name="file" accept=".dwg" />
                         </td>
                     </tr>
-                    <tr class="tab2">
+                    <tr class="tab3">
                         <td width="50%"><b> Ownership proof <font
 								style="color: rgb(128, 128, 128); font-size: 12px;">(sale
 									deed/ lease deed/ rental deed)</font> self-attested by the applicant
@@ -860,9 +932,9 @@ div.tabArrow {
             <tr>
 
                 <td align="center" valign="middle" colspan="2" height="70px;">
-
-                    <input type="button" id="tabchangeId" />
-                    <input type="button" id="registrationbtnId" name="industrialistSubmitBtn" value="Submit" style="margin-right: 185px;" />
+                    <input type="button" id="tabBackId" />
+                    <input type="button" id="registrationbtnId" name="industrialistSubmitBtn" value="Submit"  />
+                    <input type="button" id="tabchangeId" style="margin-right: 185px;"/>
 
                 </td>
 

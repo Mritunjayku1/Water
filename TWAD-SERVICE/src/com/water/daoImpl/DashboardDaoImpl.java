@@ -24,6 +24,7 @@ import com.water.bean.DashboardCountBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.EmployeeFormBean;
+import com.water.bean.OfficeFormBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 import com.water.dao.DashboardDao;
@@ -34,6 +35,7 @@ import com.water.model.EmployeeDetails;
 import com.water.model.MasterCategory;
 import com.water.model.MasterDistrict;
 import com.water.model.MasterDivision;
+import com.water.model.MasterOffice;
 import com.water.model.MasterReconnection;
 import com.water.model.MasterRole;
 import com.water.model.MasterStatus;
@@ -1675,6 +1677,7 @@ public String addNewUser(EmployeeFormBean employeeFormBean ){
 	Transaction tx =  session.beginTransaction();
 	EmployeeDetails employeeDetails = new EmployeeDetails();
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
+	employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
 	employeeDetails.setLoginUserName(employeeFormBean.getUsername());
 	employeeDetails.setLoginPassword(employeeFormBean.getPassword());
 	employeeDetails.setEmailAddr(employeeFormBean.getEmail());
@@ -1697,6 +1700,7 @@ public String editUser(EmployeeFormBean employeeFormBean ){
 	EmployeeDetails employeeDetails = (EmployeeDetails)session.get(EmployeeDetails.class,Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserId(Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
+	employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
 	employeeDetails.setLoginUserName(employeeFormBean.getUsername());
 	employeeDetails.setLoginPassword(employeeFormBean.getPassword());
 	employeeDetails.setEmailAddr(employeeFormBean.getEmail());
@@ -1776,6 +1780,55 @@ public String editCategory(CategoryFormBean categoryFormBean ){
 		Criteria cr = session.createCriteria(MasterCategory.class,"app");
 			return cr.list();
 		}
+	
+
+public String addOffice(OfficeFormBean officeFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterOffice masterOffice = new MasterOffice();
+	masterOffice.setOfficeName(officeFormBean.getOfficeName());
+	masterOffice.setOfficeDesc(officeFormBean.getOfficeDesc());
+	masterOffice.setUpdateTs(new Date());
+	masterOffice.setCreateTs(new Date());
+	masterOffice.setUpdateUserId("Administrator");
+	masterOffice.setCreateUserId("Administrator");
+	session.save(masterOffice);
+	tx.commit();
+		return "Office Added Successfully";
+	}
+public String editOffice(OfficeFormBean officeFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterOffice masterOffice = (MasterOffice)session.get(MasterOffice.class,Integer.parseInt(officeFormBean.getOfficeId()));
+	masterOffice.setOfficeName(officeFormBean.getOfficeName());
+	masterOffice.setOfficeDesc(officeFormBean.getOfficeDesc());
+	
+	masterOffice.setUpdateTs(new Date());
+	session.update(masterOffice);
+	tx.commit();
+		return "Office Updated Successfully";
+	}
+	
+	public String deleteOffice(OfficeFormBean officeFormBean ){
+		
+		String[] officeArray = officeFormBean.getOfficeId().split(",");
+		
+		for(int i=0;i<officeArray.length;i++){
+			Session session = sessionFactory.openSession();
+			Transaction tx =  session.beginTransaction();
+			int userid=Integer.parseInt(officeArray[i]);
+			MasterOffice masterOffice = (MasterOffice)session.get(MasterOffice.class,userid);
+		session.delete(masterOffice);
+		tx.commit();
+		}
+			return "Office deleted Successfully";
+		}
+	public List<MasterOffice> getOfficeDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterOffice.class,"app");
+			return cr.list();
+		}
+
 	
 
 public String addConnectionType(ConnectionFormBean connectionFormBean ){

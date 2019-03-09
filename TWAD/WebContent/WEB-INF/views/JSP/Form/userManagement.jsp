@@ -208,12 +208,13 @@ $(function(){
 		$('#dataTables-example td input:checkbox:checked').each(function(){
 			$('#editUserId').val($(this).closest('tr').find('td:nth-child(1)').find('input[type="checkbox"]').attr('id').trim());
 			$('#editRoleId option[value="'+$(this).closest('tr').find('td:nth-child(3)').attr('id').trim()+'"]').attr('selected', 'selected');
-			$('#editUserNameId').val($(this).closest('tr').find('td:nth-child(4)').text());
-			$('#editPasswordId').val($(this).closest('tr').find('td:nth-child(5)').text());
-			$('#editNameId').val($(this).closest('tr').find('td:nth-child(6)').text());
-			$('#editMobileId').val($(this).closest('tr').find('td:nth-child(8)').text());
-			$('#editEmailId').val($(this).closest('tr').find('td:nth-child(7)').text());
-			userlist = userlist.replace($(this).closest('tr').find('td:nth-child(4)').text().trim(),"");
+			$('#editOfficeId option[value="'+$(this).closest('tr').find('td:nth-child(4)').attr('id').trim()+'"]').attr('selected', 'selected');
+			$('#editUserNameId').val($(this).closest('tr').find('td:nth-child(5)').text());
+			$('#editPasswordId').val($(this).closest('tr').find('td:nth-child(6)').text());
+			$('#editNameId').val($(this).closest('tr').find('td:nth-child(7)').text());
+			$('#editMobileId').val($(this).closest('tr').find('td:nth-child(9)').text());
+			$('#editEmailId').val($(this).closest('tr').find('td:nth-child(8)').text());
+			userlist = userlist.replace($(this).closest('tr').find('td:nth-child(5)').text().trim(),"");
 			
 		});
 		}
@@ -237,6 +238,7 @@ $(function(){
 			url:"addNewUser.do",
 			data:{
 				'roleId':$('#roleId').val(),
+				'officeId':$('#officeId').val(),
 				'username':$('#userNameId').val(),
 				'name':$('#nameId').val(),
 				'password':$('#passwordId').val(),
@@ -258,6 +260,7 @@ $(function(){
 			url:"editUser.do",
 			data:{
 				'userId':$('#editUserId').val(),
+				'officeId':$('#editOfficeId').val(),
 				'roleId':$('#editRoleId').val(),
 				'username':$('#editUserNameId').val(),
 				'name':$('#editNameId').val(),
@@ -360,6 +363,7 @@ $(function(){
                                             <th style="color:black !important"><input type="checkbox" id="all" style="width:15px;"/></th>
                                             <th style="color:black !important"><b> #</b></th>
                                             <th style="color:black !important"><b>Role</b></th>
+                                             <th style="color:black !important"><b>Office Name</b></th>
                                             <th style="color:black !important"><b>User Name</b></th>
                                              <th style="color:black !important"><b>Password</b></th> 
                                              <th style="color:black !important"><b>Name</b></th>
@@ -381,6 +385,7 @@ $(function(){
                                             <td><input type="checkbox" id="${app.getUserId()}" style="width:15px;"/></td>
                                             <td>${count.count}</td>
                                              <td id="${app.getRoleId()}">${app.getRole()}</td>
+                                             <td id="${app.getOfficeId()}">${app.getOffice()}</td>
                                              <td>${app.getUsername()}</td>
                                               <td>*********</td> 
                                             <td class="center">${app.getName()}</td>
@@ -440,25 +445,37 @@ $(function(){
 		
 
 <span><b>Role:</b></span><span style="color: red;">*</span>
-				<select style="margin-left: 41px;width: 200px;" id="roleId">
+				<select style="margin-left: 52px;width: 200px;" id="roleId">
 				<option value="10">Administrator</option>
 				<option value="1">CE</option>
 				<option value="2">EE</option>
 				<option value="3">MC</option>
+				<option value="4">HO</option>
+				
+				</select><br/>
+				
+
+<span><b>Office Name:</b></span><span style="color: red;">*</span>
+				<select style="width: 200px;" id="officeId">
+				 <option value="">--Select Office Name--</option>
+                                    <c:forEach items="${list.officeDtl}" var="app" varStatus="count">
+                                        <option value="${app.getOfficeId()}">${app.getOfficeName()}</option>
+                                    </c:forEach>
+
 				
 				</select><br/>
 
 
 <span><b>Username:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="text" id="userNameId" name="userName" /><br/>
+				<input placeholder="Ex: ABC" type="text" id="userNameId" name="userName" style="margin-left: 14px;"/><br/>
 <span><b>Password:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="password" id="passwordId" name="password" style="margin-left: 5px;"/><br/>
+				<input placeholder="Ex: ABC" type="password" id="passwordId" name="password" style="margin-left: 16px;"/><br/>
 <span><b>Name:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="text" id="nameId" name="name" style="margin-left: 30px;" /><br/>
+				<input placeholder="Ex: ABC" type="text" id="nameId" name="name" style="margin-left: 42px;" /><br/>
 <span><b>Email:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="text" id="emailId" name="email" style="margin-left: 30px;" /><br/>
+				<input placeholder="Ex: ABC" type="text" id="emailId" name="email" style="margin-left: 43px;" /><br/>
 <span><b>Mobile:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="text" id="mobileId" name="mobile" style="margin-left: 23px;"  maxlength="10" /><br/><br/>
+				<input placeholder="Ex: ABC" type="text" id="mobileId" name="mobile" style="margin-left: 36px;"  maxlength="10" /><br/><br/>
 				
 				<input type="button" value="Save" id="userSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/>
 				
@@ -473,7 +490,7 @@ $(function(){
 		
 
 <span><b>Role:</b></span><span style="color: red;">*</span>
-				<select style="margin-left: 41px;width: 200px;" id="editRoleId">
+				<select style="margin-left: 52px;width: 200px;" id="editRoleId">
 				<option value="10">Administrator</option>
 				<option value="1">CE</option>
 				<option value="2">EE</option>
@@ -481,16 +498,28 @@ $(function(){
 				
 				</select><br/>
 				<input type="hidden" id="editUserId"/>
+				
+				
+<span><b>Office Name:</b></span><span style="color: red;">*</span>
+				<select style="width: 200px;" id="editOfficeId">
+				 <option value="">--Select Office Name--</option>
+                                    <c:forEach items="${list.officeDtl}" var="app" varStatus="count">
+                                        <option value="${app.getOfficeId()}">${app.getOfficeName()}</option>
+                                    </c:forEach>
+
+				
+				</select><br/>
+				
 <span><b>Username:</b></span><span style="color: red;">&nbsp;</span>
-				<input placeholder="Ex: ABC" type="text" id="editUserNameId" name="userName" readonly/><br/>
+				<input placeholder="Ex: ABC" type="text" id="editUserNameId" name="userName" readonly style="margin-left: 17px;"/><br/>
 <span><b>Password:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="password" id="editPasswordId" name="password" style="margin-left: 5px;"/><br/>
+				<input placeholder="Ex: ABC" type="password" id="editPasswordId" name="password" style="margin-left: 16px;"/><br/>
 <span><b>Name:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="text" id="editNameId" name="name" style="margin-left: 30px;" readonly /><br/>
+				<input placeholder="Ex: ABC" type="text" id="editNameId" name="name" style="margin-left: 42px;" readonly /><br/>
 <span><b>Email:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="text" id="editEmailId" name="email" style="margin-left: 30px;" readonly /><br/>
+				<input placeholder="Ex: ABC" type="text" id="editEmailId" name="email" style="margin-left: 43px;" readonly /><br/>
 <span><b>Mobile:</b></span><span style="color: red;">*</span>
-				<input placeholder="Ex: ABC" type="text" id="editMobileId" name="mobile" style="margin-left: 23px;" maxlength="10" /><br/><br/>
+				<input placeholder="Ex: ABC" type="text" id="editMobileId" name="mobile" style="margin-left: 36px;" maxlength="10" /><br/><br/>
 				
 				<input type="button" value="Update" id="editUserBtn"/> <input type="button" value="Close" class="closeBtn"/>
 				

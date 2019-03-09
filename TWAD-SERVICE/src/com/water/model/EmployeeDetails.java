@@ -117,13 +117,16 @@ public class EmployeeDetails  implements Serializable{
 	private Date supervisorLastUpdated;
     
    
-	
- 
-
-    
+	  
     @ManyToOne(optional = false)
     @JoinColumn(name = "ROLE_ID")
     private MasterRole userRole;
+    
+    
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "OFFICE_ID")
+    private MasterOffice userOffice;
+    
     
     @ManyToOne(optional = false)
     @JoinColumn(name = "ZONE_ID")
@@ -423,6 +426,16 @@ public class EmployeeDetails  implements Serializable{
 
 	public void setPhoneNum(Long phoneNum) {
 		this.phoneNum = phoneNum;
+	}
+
+
+	public MasterOffice getUserOffice() {
+		return userOffice;
+	}
+
+
+	public void setUserOffice(MasterOffice userOffice) {
+		this.userOffice = userOffice;
 	}
  
 

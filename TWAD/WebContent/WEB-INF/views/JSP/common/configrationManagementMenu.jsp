@@ -180,6 +180,9 @@ $(function(){
 		if(url.indexOf("talukVillageManagement")>0){
 			$('ul li:nth-child(5)').addClass('selectionClass');
 			}
+		if(url.indexOf("officeLocation")>0){
+			$('ul li:nth-child(6)').addClass('selectionClass');
+			}
 	
 });
 
@@ -191,13 +194,14 @@ $(function(){
 <div>
 	<ul id="HDropdown-orange-classic">
 	
-	 <li><a href="configrationManagement.do" id='menu1' > User</a> </li> 
-	 <li><a href="categoryManagement.do" id='menu2'>Category Type</a></li>
-	<!--  <li><a href="reConnectionTypeManagement.do" id='menu2'>Connection Type</a></li>
-	 <li><a href="zoneDivisionManagement.do" id='menu2'>Zone/Division </a></li> -->
-	 <li><a href="districtManagement.do" id='menu3'>District </a></li> 
-	  <li><a href="districtTalukManagement.do" id='menu4'>District/Taluk </a></li> 
-	   <li><a href="talukVillageManagement.do" id='menu5'>Taluk/Village </a></li> 
+	 <li><a href="configrationManagement.do" > User</a> </li> 
+	 <li><a href="categoryManagement.do">Category Type</a></li>
+	<!--  <li><a href="reConnectionTypeManagement.do">Connection Type</a></li>
+	 <li><a href="zoneDivisionManagement.do" >Zone/Division </a></li> -->
+	 <li><a href="districtManagement.do">District </a></li> 
+	  <li><a href="districtTalukManagement.do">District/Taluk </a></li> 
+	   <li><a href="talukVillageManagement.do">Taluk/Village </a></li>
+	    <li><a href="officeLocation.do">Office Location</a></li> 
 	   
 
 	</ul>

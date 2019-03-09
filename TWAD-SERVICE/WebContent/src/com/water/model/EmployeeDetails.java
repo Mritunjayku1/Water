@@ -138,6 +138,11 @@ public class EmployeeDetails  implements Serializable{
     private MasterRole userRole;
     
     @ManyToOne(optional = false)
+    @JoinColumn(name = "OFFICE_ID")
+    private MasterOffice userOffice;
+    
+    
+    @ManyToOne(optional = false)
     @JoinColumn(name = "ZONE_ID")
     private MasterZone zoneId;
     

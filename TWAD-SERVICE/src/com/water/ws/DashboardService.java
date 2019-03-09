@@ -45,6 +45,7 @@ import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.DocumentBean;
 import com.water.bean.EmployeeFormBean;
+import com.water.bean.OfficeFormBean;
 import com.water.bean.OracleDbBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
@@ -60,6 +61,7 @@ import com.water.model.Documents;
 import com.water.model.EmployeeDetails;
 import com.water.model.MasterCategory;
 import com.water.model.MasterDistrict;
+import com.water.model.MasterOffice;
 import com.water.model.MasterReconnection;
 import com.water.model.MasterZone;
 import com.water.util.Common;
@@ -2760,6 +2762,10 @@ DashboardCountBean dashboardBean;
 			employeeFormBean.setPassword(employeeDetails.getLoginPassword());
 			employeeFormBean.setRole(employeeDetails.getUserRole().getRoleName());
 			employeeFormBean.setRoleId(String.valueOf(employeeDetails.getUserRole().getRoleId()));
+			if(employeeDetails.getUserOffice() != null){
+			employeeFormBean.setOffice(employeeDetails.getUserOffice().getOfficeName());
+			employeeFormBean.setOfficeId(String.valueOf(employeeDetails.getUserOffice().getOfficeId()));
+			}
 			employeeFormBean.setUserId(String.valueOf(employeeDetails.getUserId()));
 			employeeFormBean.setUsername(employeeDetails.getLoginUserName());
 			employeeFormBeanList.add(employeeFormBean);
@@ -2813,6 +2819,58 @@ DashboardCountBean dashboardBean;
 		}
             return gson.toJson(categoryFormBeanList);
 	}
+	
+	
+	
+	@POST
+	@Path("addOffice")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addOffice(OfficeFormBean officeFormBean) {
+		
+	return new DashboardDaoImpl().addOffice(officeFormBean);
+	}
+	@POST
+	@Path("editOffice")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editOffice(OfficeFormBean officeFormBean) {
+		
+	return new DashboardDaoImpl().editOffice(officeFormBean);
+	}
+	@POST
+	@Path("deleteOffice")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deleteOffice(OfficeFormBean officeFormBean) {
+		
+	return new DashboardDaoImpl().deleteOffice(officeFormBean);
+	}
+	
+	@POST
+	@Path("/getOfficeDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getOfficeDtl() {
+		gson = new Gson();
+		
+		List<MasterOffice> masterOfficeList =  new DashboardDaoImpl().getOfficeDtl();
+		List<OfficeFormBean> officeFormBeanList = new ArrayList<>();
+		
+		for(MasterOffice masterOffice:masterOfficeList){
+		
+			OfficeFormBean employeeFormBean = new OfficeFormBean();
+			
+			employeeFormBean.setOfficeId(String.valueOf(masterOffice.getCategoyId()));
+			employeeFormBean.setOfficeName(masterOffice.getOfficeName());
+			employeeFormBean.setOfficeDesc(masterOffice.getOfficeDesc());
+			officeFormBeanList.add(employeeFormBean);
+		}
+            return gson.toJson(officeFormBeanList);
+	}
+	
+	
+	
+	
 	
 	
 	@POST

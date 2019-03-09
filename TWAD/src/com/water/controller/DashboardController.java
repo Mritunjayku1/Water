@@ -66,6 +66,7 @@ import com.water.bean.DashboardCountBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.EmployeeFormBean;
+import com.water.bean.OfficeFormBean;
 import com.water.bean.OracleDbBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneConstants;
@@ -1632,6 +1633,29 @@ public class DashboardController {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<?> entity = new HttpEntity(headers);
+		
+		
+
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getOfficeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<OfficeFormBean> officeFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			OfficeFormBean officeFormBean = gson.fromJson(
+					jsonArray1.getString(i), OfficeFormBean.class);
+			officeFormBeanList.add(officeFormBean);
+		}
+
+		
+		
+		model.put("officeDtl", officeFormBeanList);
+		
 
 		ResponseEntity<String> out = restTemplate.exchange(
 				WaterDashboardService + "getUserDtl",
@@ -1649,9 +1673,8 @@ public class DashboardController {
 			employeeFormBeanList.add(employeeFormBean);
 		}
 
-		
-		
 		model.put("userDtl", employeeFormBeanList);
+		
 		return new ModelAndView("configrationManagement", "list", model);
 	}
 	
@@ -1689,6 +1712,50 @@ public class DashboardController {
 
 		return new ModelAndView("categoryManagement", "list", model);
 	}
+	
+	
+	@RequestMapping(value = "/officeLocation", method = RequestMethod.GET)
+	public ModelAndView officeLocation() throws JsonSyntaxException, JSONException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getOfficeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<OfficeFormBean> officeFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			OfficeFormBean officeFormBean = gson.fromJson(
+					jsonArray.getString(i), OfficeFormBean.class);
+			officeFormBeanList.add(officeFormBean);
+		}
+
+		
+		
+		model.put("officeDtl", officeFormBeanList);
+		
+		
+		
+		
+		
+		
+		
+
+		return new ModelAndView("officeLocation", "list", model);
+	}
+	
 	
 	@RequestMapping(value = "/reConnectionTypeManagement", method = RequestMethod.GET)
 	public ModelAndView reConnectionTypeManagement() throws JSONException {
@@ -2529,6 +2596,68 @@ public class DashboardController {
 		String res = out.getBody();
 		return res;
 	}
+	
+	
+
+	@RequestMapping(value = "/addOffice", method = RequestMethod.POST)
+	@ResponseBody
+	public String addOffice(OfficeFormBean officeFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(officeFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "addOffice", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/editOffice", method = RequestMethod.POST)
+	@ResponseBody
+	public String editOffice(OfficeFormBean officeFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(officeFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "editOffice", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	@RequestMapping(value = "/deleteOffice", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteOffice(OfficeFormBean officeFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(officeFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "deleteOffice", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
 	
 	
 

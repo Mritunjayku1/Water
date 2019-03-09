@@ -5,6 +5,8 @@ public class EmployeeFormBean {
 	private String userId;
 	private String role;
 	private String roleId;
+	private String office;
+	private String officeId;
 	private String username;
 	private String name;
 	private String password;
@@ -57,5 +59,17 @@ public class EmployeeFormBean {
 	}
 	public void setRoleId(String roleId) {
 		this.roleId = roleId;
+	}
+	public String getOffice() {
+		return office;
+	}
+	public void setOffice(String office) {
+		this.office = office;
+	}
+	public String getOfficeId() {
+		return officeId;
+	}
+	public void setOfficeId(String officeId) {
+		this.officeId = officeId;
 	}
 }

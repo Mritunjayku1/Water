@@ -79,6 +79,7 @@
 		<mapping class="com.water.model.MasterDistrict"></mapping>
 		<mapping class="com.water.model.MasterTaluk"></mapping>
 		<mapping class="com.water.model.MasterVillage"></mapping>
+		<mapping class="com.water.model.MasterOffice"></mapping>
 	    
 
 
