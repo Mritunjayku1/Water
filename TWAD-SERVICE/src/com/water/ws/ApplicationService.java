@@ -192,7 +192,7 @@ public class ApplicationService {
 
 		//applicationDtls.setPayDtls(null);
 		applicationDtls.setReqMld(appFormBean.getReqMld());
-		applicationDtls.setActive(0);
+		applicationDtls.setActive(1);
 		
 		applicationDtls.setUserId(null);
 		applicationDtls.setWorkType(appFormBean.getWorkType());

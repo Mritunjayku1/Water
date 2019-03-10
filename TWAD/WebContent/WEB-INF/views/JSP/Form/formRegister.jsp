@@ -101,7 +101,7 @@ div.tabArrow {
 		
 		
 		
-		/* $("#legCompNameId").val("Jay Test");
+		 $("#legCompNameId").val("Jay Test");
 		$("#correspondenceAddrId").val("");
 		$("#contactPersonNameId").val("Jay");
 		$("#mobileNumId").val("9677096448");
@@ -111,7 +111,7 @@ div.tabArrow {
 		$("#workTypeId").val("1");
 		$("#pinCodeId").val("600560");
 		$("#isNewConnectionId").val("1");
-		$("#cpinCodeId").val("879787"); */
+		$("#cpinCodeId").val("879787"); 
 		
 		
 		
