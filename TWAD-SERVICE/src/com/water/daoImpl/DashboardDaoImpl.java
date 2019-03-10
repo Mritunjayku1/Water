@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.persistence.criteria.JoinType;
+
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -1352,6 +1354,210 @@ public class DashboardDaoImpl implements DashboardDao {
 		return dashBoardCount;
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DDPaymentFormBean> registeredApplication() {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.createAlias("companyDtl.categoryType", "categoryType")
+					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
+					.setProjection(Projections.projectionList()
+					.add(Projections.property("companyDtl.appId"),"appId")
+					.add(Projections.property("companyDtl.contactPersonName"),"contactPersonName")
+					.add(Projections.property("companyDtl.legCompName"),"legCompName")
+					.add(Projections.property("companyDtl.createTs"),"createTs")
+					.add(Projections.property("companyDtl.cdoorNo"),"cdoorNo")
+					.add(Projections.property("companyDtl.cplotNo"),"cplotNo")
+					.add(Projections.property("companyDtl.cstreetName"),"cstreetName")
+					.add(Projections.property("companyDtl.clocation"),"clocation")
+					.add(Projections.property("companyDtl.cpinCode"),"cpinCode")
+					.add(Projections.property("companyDtl.salutation"),"salutation")
+					.add(Projections.property("companyDtl.mobileNum"),"mobileNum")
+					.add(Projections.property("companyDtl.landLineNo"),"landLineNo")
+					.add(Projections.property("companyDtl.emailAddr"),"emailAddr")
+					.add(Projections.property("categoryType.categoryName"),"categoryType")
+					.add(Projections.property("office.officeName"),"officeName")
+					.add(Projections.property("companyDtl.addrPremSought"),"addrPremSought")
+					.add(Projections.property("companyDtl.doorNo"),"doorNo")
+					.add(Projections.property("companyDtl.plotNo"),"plotNo")
+					.add(Projections.property("companyDtl.streetName"),"streetName")
+					.add(Projections.property("companyDtl.location"),"location")
+					.add(Projections.property("companyDtl.district"),"district")
+					.add(Projections.property("companyDtl.taluk"),"taluk")
+					.add(Projections.property("companyDtl.village"),"village")
+					.add(Projections.property("companyDtl.pinCode"),"pinCode")
+					.add(Projections.property("companyDtl.surveyFieldNo"),"surveyFieldNo")
+					.add(Projections.property("companyDtl.isNewConnection"),"isNewConnection")
+					.add(Projections.property("companyDtl.reqMld"),"reqMld")
+					.add(Projections.property("companyDtl.gstAmount"),"gstAmount")
+					.add(Projections.property("companyDtl.totalAmount"),"totalAmount")
+					.add(Projections.property("companyDtl.intrPlumStatus"),"intrPlumStatus")
+					.add(Projections.property("companyDtl.workType"),"workType")
+				           
+				           )
+					.add(Restrictions.eq("companyDtl.active", 1));
+					cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DDPaymentFormBean> approvedApplication() {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.createAlias("companyDtl.categoryType", "categoryType")
+					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
+					.setProjection(Projections.projectionList()
+					.add(Projections.property("companyDtl.appId"),"appId")
+					.add(Projections.property("companyDtl.contactPersonName"),"contactPersonName")
+					.add(Projections.property("companyDtl.legCompName"),"legCompName")
+					.add(Projections.property("companyDtl.createTs"),"createTs")
+					.add(Projections.property("companyDtl.cdoorNo"),"cdoorNo")
+					.add(Projections.property("companyDtl.cplotNo"),"cplotNo")
+					.add(Projections.property("companyDtl.cstreetName"),"cstreetName")
+					.add(Projections.property("companyDtl.clocation"),"clocation")
+					.add(Projections.property("companyDtl.cpinCode"),"cpinCode")
+					.add(Projections.property("companyDtl.salutation"),"salutation")
+					.add(Projections.property("companyDtl.mobileNum"),"mobileNum")
+					.add(Projections.property("companyDtl.landLineNo"),"landLineNo")
+					.add(Projections.property("companyDtl.emailAddr"),"emailAddr")
+					.add(Projections.property("categoryType.categoryName"),"categoryType")
+					.add(Projections.property("office.officeName"),"officeName")
+					.add(Projections.property("companyDtl.addrPremSought"),"addrPremSought")
+					.add(Projections.property("companyDtl.doorNo"),"doorNo")
+					.add(Projections.property("companyDtl.plotNo"),"plotNo")
+					.add(Projections.property("companyDtl.streetName"),"streetName")
+					.add(Projections.property("companyDtl.location"),"location")
+					.add(Projections.property("companyDtl.district"),"district")
+					.add(Projections.property("companyDtl.taluk"),"taluk")
+					.add(Projections.property("companyDtl.village"),"village")
+					.add(Projections.property("companyDtl.pinCode"),"pinCode")
+					.add(Projections.property("companyDtl.surveyFieldNo"),"surveyFieldNo")
+					.add(Projections.property("companyDtl.isNewConnection"),"isNewConnection")
+					.add(Projections.property("companyDtl.reqMld"),"reqMld")
+					.add(Projections.property("companyDtl.gstAmount"),"gstAmount")
+					.add(Projections.property("companyDtl.totalAmount"),"totalAmount")
+					.add(Projections.property("companyDtl.intrPlumStatus"),"intrPlumStatus")
+					.add(Projections.property("companyDtl.workType"),"workType")
+					.add(Projections.property("companyDtl.managementComments"),"managementComments")
+				           
+				           )
+					.add(Restrictions.eq("companyDtl.active", 2));
+					cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DDPaymentFormBean> rejectedApplication() {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.createAlias("companyDtl.categoryType", "categoryType")
+					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
+					.setProjection(Projections.projectionList()
+					.add(Projections.property("companyDtl.appId"),"appId")
+					.add(Projections.property("companyDtl.contactPersonName"),"contactPersonName")
+					.add(Projections.property("companyDtl.legCompName"),"legCompName")
+					.add(Projections.property("companyDtl.createTs"),"createTs")
+					.add(Projections.property("companyDtl.cdoorNo"),"cdoorNo")
+					.add(Projections.property("companyDtl.cplotNo"),"cplotNo")
+					.add(Projections.property("companyDtl.cstreetName"),"cstreetName")
+					.add(Projections.property("companyDtl.clocation"),"clocation")
+					.add(Projections.property("companyDtl.cpinCode"),"cpinCode")
+					.add(Projections.property("companyDtl.salutation"),"salutation")
+					.add(Projections.property("companyDtl.mobileNum"),"mobileNum")
+					.add(Projections.property("companyDtl.landLineNo"),"landLineNo")
+					.add(Projections.property("companyDtl.emailAddr"),"emailAddr")
+					.add(Projections.property("categoryType.categoryName"),"categoryType")
+					.add(Projections.property("office.officeName"),"officeName")
+					.add(Projections.property("companyDtl.addrPremSought"),"addrPremSought")
+					.add(Projections.property("companyDtl.doorNo"),"doorNo")
+					.add(Projections.property("companyDtl.plotNo"),"plotNo")
+					.add(Projections.property("companyDtl.streetName"),"streetName")
+					.add(Projections.property("companyDtl.location"),"location")
+					.add(Projections.property("companyDtl.district"),"district")
+					.add(Projections.property("companyDtl.taluk"),"taluk")
+					.add(Projections.property("companyDtl.village"),"village")
+					.add(Projections.property("companyDtl.pinCode"),"pinCode")
+					.add(Projections.property("companyDtl.surveyFieldNo"),"surveyFieldNo")
+					.add(Projections.property("companyDtl.isNewConnection"),"isNewConnection")
+					.add(Projections.property("companyDtl.reqMld"),"reqMld")
+					.add(Projections.property("companyDtl.gstAmount"),"gstAmount")
+					.add(Projections.property("companyDtl.totalAmount"),"totalAmount")
+					.add(Projections.property("companyDtl.intrPlumStatus"),"intrPlumStatus")
+					.add(Projections.property("companyDtl.workType"),"workType")
+					.add(Projections.property("companyDtl.managementComments"),"managementComments")       
+				           )
+			 .add(Restrictions.eq("companyDtl.active", 0));
+					cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+	
+
+
+	
+	
+	
 	
 	@Override
 	public List<DDPaymentFormBean> paymentPendingList() {

@@ -2153,6 +2153,67 @@ applicationBean.setCreateDate(appDtls.getCreateTs().toString());
 
 	}
 	
+
+	@POST
+	@Path("/registeredApplicationApproved")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String registeredApplicationApproved(DDPaymentFormBean dDPaymentFormBean) {
+	Session	session = HibernateUtil.getSessionFactory().openSession();
+	Transaction transaction = session.beginTransaction();
+try{
+	transaction.begin();
+	CompanyDtl  companyDtl = (CompanyDtl) session.get(CompanyDtl.class, dDPaymentFormBean.getAppId());
+	companyDtl.setOffice((MasterOffice) session.get(MasterOffice.class, Integer.parseInt(dDPaymentFormBean.getOfficeName())));
+	companyDtl.setManagementComments(dDPaymentFormBean.getManagementComments());
+	companyDtl.setActive(2);
+	session.update(companyDtl);
+	transaction.commit();
+	
+}
+catch(Exception e){
+	e.printStackTrace();
+	transaction.rollback();
+	return "Application not Approved";
+}
+finally{
+	session.close();
+}
+		return "Application Approved";
+
+	}
+	
+	@POST
+	@Path("/registeredApplicationRejected")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String registeredApplicationRejected(DDPaymentFormBean dDPaymentFormBean) {
+		Session	session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = session.beginTransaction();
+	try{
+		transaction.begin();
+		CompanyDtl  companyDtl = (CompanyDtl) session.get(CompanyDtl.class, dDPaymentFormBean.getAppId());
+		companyDtl.setActive(0);
+		companyDtl.setManagementComments(dDPaymentFormBean.getManagementComments());
+		session.update(companyDtl);
+		transaction.commit();
+		
+	}
+	catch(Exception e){
+		e.printStackTrace();
+		transaction.rollback();
+		return "Application is not Rejected";
+	}
+	finally{
+		session.close();
+	}
+			return "Application Rejected";
+
+		}
+	
+
+	
+	
+	
+	
 	@POST
 	@Path("/ddPaymentApproved")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -2407,6 +2468,31 @@ finally{
 
 		}
 		return gson.toJson(dashboardCountBean);
+	}
+	
+	
+	
+	@POST
+	@Path("/registeredApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String registeredApplication() {
+		return new Gson().toJson(new DashboardDaoImpl().registeredApplication());
+
+	}
+	
+	@POST
+	@Path("/approvedApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String approvedApplication() {
+		return new Gson().toJson(new DashboardDaoImpl().approvedApplication());
+
+	}
+	@POST
+	@Path("/rejectedApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String rejectedApplication() {
+		return new Gson().toJson(new DashboardDaoImpl().rejectedApplication());
+
 	}
 
 	@POST

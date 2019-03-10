@@ -21,7 +21,7 @@ import com.water.model.Application;
 public class Constant {
 
 			
-	public static final String Get_PaymentDashboardCount="select * from (select count(*)  as penndingApplication from CompanyPaymentDtl where PAYMENT_STATUS_FLAG='N' ) as a,(select count(*) as approvedApplication from CompanyPaymentDtl where PAYMENT_STATUS_FLAG='A' ) as b, (select count(*) as rejectedApplication from CompanyPaymentDtl where PAYMENT_STATUS_FLAG='R' ) as c, (select count(*) as totalRegister from CompanyPaymentDtl ) as d";
+	public static final String Get_PaymentDashboardCount="select * from (select count(*)  as penndingApplication from CompanyDtl ) as a,(select count(*) as approvedApplication from CompanyPaymentDtl where PAYMENT_STATUS_FLAG='A' ) as b, (select count(*) as rejectedApplication from CompanyPaymentDtl where PAYMENT_STATUS_FLAG='R' ) as c, (select count(*) as totalRegister from CompanyPaymentDtl ) as d";
 	
 	public static final String Get_CEDashboardCount="select distinct (select count(ee_status) from app where  status_flag<>'E' and status_flag<>'F'  ) as register,(select count(ee_status) from app where ee_status=1 and status_flag='Y' and INS_STATUS_ID=1 and PAID_PROCESSING_FEE is not null  ) as pending ,(select count(ee_status) from app where mc_status=3 and status_flag='Y') as Approved,(select count(ee_status) from app where status_flag='P' and INS_STATUS_ID=4 ) as paid from app group by ce_status";
 	

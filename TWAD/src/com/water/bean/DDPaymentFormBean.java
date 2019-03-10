@@ -28,6 +28,7 @@ public class DDPaymentFormBean {
 	private Long landLineNo;
 	private String emailAddr;
 	private String categoryType;
+	private String officeName;
 	private String addrPremSought;
 	private String doorNo;
 	private String plotNo;
@@ -279,6 +280,12 @@ public class DDPaymentFormBean {
 	}
 	public void setCompanyPaymentDtlID(Integer companyPaymentDtlID) {
 		this.companyPaymentDtlID = companyPaymentDtlID;
+	}
+	public String getOfficeName() {
+		return officeName;
+	}
+	public void setOfficeName(String officeName) {
+		this.officeName = officeName;
 	}
 
 }

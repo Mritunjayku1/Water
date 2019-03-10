@@ -1403,6 +1403,136 @@ public class DashboardController {
 	}
 
 
+	@RequestMapping(value = "/registeredApplication", method = RequestMethod.GET)
+	public ModelAndView registeredApplication()
+			throws JSONException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+		
+		
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getOfficeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<OfficeFormBean> officeFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			OfficeFormBean officeFormBean = gson.fromJson(
+					jsonArray1.getString(i), OfficeFormBean.class);
+			officeFormBeanList.add(officeFormBean);
+		}
+
+		
+		
+		model.put("officeDtl", officeFormBeanList);
+		
+		
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "registeredApplication",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		return new ModelAndView("registeredApplication", "list", model);
+	}
+	
+
+	
+
+	@RequestMapping(value = "/approvedApplication", method = RequestMethod.GET)
+	public ModelAndView approvedApplication()
+			throws JSONException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "approvedApplication",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		return new ModelAndView("approvedApplication", "list", model);
+	}
+	
+
+	
+
+	@RequestMapping(value = "/rejectedApplication", method = RequestMethod.GET)
+	public ModelAndView rejectedApplication()
+			throws JSONException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "rejectedApplication",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		return new ModelAndView("rejectedApplication", "list", model);
+	}
+	
+
+
 	@RequestMapping(value = "/paymentPendingList", method = RequestMethod.GET)
 	public ModelAndView paymentPendingList()
 			throws JSONException {
@@ -1415,7 +1545,7 @@ public class DashboardController {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<?> entity = new HttpEntity(headers);
-
+		
 		ResponseEntity<String> out = restTemplate.exchange(
 				WaterDashboardService + "paymentPendingList",
 				HttpMethod.POST, entity, String.class);
@@ -1436,6 +1566,55 @@ public class DashboardController {
 		// model.put("categoryCount", publicdashboard());
 		return new ModelAndView("ddPaymentPending", "list", model);
 	}
+	
+	
+
+	@RequestMapping(value = "/registeredApplicationApproved", method = RequestMethod.POST)
+	@ResponseBody
+	public String registeredApplicationApproved(DDPaymentFormBean dDPaymentFormBean)
+			throws JSONException {
+
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(dDPaymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "registeredApplicationApproved",
+
+				HttpMethod.POST, entity, String.class);
+
+		return out.getBody().toString();
+
+	}
+
+	@RequestMapping(value = "/registeredApplicationRejected", method = RequestMethod.POST)
+	@ResponseBody
+	public String registeredApplicationRejected(DDPaymentFormBean dDPaymentFormBean)
+			throws JSONException {
+
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(dDPaymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "registeredApplicationApproved",
+
+				HttpMethod.POST, entity, String.class);
+
+		return out.getBody().toString();
+
+	}
+	
+
+	
 	
 	@RequestMapping(value = "/ddPaymentApproved", method = RequestMethod.POST)
 	@ResponseBody

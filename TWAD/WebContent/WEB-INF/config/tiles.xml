@@ -166,6 +166,24 @@
 		<put-attribute name="headerMenu" value="/WEB-INF/views/JSP/common/PaymentHeaderMenu.jsp"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/ddPaymentDashboard.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="registeredApplication" extends="CEbase.definition">
+		<put-attribute name="title" value="E-Water | Payment Dashboard"></put-attribute>
+		<put-attribute name="headerMenu" value="/WEB-INF/views/JSP/common/PaymentHeaderMenu.jsp"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/registeredApplication.jsp"></put-attribute>
+	</definition>
+	
+	<definition name="approvedApplication" extends="CEbase.definition">
+		<put-attribute name="title" value="E-Water | Payment Dashboard"></put-attribute>
+		<put-attribute name="headerMenu" value="/WEB-INF/views/JSP/common/PaymentHeaderMenu.jsp"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/approvedApplication.jsp"></put-attribute>
+	</definition>
+	<definition name="rejectedApplication" extends="CEbase.definition">
+		<put-attribute name="title" value="E-Water | Payment Dashboard"></put-attribute>
+		<put-attribute name="headerMenu" value="/WEB-INF/views/JSP/common/PaymentHeaderMenu.jsp"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/rejectedApplication.jsp"></put-attribute>
+	</definition>
+	
 
 	<definition name="ddPaymentPending" extends="CEbase.definition">
 		<put-attribute name="title" value="E-Water | Payment View App"></put-attribute>

@@ -17,6 +17,10 @@ public interface DashboardDao {
 	public List<Application> listCePendingApplicationDtls();
 	public List<Application> listceApprovedApplicationDtls();
 	public List<Application> listEeApprovedApplicationDtls();
+	
+	public List<DDPaymentFormBean> registeredApplication();
+	public List<DDPaymentFormBean> approvedApplication();
+	public List<DDPaymentFormBean> rejectedApplication();
 	public List<DDPaymentFormBean> paymentPendingList();
 	public List<DDPaymentFormBean> paymentRejectedList();
 	public List<DDPaymentFormBean> paymentApprovedList();

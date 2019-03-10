@@ -45,7 +45,7 @@
 
 <!-- 	 JAY ORACLE -->
  
-	 <!-- <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property> 
+	 <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property> 
 			<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property> 
 			<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property> 
 			<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property> 
@@ -53,20 +53,20 @@
 			<property name="hibernate.connection.username">root</property> 
 			<property name="hibernate.connection.password">root</property> 
 			<property name="hibernate.connection.autocommit">false</property> 
-			 -->
+			
 			
 			
 			
 		<!-- 	 MAHA ORACLE -->
 			
-	     <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+	   <!--   <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
 		<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/TwadOracle</property>
 		<property name="hibernate.connection.username">postgres</property>
 		<property name="hibernate.connection.password">maha</property>
-		<property name="hibernate.connection.autocommit">false</property>
+		<property name="hibernate.connection.autocommit">false</property> -->
 
 <!-- live configuration -->
  <!-- <property name="hibernate.transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property> 

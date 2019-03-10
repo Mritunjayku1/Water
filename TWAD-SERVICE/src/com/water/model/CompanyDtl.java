@@ -63,6 +63,13 @@ public class CompanyDtl implements Serializable {
 	@ManyToOne(targetEntity = MasterCategory.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "CATEGORY_ID")
 	private MasterCategory categoryType;
+	
+	@ManyToOne(targetEntity = MasterOffice.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "OFFICE_ID")
+	private MasterOffice office;
+	
+	@Column(name = "MANAGEMENT_COMMENTS", nullable = true, length = 100)
+	private String managementComments;
 
 	@Column(name = "ADDR_PREM_SOUGHT", length = 100)
 	private String addrPremSought;
@@ -125,7 +132,7 @@ public class CompanyDtl implements Serializable {
 	private Integer applicationStatus=0;
 	
 	@Column(name = "ACTIVE", nullable = false, length = 100)
-	private Integer active=0;
+	private Integer active=1;
 
 	// @Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "INSPECTION_DATE", nullable = true, length = 26)
@@ -696,6 +703,26 @@ public class CompanyDtl implements Serializable {
 
 	public void setInsStatusId(Integer insStatusId) {
 		this.insStatusId = insStatusId;
+	}
+
+
+	public MasterOffice getOffice() {
+		return office;
+	}
+
+
+	public void setOffice(MasterOffice office) {
+		this.office = office;
+	}
+
+
+	public String getManagementComments() {
+		return managementComments;
+	}
+
+
+	public void setManagementComments(String managementComments) {
+		this.managementComments = managementComments;
 	}
 
 

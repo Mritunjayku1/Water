@@ -160,17 +160,27 @@ $(function(){
 		if(url.indexOf("paymentDashboard")>0){
 		$('ul li:nth-child(1)').addClass('selectionClass');
 		}
-		if(url.indexOf("paymentPendingList")>0){
+		if(url.indexOf("registeredApplication")>0){
 			$('ul li:nth-child(2)').addClass('selectionClass');
 		}
-		if(url.indexOf("paymentRejectedList")>0){
+		
+		if(url.indexOf("approvedApplication")>0){
 			$('ul li:nth-child(3)').addClass('selectionClass');
+		}
+		if(url.indexOf("rejectedApplication")>0){
+			$('ul li:nth-child(4)').addClass('selectionClass');
+		}
+		if(url.indexOf("paymentPendingList")>0){
+			$('ul li:nth-child(5)').addClass('selectionClass');
+		}
+		if(url.indexOf("paymentRejectedList")>0){
+			$('ul li:nth-child(6)').addClass('selectionClass');
 			}
 		if(url.indexOf("paymentApprovedList")>0){
-			$('ul li:nth-child(4)').addClass('selectionClass');
+			$('ul li:nth-child(7)').addClass('selectionClass');
 			}
 		if(url.indexOf("paymentViewAll")>0){
-			$('ul li:nth-child(5)').addClass('selectionClass');
+			$('ul li:nth-child(8)').addClass('selectionClass');
 			}
 	
 });
@@ -182,11 +192,14 @@ $(function(){
 <div>
 	<ul id="HDropdown-orange-classic">
 
-		<li><a href="paymentDashboard.do" id='menu1'> Dashboard</a></li>
-		<li><a href="paymentPendingList.do" id='menu2'>Pending DD</a></li>
-		<li><a href="paymentRejectedList.do" id='menu3'>Rejected DD</a></li>
-		<li><a href="paymentApprovedList.do" id='menu4'>Approved DD</a></li>
-		<li><a href="paymentViewAll.do" id='menu5'>View All DD </a></li>
+		<li><a href="paymentDashboard.do"> Dashboard</a></li>
+		<li><a href="registeredApplication.do"> Registered Application</a></li>
+		<li><a href="approvedApplication.do"> Approved Application</a></li>
+		<li><a href="rejectedApplication.do"> Rejected Application</a></li>
+		<li><a href="paymentPendingList.do">Pending DD</a></li>
+		<li><a href="paymentRejectedList.do">Rejected DD</a></li>
+		<li><a href="paymentApprovedList.do">Approved DD</a></li>
+		<li><a href="paymentViewAll.do">View All DD </a></li>
     </ul>
 </div>
 <br>
