@@ -3176,17 +3176,21 @@ public class DashboardController {
 	
 	@RequestMapping(value = "/eeBeforeInsp", method = RequestMethod.GET)
 	public ModelAndView mcBeforeInsp(
-			@ModelAttribute("dashboardForm") ComplaintBean complaintBean)
+			@ModelAttribute("dashboardForm") ComplaintBean complaintBean,HttpSession session)
 			throws JSONException {
 
+		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
+		if(null != session.getAttribute("OfficeId")){
+		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		RestTemplate restTemplate = new RestTemplate();
-
+        
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<?> entity = new HttpEntity(headers);
+		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
 
 		ResponseEntity<String> out = restTemplate.exchange(
 				WaterDashboardService + "listBeforeInspection",

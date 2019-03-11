@@ -2466,7 +2466,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 	// Maha new method
 	
 	@Override
-	public List<CompanyDtl> listBeforeInspection() {
+	public List<CompanyDtl> listBeforeInspection(CompanyDtlBean companyDtlBean) {
 		// TODO Auto-generated method stub
 
 		
@@ -2479,8 +2479,10 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			
 			
 			Criteria cr = session.createCriteria(CompanyDtl.class,"app")
+					.createCriteria("app.office","office")
 					.createCriteria("app.eeStatus","status")
 			         .add(Restrictions.eq("status.statusId", 1))
+			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
 					.add(Restrictions.eq("app.statusFlag", 'Y')).add(Restrictions.eq("app.insStatusId",1 ));
 			
 			companyDtls=cr.list();

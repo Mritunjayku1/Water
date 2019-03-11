@@ -1305,13 +1305,13 @@ applicationBean.setCreateDate(appDtls.getCreateTs().toString());
 	@POST
 	@Path("/listBeforeInspection")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listBeforeInspection() {
+	public String listBeforeInspection(CompanyDtlBean companyDtlBean) {
 
 		dashboardDao = new DashboardDaoImpl();
 		gson = new Gson();
 		
 
-		List<CompanyDtl> appDtls = dashboardDao.listBeforeInspection();
+		List<CompanyDtl> appDtls = dashboardDao.listBeforeInspection(companyDtlBean);
 		List<CompanyDtlBean> applicationBeanList = new ArrayList<CompanyDtlBean>();
 		for (CompanyDtl companyDtl : appDtls) {
 			//MasterZone mastr=new MasterZone();

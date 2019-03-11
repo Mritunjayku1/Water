@@ -28,7 +28,7 @@ public interface DashboardDao {
 	public DDPaymentFormBean paymentViewForm(DDPaymentFormBean ddPaymentFormBean);
 	public List<Application> listViewAllApplication();
 	
-	public List<CompanyDtl> listBeforeInspection();
+	public List<CompanyDtl> listBeforeInspection(CompanyDtlBean companyDtlBean);
 	public List<CompanyDtl> listMOU();
 	public List<CompanyDtl> listEstimate();
 	public List<CompanyDtl> listAfterInspection();

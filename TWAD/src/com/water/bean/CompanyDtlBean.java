@@ -101,6 +101,8 @@ public class CompanyDtlBean {
 	private String updateTs;
 
 	private String updateUserId;
+	
+	private String office;
 
 	public String getAppId() {
 		return appId;
@@ -508,6 +510,14 @@ public class CompanyDtlBean {
 
 	public void setUpdateUserId(String updateUserId) {
 		this.updateUserId = updateUserId;
+	}
+
+	public String getOffice() {
+		return office;
+	}
+
+	public void setOffice(String office) {
+		this.office = office;
 	}
 
 	
