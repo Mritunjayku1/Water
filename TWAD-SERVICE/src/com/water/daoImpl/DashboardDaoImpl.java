@@ -27,6 +27,7 @@ import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.EmployeeFormBean;
 import com.water.bean.OfficeFormBean;
+import com.water.bean.PaymentFormBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 import com.water.dao.DashboardDao;
@@ -38,6 +39,8 @@ import com.water.model.MasterCategory;
 import com.water.model.MasterDistrict;
 import com.water.model.MasterDivision;
 import com.water.model.MasterOffice;
+import com.water.model.MasterPayment;
+import com.water.model.MasterPaymentType;
 import com.water.model.MasterReconnection;
 import com.water.model.MasterRole;
 import com.water.model.MasterStatus;
@@ -2036,7 +2039,120 @@ public String editOffice(OfficeFormBean officeFormBean ){
 		}
 
 	
+	
 
+public String addPaymentType(PaymentFormBean paymentTypeFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterPaymentType masterPaymentType = new MasterPaymentType();
+	masterPaymentType.setPaymentType(paymentTypeFormBean.getPaymentType());
+	masterPaymentType.setPaymentTypeDesc(paymentTypeFormBean.getPaymentTypeDesc());
+	masterPaymentType.setUpdateTs(new Date());
+	masterPaymentType.setCreateTs(new Date());
+	masterPaymentType.setUpdateUserId("Administrator");
+	masterPaymentType.setCreateUserId("Administrator");
+	session.save(masterPaymentType);
+	tx.commit();
+		return "PaymentType Added Successfully";
+	}
+public String editPaymentType(PaymentFormBean paymentTypeFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterPaymentType masterPaymentType = (MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentTypeFormBean.getPaymentId()));
+	masterPaymentType.setPaymentType(paymentTypeFormBean.getPaymentType());
+	masterPaymentType.setPaymentTypeDesc(paymentTypeFormBean.getPaymentTypeDesc());
+	
+	masterPaymentType.setUpdateTs(new Date());
+	session.update(masterPaymentType);
+	tx.commit();
+		return "PaymentType Updated Successfully";
+	}
+	
+	public String deletePaymentType(PaymentFormBean paymentTypeFormBean ){
+		
+		String[] paymentTypeArray = paymentTypeFormBean.getPaymentId().split(",");
+		
+		for(int i=0;i<paymentTypeArray.length;i++){
+			Session session = sessionFactory.openSession();
+			Transaction tx =  session.beginTransaction();
+			int userid=Integer.parseInt(paymentTypeArray[i]);
+			MasterPaymentType masterPaymentType = (MasterPaymentType)session.get(MasterPaymentType.class,userid);
+		session.delete(masterPaymentType);
+		tx.commit();
+		}
+			return "PaymentType deleted Successfully";
+		}
+	public List<MasterPaymentType> getPaymentTypeDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterPaymentType.class,"app");
+			return cr.list();
+		}
+
+
+public String addPayment(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterPayment masterPayment = new MasterPayment();
+	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
+	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
+	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
+	masterPayment.setGstAmount(paymentFormBean.getGstAmount());
+	masterPayment.setGstPercent(paymentFormBean.getGstPercent());
+	masterPayment.setTotalAmount(paymentFormBean.getTotalAmount());
+	masterPayment.setUpdateTs(new Date());
+	masterPayment.setCreateTs(new Date());
+	masterPayment.setUpdateUserId("Administrator");
+	masterPayment.setCreateUserId("Administrator");
+	session.save(masterPayment);
+	tx.commit();
+		return "Payment Added Successfully";
+	}
+public String editPayment(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterPayment masterPayment = (MasterPayment)session.get(MasterPayment.class,Integer.parseInt(paymentFormBean.getPaymentId()));
+	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
+	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
+	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
+	masterPayment.setGstAmount(paymentFormBean.getGstAmount());
+	masterPayment.setGstPercent(paymentFormBean.getGstPercent());
+	masterPayment.setTotalAmount(paymentFormBean.getTotalAmount());
+	
+	masterPayment.setUpdateTs(new Date());
+	session.update(masterPayment);
+	tx.commit();
+		return "Payment Updated Successfully";
+	}
+	
+	public String deletePayment(PaymentFormBean paymentFormBean ){
+		
+		String[] paymentArray = paymentFormBean.getPaymentId().split(",");
+		
+		for(int i=0;i<paymentArray.length;i++){
+			Session session = sessionFactory.openSession();
+			Transaction tx =  session.beginTransaction();
+			int userid=Integer.parseInt(paymentArray[i]);
+			MasterPayment masterPayment = (MasterPayment)session.get(MasterPayment.class,userid);
+		session.delete(masterPayment);
+		tx.commit();
+		}
+			return "Payment deleted Successfully";
+		}
+	public List<MasterPayment> getPaymentDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterPayment.class,"app");
+			return cr.list();
+		}
+
+
+
+	
+	
+	
+	
+	
+	
+	
 public String addConnectionType(ConnectionFormBean connectionFormBean ){
 	Session session = sessionFactory.openSession();
 	Transaction tx =  session.beginTransaction();

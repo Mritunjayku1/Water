@@ -183,7 +183,12 @@ $(function(){
 		if(url.indexOf("officeLocation")>0){
 			$('ul li:nth-child(6)').addClass('selectionClass');
 			}
-	
+		if(url.indexOf("paymentType.do")>0){
+			$('ul li:nth-child(7)').addClass('selectionClass');
+			}
+		if(url.indexOf("payment.do")>0){
+			$('ul li:nth-child(8)').addClass('selectionClass');
+			}
 });
 
 
@@ -202,6 +207,8 @@ $(function(){
 	  <li><a href="districtTalukManagement.do">District/Taluk </a></li> 
 	   <li><a href="talukVillageManagement.do">Taluk/Village </a></li>
 	    <li><a href="officeLocation.do">Office Location</a></li> 
+	     <li><a href="paymentType.do">Payment Type</a></li> 
+	      <li><a href="payment.do">Payment</a></li> 
 	   
 
 	</ul>

@@ -80,7 +80,8 @@
 		<mapping class="com.water.model.MasterTaluk"></mapping>
 		<mapping class="com.water.model.MasterVillage"></mapping>
 		<mapping class="com.water.model.MasterOffice"></mapping>
-	    
+	    <mapping class="com.water.model.MasterPaymentType"></mapping>
+		<mapping class="com.water.model.MasterPayment"></mapping>
 
 
 

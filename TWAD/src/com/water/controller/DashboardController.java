@@ -68,6 +68,7 @@ import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.EmployeeFormBean;
 import com.water.bean.OfficeFormBean;
 import com.water.bean.OracleDbBean;
+import com.water.bean.PaymentFormBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneConstants;
 import com.water.bean.ZoneDivisionFormBean;
@@ -1934,6 +1935,116 @@ public class DashboardController {
 
 		return new ModelAndView("officeLocation", "list", model);
 	}
+
+	
+	@RequestMapping(value = "/paymentType", method = RequestMethod.GET)
+	public ModelAndView paymentType() throws JsonSyntaxException, JSONException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+				
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getPaymentTypeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<PaymentFormBean> paymentFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			PaymentFormBean paymentFormBean = gson.fromJson(
+					jsonArray.getString(i), PaymentFormBean.class);
+			paymentFormBeanList.add(paymentFormBean);
+		}
+
+		
+		
+		model.put("paymentTypeDtl", paymentFormBeanList);
+		
+		
+		
+		
+		
+		
+		
+
+		return new ModelAndView("paymentType", "list", model);
+	}
+	
+
+	@RequestMapping(value = "/payment", method = RequestMethod.GET)
+	public ModelAndView payment() throws JsonSyntaxException, JSONException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+		
+
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getPaymentTypeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<PaymentFormBean> paymenttypeFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			PaymentFormBean paymentTypeFormBean = gson.fromJson(
+					jsonArray1.getString(i), PaymentFormBean.class);
+			paymenttypeFormBeanList.add(paymentTypeFormBean);
+		}
+
+		
+		
+		model.put("paymentTypeDtl", paymenttypeFormBeanList);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getPaymentDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<PaymentFormBean> paymentFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			PaymentFormBean paymentFormBean = gson.fromJson(
+					jsonArray.getString(i), PaymentFormBean.class);
+			paymentFormBeanList.add(paymentFormBean);
+		}
+
+		
+		
+		model.put("paymentDtl", paymentFormBeanList);
+		
+		
+		
+		
+		
+		
+		
+
+		return new ModelAndView("payment", "list", model);
+	}
+	
+
+	
 	
 	
 	@RequestMapping(value = "/reConnectionTypeManagement", method = RequestMethod.GET)
@@ -2837,6 +2948,132 @@ public class DashboardController {
 	}
 	
 
+
+	@RequestMapping(value = "/addPaymentType", method = RequestMethod.POST)
+	@ResponseBody
+	public String addPaymentType(PaymentFormBean paymentTypeFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentTypeFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "addPaymentType", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/editPaymentType", method = RequestMethod.POST)
+	@ResponseBody
+	public String editPaymentType(PaymentFormBean paymentTypeFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentTypeFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "editPaymentType", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	@RequestMapping(value = "/deletePaymentType", method = RequestMethod.POST)
+	@ResponseBody
+	public String deletePaymentType(PaymentFormBean paymentTypeFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentTypeFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "deletePaymentType", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/addPayment", method = RequestMethod.POST)
+	@ResponseBody
+	public String addPayment(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "addPayment", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/editPayment", method = RequestMethod.POST)
+	@ResponseBody
+	public String editPayment(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "editPayment", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	@RequestMapping(value = "/deletePayment", method = RequestMethod.POST)
+	@ResponseBody
+	public String deletePayment(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "deletePayment", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+
+	
+	
+	
+	
+	
+	
 	
 	
 

@@ -47,6 +47,7 @@ import com.water.bean.DocumentBean;
 import com.water.bean.EmployeeFormBean;
 import com.water.bean.OfficeFormBean;
 import com.water.bean.OracleDbBean;
+import com.water.bean.PaymentFormBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 import com.water.dao.ComplaintDao;
@@ -62,6 +63,8 @@ import com.water.model.EmployeeDetails;
 import com.water.model.MasterCategory;
 import com.water.model.MasterDistrict;
 import com.water.model.MasterOffice;
+import com.water.model.MasterPayment;
+import com.water.model.MasterPaymentType;
 import com.water.model.MasterReconnection;
 import com.water.model.MasterZone;
 import com.water.util.Common;
@@ -2953,6 +2956,111 @@ DashboardCountBean dashboardBean;
 		}
             return gson.toJson(officeFormBeanList);
 	}
+	
+	
+	
+	
+	
+	@POST
+	@Path("addPaymentType")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addPaymentType(PaymentFormBean paymentTypeFormBean) {
+		
+	return new DashboardDaoImpl().addPaymentType(paymentTypeFormBean);
+	}
+	@POST
+	@Path("editPaymentType")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editPaymentType(PaymentFormBean paymentTypeFormBean) {
+		
+	return new DashboardDaoImpl().editPaymentType(paymentTypeFormBean);
+	}
+	@POST
+	@Path("deletePaymentType")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deletePaymentType(PaymentFormBean paymentTypeFormBean) {
+		
+	return new DashboardDaoImpl().deletePaymentType(paymentTypeFormBean);
+	}
+	
+	@POST
+	@Path("/getPaymentTypeDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getPaymentTypeDtl() {
+		gson = new Gson();
+		
+		List<MasterPaymentType> masterPaymentTypeList =  new DashboardDaoImpl().getPaymentTypeDtl();
+		List<PaymentFormBean> paymentTypeFormBeanList = new ArrayList<>();
+		
+		for(MasterPaymentType masterPaymentType:masterPaymentTypeList){
+		
+			PaymentFormBean employeeFormBean = new PaymentFormBean();
+			
+			employeeFormBean.setPaymentId(String.valueOf(masterPaymentType.getPaymentTypeId()));
+			employeeFormBean.setPaymentType(masterPaymentType.getPaymentType());
+			employeeFormBean.setPaymentTypeDesc(masterPaymentType.getPaymentTypeDesc());
+			paymentTypeFormBeanList.add(employeeFormBean);
+		}
+            return gson.toJson(paymentTypeFormBeanList);
+	}
+	
+	
+	@POST
+	@Path("addPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String addPayment(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().addPayment(paymentFormBean);
+	}
+	@POST
+	@Path("editPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String editPayment(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().editPayment(paymentFormBean);
+	}
+	@POST
+	@Path("deletePayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String deletePayment(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().deletePayment(paymentFormBean);
+	}
+	
+	@POST
+	@Path("/getPaymentDtl")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getPaymentDtl() {
+		gson = new Gson();
+		
+		List<MasterPayment> masterPaymentList =  new DashboardDaoImpl().getPaymentDtl();
+		List<PaymentFormBean> paymentFormBeanList = new ArrayList<>();
+		
+		for(MasterPayment masterPayment:masterPaymentList){
+		
+			PaymentFormBean employeeFormBean = new PaymentFormBean();
+			
+			employeeFormBean.setPaymentId(String.valueOf(masterPayment.getPaymentId()));
+			employeeFormBean.setPaymentType(masterPayment.getPaymentType().getPaymentType());
+			employeeFormBean.setPaymentTypeId(String.valueOf(masterPayment.getPaymentType().getPaymentTypeId()));
+			employeeFormBean.setPaymentAmount(masterPayment.getPaymentAmount());
+			employeeFormBean.setPaymentDesc(masterPayment.getPaymentDesc());
+			
+			employeeFormBean.setGstAmount(masterPayment.getGstAmount());
+			employeeFormBean.setGstPercent(masterPayment.getGstPercent());
+			employeeFormBean.setTotalAmount(masterPayment.getTotalAmount());
+			
+			paymentFormBeanList.add(employeeFormBean);
+		}
+            return gson.toJson(paymentFormBeanList);
+	}
+	
 	
 	
 	

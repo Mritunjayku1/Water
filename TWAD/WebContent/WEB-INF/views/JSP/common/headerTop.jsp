@@ -144,21 +144,20 @@
 </style>
 
 <div>
-	<table class='table tabel-striped bootstrap-datatable '	
-		style='border-bottom: 1px solid #1589FF;'>
+	<table	 height="130px" style='background-color: white;'>
 		<tr>
-			<td style="width: 10%;"><a href='home.do'><img
-					title='EC Home' src='library/img/EC_logo.jpg' width="75px" height="75px"></a></td>
+			<td width="20%" align="center"><img src="library/img/twad_logo.gif" width="110px"
+								height="106px" style="margin-left: 50px;"></td>
+							<td width="40%" align="center"><img src="library/img/middleImage.png" width="560px"
+								height="67px"></td>
+							<td  width="20%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px"></td>
 			<td
-				style="text-align: center; font-family: alice; width: 60%; color: #1589FF; font-size: 34px;font-weight:bold;">
-				<font color="blue"> New Water Connections</font> </td>
-			<td
-				style='text-align: right; width: 20%; color: #1589FF; text-shadow: 1px 7px 10px #a6a1a1; font-size: 14px;'>
+				style='text-align: right; width: 20%; color: #1589FF; text-shadow: 1px 7px 10px #a6a1a1; font-size: 14px;padding-right: 30px;'>
 				Hi! <c:out value="${sessionScope.LoginName}" /> <a href='signOut.do'
 				title='Sign Out'><img src='library/img/logout.png'> Sign Out </a><br/><br/>
 				<a href="changePasswordPage.do">Change Password </a>
 			</td>
-			<!-- 			<td style="text-align: right;font-size: 10px;"><a href="?lang=en">English</a> | <a href="?lang=de">Language2</a></td> -->
 		</tr>
 
 
