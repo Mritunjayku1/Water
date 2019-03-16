@@ -13,5 +13,5 @@ public interface SmsDatadao {
 	public SmsDatas receiveSMs(String sender, String message);
 
 	List<CompanyDtl> getTemplateID(String applicationId,Integer applicationID);
-	//
+	//Test
 }
