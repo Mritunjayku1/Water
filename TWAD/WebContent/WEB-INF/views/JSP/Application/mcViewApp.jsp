@@ -231,7 +231,14 @@ height:25px !important;
     position: absolute;
     color: green;
     }
-    
+  .bg_heading {
+	text-align: left;
+    font-size: 20px;
+    color: white;
+    margin-top: -32px;
+    margin-left: 135px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}  
     
     
     
@@ -242,12 +249,24 @@ height:25px !important;
 <script type="text/javascript">
 
 $(function(){
+	var appId="";
 	$('.paymentClass').click(function(){
+		appId = $(this).attr('id');
+		$(".ui-dialog-content").dialog("close");
+		$( "#addDialog" ).dialog({ 'width':'500px','modal':'true'});
+	}); 
+	
+	$('.closeBtn,.imgClose').click(function(){
+		$(".ui-dialog-content").dialog("close");
+		
+	}); 
+	
+	$('#userSaveBtnId').click(function(){
 		if(confirm("Are you sure want to Submit ?")){
 			 $.ajax({
 				type:"POST",
 				url:"mcApprovePayment.do",
-				data:{'appRef':id},
+				data:{'appId':appId,'mcUser':$("input[name='mcUser']:checked").val()},
 				success:function(response){
 					alert(response);
 					window.location.reload();
@@ -333,6 +352,25 @@ $(function(){
 	}
 </script>
 
+<div id="addDialog" style="display: none;">
+
+
+<img class="imgClose" src="library/img/Close_SMS.png"
+			style="width: 40px; border-width: 0px; float: right; margin-top: -43px; margin-right: -5px; cursor: pointer;">
+		<h2 class="bg_heading">Select User Type</h2>
+		<table width="80%" align="center">
+		<tr>
+		<td align="center"><input type="radio" name="mcUser" id="rtcId" value="RTC" checked="checked"/>RTC</td>
+		<td align="center"><input type="radio" name="mcUser" id="sltcId"  value="SLTC"/>SLTC</td>
+		<td align="center"><input type="radio" name="mcUser" id="boardId" value="Board"/>Board</td>
+		</tr>
+		<tr height="10px"></tr>
+<tr><td colspan="3" align="center">
+				<input type="button" value="Approve" id="userSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/>
+			</td></tr></table>	
+		</div>
+		
+
 <table class='table-bordered table table-striped display'
 	style='width: 100%; font-size: 28px;'>
 
@@ -408,7 +446,7 @@ $(function(){
                                          <td class="center">${app.getTotalAmount()}</td>
                                          
                                              
-											<td><button onclick="getPaymentDetails(this.id)"
+											<td><button
 													class="paymentClass" id="${app.getAppId()}"
 													style="width: auto;">Accepted</button>
 													

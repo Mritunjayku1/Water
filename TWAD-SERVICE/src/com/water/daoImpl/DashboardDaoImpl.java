@@ -213,7 +213,6 @@ public class DashboardDaoImpl implements DashboardDao {
 				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
 				           )
-			         .add(Restrictions.eq("masterPayment.statusFlag", 'A'))
 			         .add(Restrictions.eq("companyDtl.active", 3));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
@@ -2288,6 +2287,7 @@ public String mcApprovePayment(PaymentFormBean paymentFormBean ){
 	Transaction tx1 =  session.beginTransaction();
 	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
 	companyDtl.setActive(2);
+	companyDtl.setEeStatus((MasterStatus) session.get(MasterStatus.class, 5));
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
@@ -3027,9 +3027,8 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 6))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
-					 .add(Restrictions.eq("companyDtl.paymentStatus",1))
-					 .add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag",'A'));
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+					
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -3080,8 +3079,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 7))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
-					 .add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag",'N'));
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			

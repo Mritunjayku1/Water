@@ -14,6 +14,7 @@ public class PaymentFormBean {
 	private String gstAmount;
 	private String gstPercent;
 	private String totalAmount;
+	private String mcUser;
 	
 	public String getGstAmount() {
 		return gstAmount;
@@ -88,6 +89,12 @@ public class PaymentFormBean {
 	}
 	public void setInspectedDate(String inspectedDate) {
 		this.inspectedDate = inspectedDate;
+	}
+	public String getMcUser() {
+		return mcUser;
+	}
+	public void setMcUser(String mcUser) {
+		this.mcUser = mcUser;
 	}
 
 }

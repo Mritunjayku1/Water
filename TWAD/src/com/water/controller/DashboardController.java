@@ -3703,6 +3703,9 @@ public class DashboardController {
 		if(null != session.getAttribute("OfficeId")){
 		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
 		}
+		else{
+			return new ModelAndView("redirect:/adminLogin.do");
+		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
 		RestTemplate restTemplate = new RestTemplate();

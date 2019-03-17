@@ -73,6 +73,7 @@ select {
 <script type="text/javascript">
 
 function validateAddForm() {
+	return true;
 	  	var numberReg = /^[0-9]*$/;
 
 	  	var paymentTypeId = $("#paymentTypeId");
@@ -123,41 +124,12 @@ function validateAddForm() {
 			$(".ui-dialog-content").dialog("close");
 			
 		}); 
-		$('#paymentAmountId').blur(function(){
-			var paymentAmount = $(this).val();
-			var gstAmount = $('#gstAmountId').val();
-			var gstPercent = $('#gstPercentId').val();
-			if(gstAmount==0 && gstPercent != 0){
-				var gstAmount = paymentAmount*gstPercent/100;
-				$('#gstAmountId').val(gstAmount);
-			}
-			
-			if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstAmount)){
-				$('#totalAmountId').val(paymentAmount+gstAmount);
-			}
-		});
-
-		$('#gstPercentId').blur(function(){
-			var paymentAmount = $('#paymentAmountId').val();
-			var gstPercent = $('#gstPercentId').val();
-			
-			if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstPercent)){
-				var gstAmount = paymentAmount*gstPercent/100;
-				$('#gstAmountId').val(gstAmount);
-				$('#totalAmountId').val(paymentAmount+gstAmount);
-			}
-			else{
-				$('#gstAmountId').val(0);
-				$('#totalAmountId').val(0);
-			}
-		});
 
 
 		$('#paymentSaveBtnId').click(function(){
 			if(validateAddForm()){
 				
 				$("#paymentSaveBtnId").prop("disabled", true);
-	   			// localStorage.setItem('isFileUploaded', true);
 	   	        var form = $('#uploadFormId')[0];
 	   	        var data = new FormData(form);
 
@@ -173,81 +145,14 @@ function validateAddForm() {
 	   	            timeout: 600000,
 	   	            success: function (response) {
 	   	         	alert(response);
-	   	               // $("#btnSubmit").prop("disabled", false);
+	   	         	window.location.reload();
 
 	   	            },
 	   	        });
-	   		 
-	   	    
-			$.ajax({
-				type:"POST",
-				url:"addPayment.do",
-				async:false,
-				data:{
-					
-					'appId':appId,
-					'paymentType':$('#paymentTypeId').val(),
-					'paymentAmount':$('#paymentAmountId').val(),
-					'gstPercent':$('#gstPercentId').val(),
-					'gstAmount':$('#gstAmountId').val(),
-					'totalAmount':$('#totalAmountId').val(),
-					'paymentDesc':$('#paymentDescId').val()},
-				success:function(response){
-					alert(response);
-					
-					window.location.reload();
-				}
-			});
 			}
 		});
 
 		
-		
-		
-		
-		/* $('input[name="approveBtn"]')
-				.click(
-						function() {
-							var appRef = $(this).attr('id');
-							var inspectionDate = $(this).closest('tr').find(
-									'td:nth-child(7)').find(
-									'input[type="text"]').val();
-							if (inspectionDate == null || inspectionDate == '') {
-								alert("Please select  inspection Date !")
-								return false;
-							}
-							if (confirm("Are you sure want to Submit ?")) {
-								$.ajax({
-									type : "POST",
-									url : "eeSendInspectionDate.do",
-									data : {
-										'appRef' : appRef,
-										'inspectionDate' : inspectionDate
-									},
-									success : function(response) {
-										//$('#successMessage').text(response);
-										alert(response);
-										window.location.reload();
-
-									}
-								});
-							}
-
-						}); */
-		$(".inspectionDate").datepicker({
-			dateFormat : 'dd-mm-yy',
-			changeMonth : true,
-			changeYear : true,
-			//maxDate : new Date(),
-			showOn : "button",
-			minDate : 0,
-			maxDate : "+2Y",
-			buttonImageOnly : true,
-		//	buttonText : "Select date",
-			buttonImage : "library/img/datepicker.png",
-			showAnim : "slideDown",
-		});
-
 	});
 </script>
 
@@ -256,39 +161,11 @@ function validateAddForm() {
 <input type="hidden" name="appId" id="appId" value=''/>
 <img class="imgClose" src="library/img/Close_SMS.png"
 			style="width: 40px; border-width: 0px; float: right; margin-top: -11px; margin-right: -5px; cursor: pointer;">
-		<h2 class="bg_heading">Add Payment Details</h2>
+		<h2 class="bg_heading">Upload Document</h2>
 		<table id="paymentTable" style="margin-left: 30px;margin-top: 20px;">
-		<tr><td><span><b>Payment Type:</b></span><span style="color: red;">*</span></td><td>
-				<select  id="paymentTypeId">
-				 <option value="">--Select Payment Type--</option>
-                                    <c:forEach items="${list.paymentTypeDtl}" var="app" varStatus="count">
-                                        <option value="${app.getPaymentId()}">${app.getPaymentType()}</option>
-                                    </c:forEach>
-                </select></td></tr>
-				
-<tr><td><span><b>Payment Amount:</b></span><span style="color: red;">*</span></td><td>
+		
+<tr><td><span><b>Upload Document:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr>
 
-				<input placeholder="Ex: 100" type="text" id="paymentAmountId" name="paymentAmount" style=""/></td></tr>
-
-<tr><td><span><b>GST %:</b></span><span style="color: red;">*</span></td><td>
-				<input placeholder="Ex: 10" type="text" id="gstPercentId" name="gstPercent" style="" value=""/></td></tr>
-
-<tr><td><span><b>GST Amount:</b></span></td><td>
-				<input placeholder="Ex: 12" type="text" id="gstAmountId" name="gstAmount" readonly="readonly" value="0" style="background-color: lightgrey;"/></td></tr>
-
-<tr><td><span><b>Total Amount:</b></span></td><td>
-				<input placeholder="Ex: 123" type="text" id="totalAmountId" name="totalAmount" readonly="readonly" value="0" style="background-color: lightgrey;"/></td></tr>
-
-<tr><td colspan="2"><hr style="margin: 0px;width: 95%;"/></td></tr>
-
-<tr><td><span><b>Upload Pre feasibility report:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr>
-
-<tr><td><span><b>Upload consent form:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr>
-
-<tr><td colspan="2"><hr  style="margin-top: 5px;width: 95%;"/></td></tr>
-
-<tr><td><span><b>Comments:</b></span></td><td>
-				<input placeholder="Ex: ABC" type="text" id="paymentDescId" name="paymentDesc" style=""/></td></tr>
 			<tr><td colspan="2" align="center" height="70px">	<input type="button" value="Save" id="paymentSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/></td></tr>
 		
 		
