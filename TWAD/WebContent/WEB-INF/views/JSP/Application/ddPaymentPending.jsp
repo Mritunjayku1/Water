@@ -45,11 +45,19 @@ $(function(){
 		var approvedAppRef = $(this).attr('id');
 		var appId = approvedAppRef.split("_");
 		var managementComments=$('#managementComments_'+appId[1]).val();
+		
+		var ddNo=$('#ddNo_'+appId[1]).text();
+		if(ddNo == null || ddNo=='')
+		{
+		alert("Applicant not submitted DD !")
+		return false;
+		}
 		if(managementComments == null || managementComments=='')
 		{
 		alert("Please enter the Comments !")
 		return false;
 		}
+		
 		if(confirm("Are you sure want to Approve ? ")){
 		$.ajax({
 			type:"POST",
@@ -120,8 +128,12 @@ $(function(){
                                            <!--  <th style="color:black !important"></th> -->
                                             <th style="color:black !important"><b>App Ref#</b></th>
                                             <th style="color:black !important"><b> Name of Company</b></th>
-                                           <!--  <th style="color:black !important"><b>Category Type</b></th>
-                                            <th style="color:black !important"><b>Correspondence Address</b></th> -->
+                                             <th style="color:black !important"><b> Name of Person</b></th>
+                                            <th style="color:black !important"><b>Total Payment Amount</b></th>
+                                            <th style="color:black !important"><b>DD NO</b></th>
+                                             <th style="color:black !important"><b>DD Date</b></th>
+                                            <th style="color:black !important"><b>DD Bank Name</b></th>
+                                            <th style="color:black !important"><b>Payment Status</b></th>
                                              <th style="color:black !important"><b>Registered Date</b></th>
                                              <th style="color:black !important"><b>Management Comments</b></th>
                                               <th></th>
@@ -138,9 +150,15 @@ $(function(){
           								
           							<td > <a href="paymentViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
                                             <td>${app.getLegCompName()}</td>
-                                            <%--  <td>${app.getCategoryType()}</td>
-                                            <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
-                                           --%>
+                                            
+                                             <td>${app.getContactPersonName()}</td>
+                                               <td>${app.getPaymentAmount()}</td>
+                                                <td id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
+                                                 <td>${app.getDdDate()}</td>
+                                                  <td>${app.getDdBankName()}</td>
+                                                   <td> ${app.getPaymentStatus()}</td>
+                                                   
+                                           
                                              <td class="center">${app.getCreateTs()}</td>
                                               <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
                                               <td class="center">

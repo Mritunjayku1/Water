@@ -287,7 +287,7 @@ div.wrap {
 	border: 1px solid #1589FF;
 	height: 290px;
 	width: 290px;
-	margin: 12%;
+	margin: 9%;
 	border-radius: 4%;
 }
 
@@ -344,9 +344,47 @@ div[role="dialog"] {
 </HEAD>
 
 <BODY> 
-		 <Label style="text-align: center; font-family: alice; width: 100%; color: #1589FF; font-size: 39px; padding: 10px;border-bottom: 2px solid #1589FF;">
+
+<table width="90%" align="center">
+
+		<tr>
+			<td valign="middle" style="height: 130px; width: 100%;">
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px"
+								height="106px" style="margin-left: 50px;"></td>
+							<td width="50%" align="center"><img src="library/img/middleImage.png" width="560px"
+								height="67px"></td>
+							<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px" style="margin-right: 50px;"></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+
+
+		<tr>
+
+
+
+			<td height="10px">
+
+				<div style="padding: 0px; width: 100%;">
+					<div
+						style="background-image: url(library/img/border_bg.jpg); height: 10px; background-repeat: repeat-x;">
+						&nbsp;</div>
+				</div>
+			</td>
+			<td></td>
+		</tr>
+
+</table>
+		<!--  <Label style="text-align: center; font-family: alice; width: 100%; color: #1589FF; font-size: 39px; padding: 10px;border-bottom: 2px solid #1589FF;">
 		<img src='library/img/EC_logo.jpg' width="70px" height="70px"><font color="blue">  New Water Connections</font> 	
-			<br><span style='font-size:17px;font-weight: normal;'></span></Label> 
+			<br><span style='font-size:17px;font-weight: normal;'></span></Label>  -->
 	<DIV class="container" align="center"> 
 <!-- 		<DIV class="hidden-xs"> -->
 <!-- 			<IMG class="hidden-xs img-responsive center-block" -->
@@ -368,12 +406,12 @@ div[role="dialog"] {
 
 					<DIV class=""> 
 						<DIV class="form-group">
-							<form:input path="LoginName" autocomplete="off" autofocus="true" class="form-control" id="username" placeholder="User Name" required="true" value="" />
+							<form:input path="LoginName" autocomplete="off" autofocus="true" class="form-control" id="username" placeholder="User Name" required="true" value="EEUSER1" />
 						</DIV>
 					</DIV>
 					<DIV class="">
 						<DIV class="form-group  ">
-							<form:password path="LoginPassword" class="form-control" id="password" placeholder="Password" required="true" value="" />
+							<form:password path="LoginPassword" class="form-control" id="password" placeholder="Password" required="true" value="Mri@10101988" />
 						</DIV>
 					</DIV>
 					<DIV class="">

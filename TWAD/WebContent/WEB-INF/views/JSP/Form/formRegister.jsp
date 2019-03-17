@@ -1,3 +1,5 @@
+
+
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -258,7 +260,7 @@ div.tabArrow {
 
 		});
 
-		$('#reqMldId').blur(function () {
+		/* $('#reqMldId').blur(function () {
 
 		//var whichPayment = $('input[name="paymentMode"]:checked').val();
 		var reqMldId = $('#reqMldId').val();
@@ -290,7 +292,7 @@ div.tabArrow {
 
 		});
 
-		
+		 */
 
 		$('input[type="text"]').each(function() {
 			$(this).attr('data-content', $(this).attr('placeholder'));

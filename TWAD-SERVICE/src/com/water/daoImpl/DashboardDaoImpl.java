@@ -1601,12 +1601,11 @@ public class DashboardDaoImpl implements DashboardDao {
 				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
 				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
 				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.paymentStatus"),"paymentStatus") 
 				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
 				           )
-					 .add(Restrictions.eq("companyDtl.active", 1))
-					 .add(Restrictions. ne("companyPaymentDtl.paymentStatusFlag",'R'))
-					 .add(Restrictions. ne("companyPaymentDtl.paymentStatusFlag",'A'));
+					 .add(Restrictions.eq("companyDtl.active", 1));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -1681,7 +1680,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			
 
 			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
-					.createCriteria("companyPaymentDtl.appId","CompanyDtl")
+					.createCriteria("companyPaymentDtl.appId","companyDtl")
 					.setProjection(Projections.projectionList()
 							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
 				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
@@ -1694,12 +1693,13 @@ public class DashboardDaoImpl implements DashboardDao {
 				            .add(Projections.property("companyPaymentDtl.ddDate"),"ddDate")
 				            .add(Projections.property("companyPaymentDtl.ddBankName"),"ddBankName")
 				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
-				            .add(Projections.property("CompanyDtl.legCompName"),"legCompName") 
-				            .add(Projections.property("CompanyDtl.contactPersonName"),"contactPersonName") 
-				            .add(Projections.property("CompanyDtl.appId"),"appId") 
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.paymentStatus"),"paymentStatus")
+				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
 				           )
-					 .add(Restrictions.eq("CompanyDtl.active", 1)).add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag",'A'));
+					 .add(Restrictions.eq("companyDtl.active", 2));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -2851,11 +2851,12 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
 				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
 				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.paymentStatus"),"paymentStatus") 
 				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
 				           )
 			         .add(Restrictions.eq("eeStatus.statusId", 2))
-			         .add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag", 'N'))
+			         /*.add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag", 'N'))*/
 			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
 			         .add(Restrictions.eq("companyDtl.active", 2));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));

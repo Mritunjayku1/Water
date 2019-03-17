@@ -40,7 +40,7 @@ height:25px !important;
 <script type="text/javascript">
 
 $(function(){
-	$('button[name="approvedBtn"]').click(function(){
+	$('input[name="approvedBtn"]').click(function(){
 		//alert(1);
 		var approvedAppRef = $(this).attr('id');
 		var appId = approvedAppRef.split("_");
@@ -94,7 +94,7 @@ $(function(){
 <tr>
 		<td colspan='8'
 			style='text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;'>
-			Pending Applications</td>
+			Payment Pending Applications</td>
 	</tr>
 </table>
 
@@ -120,8 +120,12 @@ $(function(){
                                            <!--  <th style="color:black !important"></th> -->
                                             <th style="color:black !important"><b>App Ref#</b></th>
                                             <th style="color:black !important"><b> Name of Company</b></th>
-                                           <!--  <th style="color:black !important"><b>Category Type</b></th>
-                                            <th style="color:black !important"><b>Correspondence Address</b></th> -->
+                                             <th style="color:black !important"><b> Name of Person</b></th>
+                                            <th style="color:black !important"><b>Total Payment Amount</b></th>
+                                            <th style="color:black !important"><b>DD NO</b></th>
+                                             <th style="color:black !important"><b>DD Date</b></th>
+                                            <th style="color:black !important"><b>DD Bank Name</b></th>
+                                            <th style="color:black !important"><b>Payment Status</b></th>
                                              <th style="color:black !important"><b>Registered Date</b></th>
                                              <th style="color:black !important"><b>Management Comments</b></th>
                                               <th></th>
@@ -132,20 +136,25 @@ $(function(){
                                     
                                      <c:forEach items="${list.appBean}" var="app" >
           
-          									 ${app.getAppId()}
+          							
           									 
           								<tr class="odd gradeX">
-          								
           							<td > <a href="paymentViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
                                             <td>${app.getLegCompName()}</td>
-                                            <%--  <td>${app.getCategoryType()}</td>
-                                            <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
-                                           --%>
+                                            
+                                             <td>${app.getContactPersonName()}</td>
+                                               <td>${app.getPaymentAmount()}</td>
+                                                <td>${app.getDdNo()}</td>
+                                                 <td>${app.getDdDate()}</td>
+                                                  <td>${app.getDdBankName()}</td>
+                                                   <td>${app.getPaymentStatus()}</td>
+                                           
                                              <td class="center">${app.getCreateTs()}</td>
                                               <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
+                                              
                                               <td class="center">
-                                              <button class="paymentClass" id="approved_${app.getAppId()}_${app.getCompanyPaymentDtlID()}" name="approvedBtn" style="width: auto;">Approved</button>
-											  <button class="cancelbtn" id="rejected_${app.getAppId()}_${app.getCompanyPaymentDtlID()}" name="rejectedBtn" style="width: auto;">Rejected</button>
+                                              <input type="button" class="paymentClass" id="approved_${app.getAppId()}_${app.getCompanyPaymentDtlID()}" name="approvedBtn" style="width: auto;" value="Approved"/>
+											 <%--  <button class="cancelbtn" id="rejected_${app.getAppId()}_${app.getCompanyPaymentDtlID()}" name="rejectedBtn" style="width: auto;">Rejected</button> --%>
 											  </td>
                                            
                                         </tr>	 

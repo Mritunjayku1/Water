@@ -3,8 +3,8 @@ package com.water.dao;
 import java.util.List;
 
 import com.water.bean.SmsDatas;
-import com.water.model.Application;
 import com.water.model.CompanyDtl;
+import com.water.model.EmployeeDetails;
 
 public interface SmsDatadao {
 
@@ -13,5 +13,7 @@ public interface SmsDatadao {
 	public SmsDatas receiveSMs(String sender, String message);
 
 	List<CompanyDtl> getTemplateID(String applicationId,Integer applicationID);
-	//Test
+	List<EmployeeDetails> getTemplateIDtoEE(String applicationId,Integer applicationID);
+	
+	
 }

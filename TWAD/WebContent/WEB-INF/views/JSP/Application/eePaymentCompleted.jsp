@@ -116,7 +116,7 @@ function validateAddForm() {
 			appId = $(this).attr("id");
 			$('#appId').val(appId);
 			var inspectionDate = $(this).closest('tr').find(
-			'td:nth-child(7)').find(
+			'td:nth-child(6)').find(
 			'input[type="text"]').val();
 	if (inspectionDate == null || inspectionDate == '') {
 		alert("Please select  inspection Date !")
@@ -296,7 +296,7 @@ function validateAddForm() {
 	<tr>
 		<td colspan='8'
 			style='text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;'>
-			Before Inspection</td>
+			Payment Completed</td>
 	</tr>
 </table>
 
@@ -326,7 +326,6 @@ function validateAddForm() {
 												Company</b></th>
 										<th style="color: black !important"><b>Category Type</b></th>
 
-										<th style="color: black !important"><b>Zone#</b></th>
 										<th style="color: black !important"><b>Correspondence
 												Address</b></th>
 										
@@ -347,14 +346,11 @@ function validateAddForm() {
 											
 											<td><a href="EEViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
 											<td>${app.getLegCompName()}</td>
-											<%--  <td>${app.getDivId()}</td> --%>
 											<td>${app.getCategoryType()}</td>
-                                          <%-- <td class="center">${app.getCmwssbZoneNum()}</td> --%>
-											 <td class="center"></td> 
+                                         
 											<td class="center">${app.getCdoorNo()}
 												${app.getCplotNo()} ${app.getCstreetName()}
 												${app.getClocation()} ${app.getCpinCode()}</td>
-										<%-- <td class="center">${app.getCreateDate()}</td>  --%>
 										<td class="center"></td> 
 											<td class="center" width="200px"><input type="text" 
 												name="inspectionDate" placeholder="dd-mm-yyyy"

@@ -518,7 +518,7 @@ public class ApplicationService {
 		session.update(companyDtl);
 		session.beginTransaction().commit();
 
-		final Integer smsType = 1;
+		/*final Integer smsType = 1;
 		final String smsTemp="";final String application_ID = ddPaymentFormBean.getAppId();
 		Thread notify = new Thread(new Runnable() {
 			@Override
@@ -527,7 +527,7 @@ public class ApplicationService {
 				obj.getSmsTemplate(application_ID, smsType,smsTemp);
 			}
 		}, "notify");
-		notify.start();
+		notify.start();*/
 
 		return String.valueOf(companyPaymentDtl.getAppId());
 

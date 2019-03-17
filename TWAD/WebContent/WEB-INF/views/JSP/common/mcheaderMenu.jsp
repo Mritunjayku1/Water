@@ -141,31 +141,42 @@
 	/* 	color: #FFFFFF; */
 	font-size: 13px;
 }
-</style>
 
+.selectionClass{
+font-size: 13px;
+color: #FFFFFF;
+background: #E05400;
+background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
+}
+</style>
+<script>
+
+$(function(){
+	var url = window.location.href;
+		$('ul li').removeClass('selectionClass');
+		if(url.indexOf("mcdashboard")>0){
+		$('ul li:nth-child(1)').addClass('selectionClass');
+		}
+		if(url.indexOf("mcViewApp")>0){
+			$('ul li:nth-child(2)').addClass('selectionClass');
+			}
+		if(url.indexOf("mcapproved")>0){
+			$('ul li:nth-child(3)').addClass('selectionClass');
+			}
+		if(url.indexOf("mcViewAll")>0){
+			$('ul li:nth-child(4)').addClass('selectionClass');
+			}
+		
+});
+</script>
 
 
 <div>
 	<ul id="HDropdown-orange-classic">
-		<!-- <li><a href="home.do"><img src='library/img/home.png'/></a> -->
-		<li><a href="mcdashboard.do" id='menu1' >Dashboard</a> <!-- 			<ul> -->
-			<!--  			<li><a href="studentList.do">Student Details</a></li> --> <!-- 				
-			<!-- 			</ul> --></li>
-		<li><a href="mcViewApp.do" id='menu2'> Pending  Application</a> <!-- 			<ul> -->
-			<!-- 				<li><a href="viewResult.do">View Result</a></li> --> <!-- 			</ul> -->
-		</li>
-		<!-- <li><a href="ceStatus.do" id='menu2'>CE Status</a> 			<ul>
-							<li><a href="viewResult.do">View Result</a></li> 			</ul>
-		</li>
-		<li><a href="eeStatus.do" id='menu2'>EE Status</a> 			<ul>
-							<li><a href="viewResult.do">View Result</a></li> 			</ul>
-		</li> -->
-		<!-- <li><a href="trackStatus.do" id='menu2'>Application Tracking</a> 			<ul>
-							<li><a href="viewResult.do">View Result</a></li> 			</ul>
-		</li> -->
-	<li><a href="mcapproved.do" id='menu2'>Approved Application</a>
-		<li><a href="mcViewAll.do" id='menu2'>View All Application </a> 			
-							<!-- <li><a href="viewResult.do">View Result</a></li> 			</ul> -->
-		</li>  
+		<li><a href="mcdashboard.do"  >Dashboard</a></li>
+		<li><a href="mcViewApp.do"> Pending  Application</a> </li>
+	<li><a href="mcapproved.do" id='menu2'>Approved Application</a></li>
+		<li><a href="mcViewAll.do" id='menu2'>View All Application </a> </li>  
+		</ul>
 </div>
 <br>

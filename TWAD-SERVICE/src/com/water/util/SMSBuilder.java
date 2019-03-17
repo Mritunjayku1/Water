@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import com.water.daoImpl.SmsDataDaoImp;
 import com.water.model.Application;
 import com.water.model.CompanyDtl;
+import com.water.model.EmployeeDetails;
 
 public class SMSBuilder {
 
@@ -97,6 +98,112 @@ public class SMSBuilder {
 				}
 
 
+	public void getSmsTemplatetoEE(String applicationID, Integer smsType,String smsTemp) {
+
+		String Message = "";
+		String mobnumber = "";
+		String Name = "";
+		SmsDataDaoImp smsDataDaoImp = new SmsDataDaoImp();
+		
+		
+		List<EmployeeDetails> lstEmp = smsDataDaoImp.getTemplateIDtoEE(applicationID,
+				smsType);
+		
+		for(EmployeeDetails emp:lstEmp){
+			
+			HashMap<String, String> smsdtls = new HashMap<String, String>();
+			smsdtls.put("ToMobileNo", emp.getPhoneNum().toString());
+			smsdtls.put("EmailId", emp.getEmailAddr().toString());
+			
+			Message = getMsgBody(smsdtls.get("Body"), smsdtls);
+			mobnumber = getMsgBody(smsdtls.get("ToMobileNo"), smsdtls);
+			try {
+			if ("SMS".equalsIgnoreCase("SMS")
+					&& smsdtls.get("ToMobileNo") != null
+					&& !"".equals(smsdtls.get("ToMobileNo"))) {
+				
+				SMSUrl=SMSUrl+"&message="+Message+"&"+"number="+mobnumber;
+				URL url = new URL(SMSUrl);
+
+				//if ("1".equals(isSMSEmailActive)) {
+					System.out.println("SMS URL :" + SMSUrl);
+					HttpURLConnection connection = (HttpURLConnection) url
+							.openConnection();
+					connection.connect();
+					System.out.println("Response Code: "
+							+ connection.getResponseCode());
+			}
+			
+			String TemplateType = "EMAIL";
+			if ("EMAIL".equalsIgnoreCase(TemplateType)
+					&& emp.getEmailAddr() != null
+					&& !"".equals(emp.getEmailAddr())
+					&& "3".equals(isSMSEmailActive)) {
+
+				Map<String, Object> params = new HashMap<String, Object>();
+
+				/*params.put("applicationID", applicationID);
+				params.put("Name", app.getLegCompName());
+				params.put("EmailMsg", app.getSmsId().getSmsName());
+				params.put("Payment", app.getTotalAmount());*/
+			//	params.put("InspectionDate", app.getInspectionDate());
+			//	params.put("InitialPayment", app.getInitialPayment());
+				//params.put("FixedFinalFee", app.getFixedFinalFee().toString());
+				//params.put("PaidFinalFee", app.getPaidfinalFee().toString());
+				//params.put("MobileNo","976534422");
+				//params.put("FixedfinalFee",app.getFixedFinalFee());
+				/*if(app.getInspectionDate()!=null)
+				{
+					params.put("InspectionDate", app.getInspectionDate());
+				}
+				*/
+				String body = "test";
+				/*String body = EmailTemplateBuilder.getEmailTemplate(
+						emp.getSmsId().getSmsName(), params);*/
+				// String body =
+				// "Welcome to Register Water board New Connection Your Ref No is="+app.getAppId();
+
+				new SendEMailUtil().sendMail(
+						emp.getEmailAddr(),
+						"TN Water New Connection  - Applicationt# "
+								+"", body, "", data);
+				System.out.println("Email Sent To : " + emp.getEmailAddr());
+			}
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+        
+		System.out
+				.println(" Application : getSmsTemplate === " + applicationID);
+    
+		
+
+
+	}
+	
+	
+	public void getStatustoEE(String applicationID, String status)
+	{
+		statusURL=statusURL+"/"+applicationID+"/"+status;
+		//https://103.233.79.150/single_window/Resources/app_cmwssb_status_update/WI20180003/MC APPROVED 
+		URL url;
+		try {
+			url = new URL(statusURL);
+			System.out.println("statusURL URL :" + statusURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.connect();
+			System.out.println("StatusURL Response Code: "
+					+ conn.getResponseCode());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		
+		
+	}
 	public void getSmsTemplate(String applicationID, Integer smsType,String smsTemp) {
 
 		String Message = "";

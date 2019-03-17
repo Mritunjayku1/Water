@@ -67,14 +67,14 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 <table id="mydiv" align="center">
 
 <tr><td valign="middle" align="center" style="height:160px;width: 100%;"> 
-<table><tr><td>
+<table><!-- <tr><td>
  <img src="library/img/twad_logo.gif" width="110px" height="106px"></td><td>
     <img src="library/img/Acknowlegement.png" width="800px" height="75px">
     </td></tr></table>
-  </td></tr>
+  </td></tr> -->
   
  
-			
+			<!-- 
 			<tr>
 			
 			
@@ -86,7 +86,25 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                     &nbsp;</div>
             </div>
 			</td>
-			</tr>
+			</tr> -->
+			<tr>
+			<td valign="middle" colspan="2" style="height: 130px; width: 100%;">
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px"
+								height="106px" style="margin-left: 50px;"></td>
+							<td width="50%" align="center"><img src="library/img/middleImage.png" width="560px"
+								height="67px"></td>
+							<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px" style="margin-right: 50px;"></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</td>
+		</tr>
+			
 			</table>
 <table id="statusHeader" align="center" class="table-bordered table table-striped display" style="width: 970px;">
 

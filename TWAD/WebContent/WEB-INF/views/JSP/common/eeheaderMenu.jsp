@@ -141,7 +141,51 @@
 	/* 	color: #FFFFFF; */
 	font-size: 13px;
 }
+
+.selectionClass{
+font-size: 13px;
+color: #FFFFFF;
+background: #E05400;
+background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
+}
 </style>
+
+<script>
+
+$(function(){
+	var url = window.location.href;
+		$('ul li').removeClass('selectionClass');
+		if(url.indexOf("eeDashboard")>0){
+		$('ul li:nth-child(1)').addClass('selectionClass');
+		}
+		if(url.indexOf("eePendingApplication")>0){
+			$('ul li:nth-child(2)').addClass('selectionClass');
+			}
+		if(url.indexOf("eePaymentPending")>0){
+			$('ul li:nth-child(3)').addClass('selectionClass');
+			}
+		if(url.indexOf("eePaymentCompleted")>0){
+			$('ul li:nth-child(4)').addClass('selectionClass');
+			}
+		if(url.indexOf("eeInspectedApplication")>0){
+			$('ul li:nth-child(5)').addClass('selectionClass');
+			}
+		if(url.indexOf("eeMCApproved")>0){
+			$('ul li:nth-child(6)').addClass('selectionClass');
+			}
+		if(url.indexOf("eeFullPaymentCompleted")>0){
+			$('ul li:nth-child(7)').addClass('selectionClass');
+			}
+		if(url.indexOf("eeExecution")>0){
+			$('ul li:nth-child(8)').addClass('selectionClass');
+			}
+		if(url.indexOf("eeViewAll")>0){
+			$('ul li:nth-child(9)').addClass('selectionClass');
+			}
+});
+
+</script>
+
 
 
 <div>

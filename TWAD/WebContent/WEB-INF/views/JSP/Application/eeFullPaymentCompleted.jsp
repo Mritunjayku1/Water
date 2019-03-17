@@ -307,7 +307,7 @@ function validateAddForm() {
 	<tr>
 		<td colspan='8'
 			style='text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;'>
-			Before Inspection</td>
+			Full Payment Completed</td>
 	</tr>
 </table>
 
@@ -337,14 +337,10 @@ function validateAddForm() {
 												Company</b></th>
 										<th style="color: black !important"><b>Category Type</b></th>
 
-										<th style="color: black !important"><b>Zone#</b></th>
 										<th style="color: black !important"><b>Correspondence
 												Address</b></th>
 										
-										<th style="color: black !important"><b>Registered
-												Date</b></th>
-										<th style="color: black !important"><b>Inspection
-												Date</b></th>
+										
 										<th style="color: black !important"></th>
 									</tr>
 								</thead>
@@ -358,19 +354,13 @@ function validateAddForm() {
 											
 											<td><a href="EEViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
 											<td>${app.getLegCompName()}</td>
-											<%--  <td>${app.getDivId()}</td> --%>
 											<td>${app.getCategoryType()}</td>
-                                          <%-- <td class="center">${app.getCmwssbZoneNum()}</td> --%>
-											 <td class="center"></td> 
+                                         
 											<td class="center">${app.getCdoorNo()}
 												${app.getCplotNo()} ${app.getCstreetName()}
 												${app.getClocation()} ${app.getCpinCode()}</td>
-										<%-- <td class="center">${app.getCreateDate()}</td>  --%>
 										<td class="center"></td> 
-											<td class="center" width="200px"><input type="text" 
-												name="inspectionDate" placeholder="dd-mm-yyyy"
-												class="inspectionDate" readonly style="width: 150px !important;"
-												value="" /></td>
+											
 											<td class="center"><input type="button"
 												name="approveBtn" id="${app.getAppId()}"
 												value="Send SMS/ Email" /></td>

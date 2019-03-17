@@ -60,6 +60,7 @@ import com.water.model.MasterReconnection;
 import com.water.model.MasterStatus;
 import com.water.model.MasterZone;
 import com.water.util.HibernateUtil;
+import com.water.util.SMSBuilder;
 
 /**
  * @author Mahalingam Created on 02-June-2017 for DashboardService :
@@ -2110,9 +2111,29 @@ try{
 	CompanyDtl  companyDtl = (CompanyDtl) session.get(CompanyDtl.class, dDPaymentFormBean.getAppId());
 	companyDtl.setOffice((MasterOffice) session.get(MasterOffice.class, Integer.parseInt(dDPaymentFormBean.getOfficeName())));
 	companyDtl.setManagementComments(dDPaymentFormBean.getManagementComments());
-	companyDtl.setActive(2);
 	session.update(companyDtl);
 	transaction.commit();
+	
+	//maha addedd
+	
+	final Integer smsType=3;
+	final Integer emailType=3;
+	final String status="test";
+	
+	final String smsTemp="ok";
+	final String application_ID = dDPaymentFormBean.getAppId();
+	Thread notify = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			SMSBuilder obj = new SMSBuilder();
+			obj.getSmsTemplate(application_ID,smsType,smsTemp);
+			obj.getStatus(application_ID, status);
+			
+			obj.getSmsTemplatetoEE(application_ID,smsType,smsTemp);
+			obj.getStatustoEE(application_ID, status);
+		}
+	}, "notify");
+	notify.start();
 	
 }
 catch(Exception e){

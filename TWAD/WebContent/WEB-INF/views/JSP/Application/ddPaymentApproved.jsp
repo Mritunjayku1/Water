@@ -83,12 +83,16 @@ $(function(){
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
-                                        <tr>
+                                       <tr>
                                            <!--  <th style="color:black !important"></th> -->
                                             <th style="color:black !important"><b>App Ref#</b></th>
                                             <th style="color:black !important"><b> Name of Company</b></th>
-                                           <!--  <th style="color:black !important"><b>Category Type</b></th>
-                                            <th style="color:black !important"><b>Correspondence Address</b></th> -->
+                                             <th style="color:black !important"><b> Name of Person</b></th>
+                                            <th style="color:black !important"><b>Total Payment Amount</b></th>
+                                            <th style="color:black !important"><b>DD NO</b></th>
+                                             <th style="color:black !important"><b>DD Date</b></th>
+                                            <th style="color:black !important"><b>DD Bank Name</b></th>
+                                            <th style="color:black !important"><b>Payment Status</b></th>
                                              <th style="color:black !important"><b>Registered Date</b></th>
                                              <th style="color:black !important"><b>Management Comments</b></th>
                                         
@@ -100,15 +104,22 @@ $(function(){
           
           									 
           									 
-          								<tr class="odd gradeX">
+          							<tr class="odd gradeX">
           								
-          							<td > <a href="paymentViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
+          							<td > ${app.getAppId()}</td>
                                             <td>${app.getLegCompName()}</td>
-                                            <%--  <td>${app.getCategoryType()}</td>
-                                            <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
-                                           --%>
+                                            
+                                             <td>${app.getContactPersonName()}</td>
+                                               <td>${app.getPaymentAmount()}</td>
+                                                <td>${app.getDdNo()}</td>
+                                                 <td>${app.getDdDate()}</td>
+                                                  <td>${app.getDdBankName()}</td>
+                                                   <td>Paid</td>
+                                           
                                              <td class="center">${app.getCreateTs()}</td>
-                                              <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;">${app.getManagementComments()}</textarea></td>
+                                              <td class="center">${app.getManagementComments()}</td>
+                                              
+                                           
                                         </tr>	 
           									 
           							 </c:forEach>

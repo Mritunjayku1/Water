@@ -128,6 +128,7 @@ $(document).ready(function(){
 
 				success : function(response) {
 					alert(response);
+					$('#loading_image').hide();
 				}
 				});
 		  

@@ -7,6 +7,8 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 
@@ -15,6 +17,7 @@ import com.water.bean.SmsBean;
 import com.water.dao.SmsDatadao;
 import com.water.model.Application;
 import com.water.model.CompanyDtl;
+import com.water.model.EmployeeDetails;
 import com.water.model.TblSMSDatas;
 import com.water.util.Constant;
 import com.water.util.HibernateUtil;
@@ -73,4 +76,31 @@ public class SmsDataDaoImp implements SmsDatadao {
 		SmsTemplate = cr.list();
 		return SmsTemplate;
 	}
+	@Override
+	public List<EmployeeDetails> getTemplateIDtoEE(String applicationId, Integer smsType) {
+		Session session = sessionfact.openSession();
+		int  officeId=2;
+		List<EmployeeDetails> SmsTemplate = new ArrayList<EmployeeDetails>();
+		
+		Criteria companyCriteria = session.createCriteria(EmployeeDetails.class,"e1")
+		.createCriteria("e1.userOffice","eo1");
+		//.createCriteria(CompanyDtl.class,"c1")
+		//.createCriteria("c1.office","co1");
+		companyCriteria.add(Restrictions.eq("eo1.officeId",officeId));
+		//companyCriteria.add(Restrictions.eq("appId", applicationId));
+		
+		/*ProjectionList properties = Projections.projectionList();
+		properties.add(Projections.property("emailAddr"));
+		properties.add(Projections.property("phoneNum"));
+		companyCriteria.setProjection(properties);*/
+		SmsTemplate=companyCriteria.list();
+		
+		
+		/*Criteria cr = session.createCriteria(EmployeeDetails.class);
+		cr.add(Restrictions.eq("appId", applicationId));
+		SmsTemplate = cr.list();*/
+		return SmsTemplate;
+	}
+	
+	
 }
