@@ -33,6 +33,7 @@ import com.water.bean.AppFormBean;
 import com.water.bean.CategoryFormBean;
 import com.water.bean.ChangePasswordBean;
 import com.water.bean.ConnectionFormBean;
+import com.water.bean.DDPaymentFormBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.ForgotPasswordBean;
 import com.water.bean.LoginBean;
@@ -181,8 +182,30 @@ public class AdminController {
 		model.put("districtDtl", districtFormBeanList);
 		
 		
-
 		ResponseEntity<String> out2 = restTemplate.exchange(
+				WaterDashboardService + "getFixedPaymentAmount",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray2 = new JSONArray(out2.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> ddPaymentFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray2.length(); i++) {
+			DDPaymentFormBean ddPaymentFormBean = gson.fromJson(
+					jsonArray2.getString(i), DDPaymentFormBean.class);
+			ddPaymentFormBeanList.add(ddPaymentFormBean);
+		}
+
+		
+		model.put("fixedPaymentAmount", ddPaymentFormBeanList.get(0));
+		
+		
+		
+		
+
+		/*ResponseEntity<String> out2 = restTemplate.exchange(
 				WaterDashboardService + "getDivisionDtl",
 				HttpMethod.POST, entity, String.class);
 
@@ -202,7 +225,7 @@ public class AdminController {
 		
 		model.put("zoneDivisionDtl", zoneDivisionFormBeanList);
 		
-		
+		*/
 		
 		String path = this.getClass().getClassLoader().getResource("").getPath();
 		String fullPath = URLDecoder.decode(path, "UTF-8");

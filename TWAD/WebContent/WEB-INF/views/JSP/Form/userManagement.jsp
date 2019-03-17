@@ -450,6 +450,7 @@ $(function(){
 				<option value="1">CE</option>
 				<option value="2">EE</option>
 				<option value="3">MC</option>
+				<option value="4">HO</option>
 				
 				</select><br/>
 				
@@ -494,7 +495,7 @@ $(function(){
 				<option value="1">CE</option>
 				<option value="2">EE</option>
 				<option value="3">MC</option>
-				
+				<option value="4">HO</option>
 				</select><br/>
 				<input type="hidden" id="editUserId"/>
 				

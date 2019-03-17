@@ -2,7 +2,6 @@ package com.water.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -130,6 +128,9 @@ public class CompanyDtl implements Serializable {
 
 	@Column(name = "APPLICATION_STATUS", nullable = false, length = 100)
 	private Integer applicationStatus=0;
+	
+	@Column(name = "PAYMENT_STATUS", nullable = false, length = 100)
+	private Integer paymentStatus=0;
 	
 	@Column(name = "ACTIVE", nullable = false, length = 100)
 	private Integer active=1;
@@ -723,6 +724,16 @@ public class CompanyDtl implements Serializable {
 
 	public void setManagementComments(String managementComments) {
 		this.managementComments = managementComments;
+	}
+
+
+	public Integer getPaymentStatus() {
+		return paymentStatus;
+	}
+
+
+	public void setPaymentStatus(Integer paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 

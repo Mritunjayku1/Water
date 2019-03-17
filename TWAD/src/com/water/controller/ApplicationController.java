@@ -206,6 +206,10 @@ public class ApplicationController {
 		Map<String, String> model = new HashMap<String, String>();
 		model.put("applicationRef", applicationRef);
 
+		if(applicationRef != null){
+			applicationRef="DD Saved Successfully";
+		}
+		
 		return applicationRef;
 
 	}
@@ -1179,7 +1183,7 @@ appbean.setReqMld(String.valueOf(MldId));
 	public @ResponseBody
 	String uploadMultipleFileByAdmin(@RequestParam("file") MultipartFile[] files,@RequestParam("appId") String appId, HttpServletRequest request) {
 		
-		
+		if(null !=request.getSession().getAttribute("appId"))
 		appId=(String)request.getSession().getAttribute("appId");
 		String message = "";
 		String msg="";

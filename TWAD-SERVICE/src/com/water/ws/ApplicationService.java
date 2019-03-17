@@ -3,6 +3,7 @@ package com.water.ws;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.crypto.Mac;
@@ -13,8 +14,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import com.google.gson.Gson;
 import com.water.bean.AppFormBean;
@@ -29,6 +33,7 @@ import com.water.model.CompanyDtl;
 import com.water.model.CompanyPaymentDtl;
 import com.water.model.ComplaintDetails;
 import com.water.model.MasterCategory;
+import com.water.model.MasterPayment;
 import com.water.model.MasterStatus;
 import com.water.model.SmsTemp;
 import com.water.model.TransctionMaster;
@@ -471,6 +476,19 @@ public class ApplicationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String saveDDPaymentDtls(DDPaymentFormBean ddPaymentFormBean) {
 		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+				.createCriteria("masterPayment.appId","companyDtl")
+				.add(Restrictions.eq("companyDtl.appId", ddPaymentFormBean.getAppId()));
+		List<MasterPayment> paymentList = cr.list();
+		for(MasterPayment masterPayment : paymentList){
+			Transaction tx =  session.beginTransaction();
+			masterPayment.setStatusFlag('N');
+			session.update(masterPayment);
+			tx.commit();
+		}
+		
+		
+		
 		session.beginTransaction();
 		SmsTemp smstemp = new SmsTemp();
 		smstemp.setSmsId(1);
@@ -495,7 +513,7 @@ public class ApplicationService {
 		session.beginTransaction().commit();
 		
 		CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class, ddPaymentFormBean.getAppId());
-		companyDtl.setActive(1);
+		companyDtl.setPaymentStatus(1);
 		session.beginTransaction();
 		session.update(companyDtl);
 		session.beginTransaction().commit();

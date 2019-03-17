@@ -146,50 +146,17 @@
 
 <div>
 	<ul id="HDropdown-orange-classic">
-		<!-- <li><a href="home.do"><img src='library/img/home.png'/></a> -->
-		<li><a href="eeDashboard.do" id='menu1' > Dashboard</a> <!-- 			<ul> -->
-			<!--  			<li><a href="studentList.do">Student Details</a></li> --> <!-- 				<li><a href="studentRegistration.do">Student Registration</a></li> -->
-			<!-- 			</ul> --></li>
+		<li><a href="eeDashboard.do" > Dashboard</a></li>
+		<li><a href="eePendingApplication.do">Pending Application </a> </li>
+	    <li><a href="eePaymentPending.do">Payment Pending</a> </li>
+		<li><a href="eePaymentCompleted.do">1% Payment Completed</a></li>
+		<li><a href="eeInspectedApplication.do">Inspected Application</a></li>
+		<li><a href="eeMCApproved.do">MC Approved</a></li>
+		<li><a href="eeFullPaymentCompleted.do">Full Payment Completed</a></li>
+		<li><a href="eeExecution.do">Execution</a></li>
+		<li><a href="eeViewAll.do">View All Application </a> </li>  
 		
-		<li><a href="eeBeforeInsp.do" id='menu2'>Before Inspection </a> <!-- 			<ul> -->
-			<!-- 				<li><a href="viewResult.do">View Result</a></li> --> <!-- 			</ul> -->
-		</li>
-	<!-- 	<li><a href="eeAfterInsp.do" id='menu2'>After Inspection & Payment Estimation</a> 			<ul>
-							<li><a href="viewResult.do">View Result</a></li> 			</ul>
-		</li> -->
-		<li><a href="eeAfterInsp.do" id='menu2'>Inspection & Document</a> <!-- 			<ul> -->
-			<!-- 				<li><a href="viewResult.do">View Result</a></li> --> <!-- 			</ul> -->
-		</li>
-		<li><a href="eeEstimate.do" id='menu2'>Estimate & Document</a> <!-- 			<ul> -->
-			<!-- 				<li><a href="viewResult.do">View Result</a></li> --> <!-- 			</ul> -->
-		</li>
-		<li><a href="eeMOU.do" id='menu2'>MOU & Document</a> <!-- 			<ul> -->
-			<!-- 				<li><a href="viewResult.do">View Result</a></li> --> <!-- 			</ul> -->
-		</li>
-		
-		<!-- <li><a href="eeProsFeePendingApp.do" id='menu2'> ProcessingFee Payment Pending  </a> 			
-							<li><a href="viewResult.do">View Result</a></li> 			</ul>
-		</li>  -->
-		
-		<!--  <li><a href="eeApproved.do" id='menu2'> Approved  Application</a> 			
-							<li><a href="viewResult.do">View Result</a></li> 			</ul>
-		</li>  -->
-		
-		 <li><a href="eeApproved.do" id='menu2'> Approved  Application</a> 			
-						<!-- 	<li><a href="viewResult.do">View Result</a></li> 			</ul> -->
-		</li> 
-		<li><a href="eeConPayPendingApp.do" id='menu2'>  Payment Pending Application </a> 			
-							<!-- <li><a href="viewResult.do">View Result</a></li> 			</ul> -->
-		</li> 
-		
-		  <li><a href="eeConPaidApp.do" id='menu2'>Payment Paid Application </a> 			
-							<!-- <li><a href="viewResult.do">View Result</a></li> 			</ul> -->
-		</li> 
-		<li><a href="eeViewAll.do" id='menu2'>View All Application </a> 			
-							<!-- <li><a href="viewResult.do">View Result</a></li> 			</ul> -->
-		</li>  
-		
-
+</ul>
 
 	
 </div>

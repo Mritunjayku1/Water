@@ -41,10 +41,12 @@ public class DDPaymentFormBean {
 	private String surveyFieldNo;
 	private Integer isNewConnection;
 	private String reqMld;
+	private String gstPercent;
 	private String gstAmount;
 	private String totalAmount;
 	private Integer intrPlumStatus;
 	private Integer workType;
+	private Integer paymentStatus;
 	
 	
 	public String getCdoorNo() {
@@ -286,6 +288,18 @@ public class DDPaymentFormBean {
 	}
 	public void setOfficeName(String officeName) {
 		this.officeName = officeName;
+	}
+	public Integer getPaymentStatus() {
+		return paymentStatus;
+	}
+	public void setPaymentStatus(Integer paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+	public String getGstPercent() {
+		return gstPercent;
+	}
+	public void setGstPercent(String gstPercent) {
+		this.gstPercent = gstPercent;
 	}
 
 }

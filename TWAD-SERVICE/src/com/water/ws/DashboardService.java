@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -18,10 +17,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.io.FileUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Projections;
@@ -31,28 +28,22 @@ import com.google.gson.Gson;
 import com.sun.jersey.core.header.ContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
-import com.water.bean.AppFormBean;
 import com.water.bean.ApplicationBean;
 import com.water.bean.CategoryFormBean;
 import com.water.bean.CmwWaterConnBean;
 import com.water.bean.CompanyDtlBean;
-import com.water.bean.ComplaintBean;
 import com.water.bean.ConnectionFormBean;
 import com.water.bean.DDPaymentFormBean;
-import com.water.bean.DashboardBean;
 import com.water.bean.DashboardCountBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
-import com.water.bean.DocumentBean;
 import com.water.bean.EmployeeFormBean;
 import com.water.bean.OfficeFormBean;
 import com.water.bean.OracleDbBean;
 import com.water.bean.PaymentFormBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
-import com.water.dao.ComplaintDao;
 import com.water.dao.DashboardDao;
-import com.water.daoImpl.ComplaintDaoImpl;
 import com.water.daoImpl.DashboardDaoImpl;
 import com.water.model.Application;
 import com.water.model.CompanyDtl;
@@ -66,8 +57,8 @@ import com.water.model.MasterOffice;
 import com.water.model.MasterPayment;
 import com.water.model.MasterPaymentType;
 import com.water.model.MasterReconnection;
+import com.water.model.MasterStatus;
 import com.water.model.MasterZone;
-import com.water.util.Common;
 import com.water.util.HibernateUtil;
 
 /**
@@ -892,106 +883,9 @@ applicationBean.setCreateDate(appDtls.getCreateTs().toString());
 	@Path("/listMcPendingApplication")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String listMcPendingApplication() {
-
-		dashboardDao = new DashboardDaoImpl();
-		gson = new Gson();
-		
-
-		List<Application> appDtls = dashboardDao.listMcPendingApplicationDtls();
-		List<ApplicationBean> applicationBeanList = new ArrayList<ApplicationBean>();
-		for (Application app : appDtls) {
-			MasterZone mastr=new MasterZone();
-			mastr.setZoneDesc("other");
-			ApplicationBean applicationBean = new ApplicationBean();
-			applicationBean.setAppId(app.getAppId());
-			applicationBean.setCategoryType(app.getCategoryType().getCategoryName());
-			applicationBean.setSalutation(app.getSalutation());
-			applicationBean.setContactPersonName(app.getContactPersonName());
-			
-			if(app.getRemarks()!=null )
-			{
-				applicationBean.setRemarks(app.getRemarks());
-			}
-			if(app.getCmwssbZoneNum() != null && app.getCmwssbZoneNum().getZoneDesc().equals(null))
-			{
-			
-				applicationBean.setCmwssbZoneNum("other");
-			}
-			else if(app.getCmwssbZoneNum() != null)
-			{
-				applicationBean.setCmwssbZoneNum(app.getCmwssbZoneNum()
-						.getZoneDesc());
-			}
-			
-			
-			
-		
-///
-			if(app.getIsReconnectionForService() == null )
-			{
-				applicationBean.setIsReconnectionForService("NO");	
-			}
-			
-			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 0 )
-			{
-				applicationBean.setIsReconnectionForService("NO");
-			}
-			if(app.getIsReconnectionForService()!= null && app.getIsReconnectionForService() == 1 )
-			{
-				applicationBean.setIsReconnectionForService("YES");
-			}
-		
-			
-			applicationBean.setCdoorNo(app.getCdoorNo());
-			applicationBean.setCplotNo(app.getCplotNo());
-			applicationBean.setCstreetName(app.getCstreetName());
-			applicationBean.setClocation(app.getClocation());
-			applicationBean.setCpinCode(app.getCpinCode());
-			applicationBean.setWebAddress(app.getWebAddress());
-			if(app.getLandLineNo()!=null){
-				applicationBean.setLandLineNo(app.getLandLineNo().toString());
-			}
-			
-			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==0){
-				applicationBean.setIsNewConnection("NO");
-			}
-			if(app.getIsNewConnection()!=null && app.getIsNewConnection()==1){
-				applicationBean.setIsNewConnection("YES");
-			}
-			if(app.getDivId()!=null  && app.getDivId().getDivDesc().equals(null)){
-				applicationBean.setDivId("");
-			}
-			else if(app.getDivId()!=null)
-			{
-				applicationBean.setDivId(app.getDivId().getDivDesc());
-			}
-			
-			applicationBean.setDoorNo(app.getDoorNo());
-			applicationBean.setPlotNo(app.getPlotNo());
-			applicationBean.setStreetName(app.getStreetName());
-			applicationBean.setLocation(app.getLocation());
-			applicationBean.setPinCode(app.getPinCode());
-			applicationBean.setInitialPayment(app.getPaidProcessFee());
-			applicationBean.setEstimationCost(app.getFixedFinalFee().toString());
-			applicationBean.setPaymentAmount(app.getPaymentAmount().toString());
-			applicationBean.setGstAmount(app.getGstAmount().toString());
-			applicationBean.setLegCompName(app.getLegCompName());
-			applicationBean.setCreateDate(app.getCreateTs().toString());
-			if(app.getIsExistConnectionForAlteration()!=null && app.getIsExistConnectionForAlteration()==0){
-				applicationBean.setIsExistConnectionForAlteration("NO");
-			}
-			if(app.getIsExistConnectionForAlteration()!=null&&app.getIsExistConnectionForAlteration()==1){
-				applicationBean.setIsExistConnectionForAlteration("YES");
-				}
-			applicationBeanList.add(applicationBean);
-		
-
+		return new Gson().toJson(new DashboardDaoImpl().listMcPendingApplicationDtls());
 		}
-		
-
-		return gson.toJson(applicationBeanList);
-
-	}
+	
 	
 	@POST
 	@Path("/listAfterInspection")
@@ -1306,15 +1200,15 @@ applicationBean.setCreateDate(appDtls.getCreateTs().toString());
 
 	}
 	@POST
-	@Path("/listBeforeInspection")
+	@Path("/eePendingApplication")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String listBeforeInspection(CompanyDtlBean companyDtlBean) {
+	public String eePendingApplication(CompanyDtlBean companyDtlBean) {
 
 		dashboardDao = new DashboardDaoImpl();
 		gson = new Gson();
 		
 
-		List<CompanyDtl> appDtls = dashboardDao.listBeforeInspection(companyDtlBean);
+		List<CompanyDtl> appDtls = dashboardDao.eePendingApplication(companyDtlBean);
 		List<CompanyDtlBean> applicationBeanList = new ArrayList<CompanyDtlBean>();
 		for (CompanyDtl companyDtl : appDtls) {
 			//MasterZone mastr=new MasterZone();
@@ -1400,6 +1294,54 @@ applicationBean.setCreateDate(appDtls.getCreateTs().toString());
 		return gson.toJson(applicationBeanList);
 
 	}
+	
+	@POST
+	@Path("/eePaymentPending")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eePaymentPending(CompanyDtlBean companyDtlBean) {
+		return new Gson().toJson(new DashboardDaoImpl().eePaymentPending(companyDtlBean));
+
+	}
+	
+	
+	@POST
+	@Path("/eePaymentCompleted")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eePaymentCompleted(CompanyDtlBean companyDtlBean) {
+		return new Gson().toJson(new DashboardDaoImpl().eePaymentCompleted(companyDtlBean));
+
+	}
+	@POST
+	@Path("/eeInspectedApplication")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eeInspectedApplication(CompanyDtlBean companyDtlBean) {
+		return new Gson().toJson(new DashboardDaoImpl().eeInspectedApplication(companyDtlBean));
+
+	}
+	@POST
+	@Path("/eeMCApproved")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eeMCApproved(CompanyDtlBean companyDtlBean) {
+		return new Gson().toJson(new DashboardDaoImpl().eeMCApproved(companyDtlBean));
+
+	}
+	@POST
+	@Path("/eeFullPaymentCompleted")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eeFullPaymentCompleted(CompanyDtlBean companyDtlBean) {
+		return new Gson().toJson(new DashboardDaoImpl().eeFullPaymentCompleted(companyDtlBean));
+
+	}
+	@POST
+	@Path("/eeExecution")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eeExecution(CompanyDtlBean companyDtlBean) {
+		return new Gson().toJson(new DashboardDaoImpl().eeExecution(companyDtlBean));
+
+	}
+	
+	
+	
 	
 	@POST
 	@Path("/listProsFeePendingPayment")
@@ -2211,11 +2153,7 @@ finally{
 			return "Application Rejected";
 
 		}
-	
 
-	
-	
-	
 	
 	@POST
 	@Path("/ddPaymentApproved")
@@ -2224,6 +2162,17 @@ finally{
 	Session	session = HibernateUtil.getSessionFactory().openSession();
 	Transaction transaction = session.beginTransaction();
 try{
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,dDPaymentFormBean.getAppId());
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,1));
+	companyDtl.setActive(2);
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+	
+	
 	transaction.begin();
 	CompanyPaymentDtl  companyPaymentDtl = (CompanyPaymentDtl) session.get(CompanyPaymentDtl.class, dDPaymentFormBean.getCompanyPaymentDtlID());
 	companyPaymentDtl.setPaymentStatusFlag('A');
@@ -3016,6 +2965,76 @@ DashboardCountBean dashboardBean;
 		
 	return new DashboardDaoImpl().addPayment(paymentFormBean);
 	}
+	
+	@POST
+	@Path("eeAddPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String eeAddPayment(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().eeAddPayment(paymentFormBean);
+	}
+	
+	@POST
+	@Path("eeAddFullPayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String eeAddFullPayment(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().eeAddFullPayment(paymentFormBean);
+	}
+	
+	
+	
+	
+	
+	@POST
+	@Path("eePaymentPendingApproved")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String eePaymentPendingApproved(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().eePaymentPendingApproved(paymentFormBean);
+	}
+	
+	@POST
+	@Path("eePaymentCompletedApproved")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String eePaymentCompletedApproved(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().eePaymentCompletedApproved(paymentFormBean);
+	}
+	
+	
+	@POST
+	@Path("eeFullPaymentApproved")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String eeFullPaymentApproved(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().eeFullPaymentApproved(paymentFormBean);
+	}
+	
+	@POST
+	@Path("eeMCApprovedBtn")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String eeMCApprovedBtn(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().eeMCApprovedBtn(paymentFormBean);
+	}
+	
+	@POST
+	@Path("mcApprovePayment")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String mcApprovePayment(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().mcApprovePayment(paymentFormBean);
+	}
+	
+	
 	@POST
 	@Path("editPayment")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -3330,6 +3349,15 @@ DashboardCountBean dashboardBean;
 			talukVillageFormBeanList.add(talukVillageFormBean);
 		}*/
             return gson.toJson(talukVillageFormBeanList);
+	}
+
+	
+	@POST
+	@Path("/getFixedPaymentAmount")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String getFixedPaymentAmount() {
+		
+            return new Gson().toJson(new DashboardDaoImpl().getFixedPaymentAmount());
 	}
 
 

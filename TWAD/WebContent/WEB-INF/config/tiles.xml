@@ -270,11 +270,44 @@
 
 	
 
-	<definition name="eebeforeInsp" extends="EEbase.definition">
+	<definition name="eePendingApplication" extends="EEbase.definition">
 		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
 		<put-attribute name="body"
-			value="/WEB-INF/views/JSP/Application/eebeforeInsp.jsp"></put-attribute>
+			value="/WEB-INF/views/JSP/Application/eePendingApplication.jsp"></put-attribute>
 	</definition>
+	
+	
+	<definition name="eePaymentPending" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eePaymentPending.jsp"></put-attribute>
+	</definition>
+	<definition name="eePaymentCompleted" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eePaymentCompleted.jsp"></put-attribute>
+	</definition>
+	<definition name="eeInspectedApplication" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eeInspectedApplication.jsp"></put-attribute>
+	</definition>
+	<definition name="eeMCApproved" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eeMCApproved.jsp"></put-attribute>
+	</definition>
+	<definition name="eeFullPaymentCompleted" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eeFullPaymentCompleted.jsp"></put-attribute>
+	</definition>
+	<definition name="eeExecution" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eeExecution.jsp"></put-attribute>
+	</definition>
+	
 	
 	<definition name="eeConPaidApp" extends="EEbase.definition">
 		<put-attribute name="title" value="E-Water | EE Payment Paid"></put-attribute>

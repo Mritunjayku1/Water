@@ -61,13 +61,18 @@ $('#paymentAmountId').blur(function(){
 	var paymentAmount = $(this).val();
 	var gstAmount = $('#gstAmountId').val();
 	var gstPercent = $('#gstPercentId').val();
-	if(gstAmount==0 && gstPercent != 0){
+	if(paymentAmount!="" && gstAmount==0 && gstPercent != "" && gstPercent != 0){
 		var gstAmount = paymentAmount*gstPercent/100;
 		$('#gstAmountId').val(gstAmount);
 	}
-	
-	if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstAmount)){
-		$('#totalAmountId').val(paymentAmount+gstAmount);
+	else{
+		$('#gstAmountId').val(0);
+	}
+	if(paymentAmount!="" && !Number.isNaN(paymentAmount) && !Number.isNaN(gstAmount)){
+		$('#totalAmountId').val(parseInt(paymentAmount)+parseInt(gstAmount));
+	}
+	else{
+		$('#totalAmountId').val(0);
 	}
 });
 
@@ -75,10 +80,10 @@ $('#gstPercentId').blur(function(){
 	var paymentAmount = $('#paymentAmountId').val();
 	var gstPercent = $('#gstPercentId').val();
 	
-	if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstPercent)){
+	if(paymentAmount!="" && !Number.isNaN(paymentAmount) && gstPercent != "" && !Number.isNaN(gstPercent)){
 		var gstAmount = paymentAmount*gstPercent/100;
 		$('#gstAmountId').val(gstAmount);
-		$('#totalAmountId').val(paymentAmount+gstAmount);
+		$('#totalAmountId').val(parseInt(paymentAmount)+parseInt(gstAmount));
 	}
 	else{
 		$('#gstAmountId').val(0);
@@ -90,12 +95,15 @@ $('#editPaymentAmountId').blur(function(){
 	var paymentAmount = $(this).val();
 	var gstAmount = $('#editGstAmountId').val();
 	var gstPercent = $('#editGstPercentId').val();
-	if(gstAmount==0 && gstPercent != 0){
+	if(paymentAmount!="" && gstAmount==0 && gstPercent != "" && gstPercent != 0){
 		var gstAmount = paymentAmount*gstPercent/100;
 		$('#editGstAmountId').val(gstAmount);
 	}
-	if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstAmount)){
-		$('#editTotalAmountId').val(paymentAmount+gstAmount);
+	else{
+		$('#editGstAmountId').val(0);
+	}
+	if(paymentAmount!="" && !Number.isNaN(paymentAmount) && gstPercent != "" && !Number.isNaN(gstAmount)){
+		$('#editTotalAmountId').val(parseInt(paymentAmount)+parseInt(gstAmount));
 	}
 	else{
 		$('#editTotalAmountId').val(0);
@@ -107,10 +115,10 @@ $('#editPaymentAmountId').blur(function(){
 $('#editGstPercentId').blur(function(){
 	var paymentAmount = $('#editPaymentAmountId').val();
 	var gstPercent = $('#editGstPercentId').val();
-	if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstPercent)){
+	if(paymentAmount!="" && !Number.isNaN(paymentAmount) && gstPercent != "" && !Number.isNaN(gstPercent)){
 		var gstAmount = paymentAmount*gstPercent/100;
 		$('#editGstAmountId').val(gstAmount);
-		$('#editTotalAmountId').val(paymentAmount+gstAmount);
+		$('#editTotalAmountId').val(parseInt(paymentAmount)+parseInt(gstAmount));
 	}
 	else{
 		$('#editGstAmountId').val(0);
@@ -125,7 +133,7 @@ $('#dataTables-example input:checkbox').each(function(){
 });
 
 function validateAddForm() {
-	var numberReg = /^[0-9]{10}$/;
+	var numberReg = /^[0-9]*$/;
 
 	var paymentTypeId = $("#paymentTypeId");
 	var paymentAmount = $("#paymentAmountId");
@@ -163,7 +171,7 @@ function validateAddForm() {
 
 
 function validateEditForm() {
-	
+	var numberReg = /^[0-9]*$/;
 	var editPaymentTypeId = $("#editPaymentTypeId");
 	var editPaymentAmount = $("#editPaymentAmountId");
 	var editGstPercent = $("#editGstPercentId");

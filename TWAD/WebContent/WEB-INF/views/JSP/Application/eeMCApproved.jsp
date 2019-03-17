@@ -16,6 +16,14 @@
 	rel="stylesheet" />
 
 <style>
+.bg_heading {
+	text-align: left;
+    font-size: 20px;
+    color: white;
+    margin-top: -32px;
+    margin-left: 195px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 #menu3 {
 	background: #E05400;
 	background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
@@ -25,8 +33,27 @@ input[type="search"] {
 	height: 30px !important;
 }
 
+ input[type="file"] {
+    width: 330px;
+    height: 35px;
+    padding-top:9px;
+    }
+
 input[type="text"] {
-	height: 25px !important;
+	width: 300px;
+    height: 35px;
+    padding: 5px;
+}
+
+#paymentTable input[type="button"] {
+	width: 100px;
+    height: 30px;
+}
+
+select {
+	width: 300px;
+    height: 35px;
+    padding: 5px;
 }
 
 #successMessage {
@@ -36,12 +63,161 @@ input[type="text"] {
 	position: absolute;
 	color: green;
 }
+
+.error {
+	color: red;
+}
 </style>
 <script src='JS/complaints/searchComplaints.js'></script>
 
 <script type="text/javascript">
+
+function validateAddForm() {
+	  	var numberReg = /^[0-9]*$/;
+
+	  	var paymentTypeId = $("#paymentTypeId");
+	  	var paymentAmount = $("#paymentAmountId");
+	  	var gstPercent = $("#gstPercentId");
+	  	
+	  	
+
+	  	var inputVal = new Array(paymentTypeId,paymentAmount,gstPercent);
+
+	  	$('.error').hide();
+	  	flag = true;
+	  	for (i = 0; i < inputVal.length; i++) {
+	  		if (inputVal[i].val() == "") {
+	  			inputVal[i]
+	  					.after('<br/><span class="error"> This field is required. </span>');
+	  			inputVal[i].focus();
+	  			flag = false;
+	  		} 
+	  		
+	  		else if (inputVal[i].attr('id') == 'paymentAmountId' &&  !numberReg.test(inputVal[i].val())) {
+	  			inputVal[i].after('<br/><span class="error"> Please enter Amount in Numeric only. </span>');
+	  			inputVal[i].focus();
+	  			flag = false;
+	  		}
+	  		else if (inputVal[i].attr('id') == 'gstPercentId' &&  !numberReg.test(inputVal[i].val())) {
+	  			inputVal[i].after('<br/><span class="error"> Please enter GST Percent in Numeric only. </span>');
+	  			inputVal[i].focus();
+	  			flag = false;
+	  		}
+	  		
+	  		
+	  	}
+	  	return flag;
+	  }
+
+
 	$(function() {
-		$('input[name="approveBtn"]')
+		var appId="";
+		$('input[name="approveBtn"]').click(function(){
+			appId = $(this).attr("id");
+			$('#appId').val(appId);
+			$.ajax({
+				type:"POST",
+				url:"eeMCApprovedBtn.do",
+				async:false,
+				data:{
+					
+					'appId':appId
+					},
+				success:function(response){
+					alert(response);
+					
+					window.location.reload();
+				}
+			});
+		}); 
+		
+		$('.closeBtn,.imgClose').click(function(){
+			$(".ui-dialog-content").dialog("close");
+			
+		}); 
+		$('#paymentAmountId').blur(function(){
+			var paymentAmount = $(this).val();
+			var gstAmount = $('#gstAmountId').val();
+			var gstPercent = $('#gstPercentId').val();
+			if(gstAmount==0 && gstPercent != 0){
+				var gstAmount = paymentAmount*gstPercent/100;
+				$('#gstAmountId').val(gstAmount);
+			}
+			
+			if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstAmount)){
+				$('#totalAmountId').val(paymentAmount+gstAmount);
+			}
+		});
+
+		$('#gstPercentId').blur(function(){
+			var paymentAmount = $('#paymentAmountId').val();
+			var gstPercent = $('#gstPercentId').val();
+			
+			if(!Number.isNaN(paymentAmount) && !Number.isNaN(gstPercent)){
+				var gstAmount = paymentAmount*gstPercent/100;
+				$('#gstAmountId').val(gstAmount);
+				$('#totalAmountId').val(paymentAmount+gstAmount);
+			}
+			else{
+				$('#gstAmountId').val(0);
+				$('#totalAmountId').val(0);
+			}
+		});
+
+
+		$('#paymentSaveBtnId').click(function(){
+			if(validateAddForm()){
+				
+				$("#paymentSaveBtnId").prop("disabled", true);
+	   			// localStorage.setItem('isFileUploaded', true);
+	   	        var form = $('#uploadFormId')[0];
+	   	        var data = new FormData(form);
+
+	   	        $.ajax({
+	   	            type: "POST",
+	   	            enctype: 'multipart/form-data',
+	   	            async:false,
+	   	            url: "uploadMultipleFileByAdmin.do",
+	   	            data: data,
+	   	            processData: false,
+	   	            contentType: false,
+	   	            cache: false,
+	   	            timeout: 600000,
+	   	            success: function (response) {
+	   	         	alert(response);
+	   	               // $("#btnSubmit").prop("disabled", false);
+
+	   	            },
+	   	        });
+	   		 
+	   	    
+			$.ajax({
+				type:"POST",
+				url:"eeMCApprovedBtn.do",
+				async:false,
+				data:{
+					
+					'appId':appId,
+					'paymentType':$('#paymentTypeId').val(),
+					'paymentAmount':$('#paymentAmountId').val(),
+					'gstPercent':$('#gstPercentId').val(),
+					'gstAmount':$('#gstAmountId').val(),
+					'totalAmount':$('#totalAmountId').val(),
+					'paymentDesc':$('#paymentDescId').val()},
+				success:function(response){
+					alert(response);
+					
+					window.location.reload();
+				}
+			});
+			}
+		});
+
+		
+		
+		
+		
+		/* $('input[name="approveBtn"]')
 				.click(
 						function() {
 							var appRef = $(this).attr('id');
@@ -69,7 +245,7 @@ input[type="text"] {
 								});
 							}
 
-						});
+						}); */
 		$(".inspectionDate").datepicker({
 			dateFormat : 'dd-mm-yy',
 			changeMonth : true,
@@ -86,6 +262,56 @@ input[type="text"] {
 
 	});
 </script>
+
+<div id="addDialog" style="display: none;">
+<form id="uploadFormId" method="POST" enctype="multipart/form-data">
+<input type="hidden" name="appId" id="appId" value=''/>
+<img class="imgClose" src="library/img/Close_SMS.png"
+			style="width: 40px; border-width: 0px; float: right; margin-top: -11px; margin-right: -5px; cursor: pointer;">
+		<h2 class="bg_heading">Add Payment Details</h2>
+		<table id="paymentTable" style="margin-left: 30px;margin-top: 20px;">
+		<tr><td><span><b>Payment Type:</b></span><span style="color: red;">*</span></td><td>
+				<select  id="paymentTypeId">
+				 <option value="">--Select Payment Type--</option>
+                                    <c:forEach items="${list.paymentTypeDtl}" var="app" varStatus="count">
+                                        <option value="${app.getPaymentId()}">${app.getPaymentType()}</option>
+                                    </c:forEach>
+                </select></td></tr>
+				
+<tr><td><span><b>Payment Amount:</b></span><span style="color: red;">*</span></td><td>
+
+				<input placeholder="Ex: 100" type="text" id="paymentAmountId" name="paymentAmount" style=""/></td></tr>
+
+<tr><td><span><b>GST %:</b></span><span style="color: red;">*</span></td><td>
+				<input placeholder="Ex: 10" type="text" id="gstPercentId" name="gstPercent" style="" value=""/></td></tr>
+
+<tr><td><span><b>GST Amount:</b></span></td><td>
+				<input placeholder="Ex: 12" type="text" id="gstAmountId" name="gstAmount" readonly="readonly" value="0" style="background-color: lightgrey;"/></td></tr>
+
+<tr><td><span><b>Total Amount:</b></span></td><td>
+				<input placeholder="Ex: 123" type="text" id="totalAmountId" name="totalAmount" readonly="readonly" value="0" style="background-color: lightgrey;"/></td></tr>
+
+<tr><td colspan="2"><hr style="margin: 0px;width: 95%;"/></td></tr>
+
+<tr><td><span><b>Upload Pre feasibility report:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr>
+
+<tr><td><span><b>Upload consent form:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr>
+
+<tr><td colspan="2"><hr  style="margin-top: 5px;width: 95%;"/></td></tr>
+
+<tr><td><span><b>Comments:</b></span></td><td>
+				<input placeholder="Ex: ABC" type="text" id="paymentDescId" name="paymentDesc" style=""/></td></tr>
+			<tr><td colspan="2" align="center" height="70px">	<input type="button" value="Save" id="paymentSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/></td></tr>
+		
+		
+
+		</table>
+		
+		</form>		
+		</div>
+		
+
+
 
 <table class='table-bordered table table-striped display'
 	style='width: 100%; font-size: 28px;'>

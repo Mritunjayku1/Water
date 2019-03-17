@@ -243,20 +243,12 @@ height:25px !important;
 
 $(function(){
 	$('.paymentClass').click(function(){
-		
-		
 		if(confirm("Are you sure want to Submit ?")){
-			var isMcDicision=1;
-			var id=$(this).attr('id');
-			var estAmount=$(this).closest('tr').find('td:nth-child(6)').find('input[type="text"]').val().trim();
-			var gst=$(this).closest('tr').find('td:nth-child(7)').find('input[type="text"]').val().trim();
-			var finalfee=$(this).closest('tr').find('td:nth-child(8)').find('input[type="text"]').val().trim();
-		     $.ajax({
+			 $.ajax({
 				type:"POST",
-				url:"isMcDicision.do",
-				data:{'appRef':id,'isMcDicision':isMcDicision,'estAmount':estAmount,'gst':gst,'finalfee':finalfee},
+				url:"mcApprovePayment.do",
+				data:{'appRef':id},
 				success:function(response){
-					//$('#successMessage').text(response);
 					alert(response);
 					window.location.reload();
 					
@@ -385,9 +377,9 @@ $(function(){
                                             <th style="color:black !important"><b>Correspondence Address</b></th>
                                           
                                           
-                                              <th style="color:black !important"><b>Processing Fee</b></th>
-                                               <th style="color:black !important"><b>Estimate Fee</b></th>
-                                                 <th style="color:black !important"><b>GST @ 18 %</b></th>
+                                              <th style="color:black !important"><b>Payment Amount</b></th>
+                                               <th style="color:black !important"><b>GST Percent</b></th>
+                                                 <th style="color:black !important"><b>GST Amount</b></th>
                                                    <th style="color:black !important"><b>Total Amount</b></th>
                                               
                                              
@@ -410,23 +402,12 @@ $(function(){
                                            
                                            <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
                                          
-                                            <td class="center">${app.getInitialPayment()}</td>
-                                           <%--  <td class="center">${app.getEstimationCost()}</td> --%>
-                                       <td class="center">   <input type="text"
-												name="finalfee" id="finalfee" class="finalfee"
-												class="inspectionDate"  style="width: 150px !important;"
-												value="${app.getPaymentAmount()}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onkeyup="gst()" /></td>
-										
-												 <td class="center">   <input type="text"
-												name="gst" class="finalfee" id="gst"
-												class="inspectionDate"  style="width: 150px !important;"
-												value="${app.getGstAmount()}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /></td>
-												
-												 <td class="center">   <input type="text"
-												name="totalAmount" class="finalfee" id="totalAmount"
-												class="inspectionDate"  style="width: 150px !important;"
-												value="${app.getEstimationCost()}" onkeypress='return event.charCode >= 48 && event.charCode <= 57' /></td>
-                                            
+                                         <td class="center">${app.getPaymentAmount()}</td>
+                                         <td class="center">${app.getGstPercent()}</td>
+                                         <td class="center">${app.getGstAmount()}</td>
+                                         <td class="center">${app.getTotalAmount()}</td>
+                                         
+                                             
 											<td><button onclick="getPaymentDetails(this.id)"
 													class="paymentClass" id="${app.getAppId()}"
 													style="width: auto;">Accepted</button>

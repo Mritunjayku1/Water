@@ -2,7 +2,6 @@ package com.water.daoImpl;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
@@ -22,7 +21,6 @@ import com.water.bean.CmwWaterConnBean;
 import com.water.bean.CompanyDtlBean;
 import com.water.bean.ConnectionFormBean;
 import com.water.bean.DDPaymentFormBean;
-import com.water.bean.DashboardCountBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
 import com.water.bean.EmployeeFormBean;
@@ -190,25 +188,39 @@ public class DashboardDaoImpl implements DashboardDao {
 		return appDetails;
 	}
 	@Override
-	public List<Application> listMcPendingApplicationDtls() {
+	public List<DDPaymentFormBean> listMcPendingApplicationDtls() {
+		// TODO Auto-generated method stub
+
+		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		
-		List<Application> appDetails = new ArrayList<Application>();
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
 		try {
 			
-		
-			
-			Criteria cr = session.createCriteria(Application.class,"app")
-					.createCriteria("app.mcStatus","status")
-			         .add(Restrictions.eq("status.statusId", 2))
-					.add(Restrictions.eq("app.statusFlag", 'Y'))
-							.add(Restrictions.eq("app.insStatusId",3)
-							
+
+			Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+					.createAlias("masterPayment.appId","companyDtl",JoinType.RIGHT.ordinal())
 					
-					);
+					.setProjection(Projections.projectionList()
+				            .add(Projections.property("masterPayment.paymentAmount"),"paymentAmount") 
+				            .add(Projections.property("masterPayment.gstPercent"),"gstPercent")  
+				            .add(Projections.property("masterPayment.gstAmount"),"gstAmount")  
+				            .add(Projections.property("masterPayment.totalAmount"),"totalAmount")  
+				            
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.appId"),"appId") 
+				           
+				           )
+			         .add(Restrictions.eq("masterPayment.statusFlag", 'A'))
+			         .add(Restrictions.eq("companyDtl.active", 3));
+							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
 			
 			appDetails=cr.list();
+			
+			
 			
 
 		} catch (Exception e) {
@@ -1408,7 +1420,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.workType"),"workType")
 				           
 				           )
-					.add(Restrictions.eq("companyDtl.active", 1));
+					.add(Restrictions.isNull("companyDtl.office"));
 					cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -1475,7 +1487,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.managementComments"),"managementComments")
 				           
 				           )
-					.add(Restrictions.eq("companyDtl.active", 2));
+					.add(Restrictions.isNotNull("companyDtl.office"));
 					cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -1575,7 +1587,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			
 
 			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
-					.createCriteria("companyPaymentDtl.appId","companyDtl")
+					.createAlias("companyPaymentDtl.appId","companyDtl",JoinType.RIGHT.ordinal())
 					.setProjection(Projections.projectionList()
 							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
 				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
@@ -1592,7 +1604,9 @@ public class DashboardDaoImpl implements DashboardDao {
 				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
 				           )
-					 .add(Restrictions.eq("companyDtl.active", 1)).add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag",'N'));
+					 .add(Restrictions.eq("companyDtl.active", 1))
+					 .add(Restrictions. ne("companyPaymentDtl.paymentStatusFlag",'R'))
+					 .add(Restrictions. ne("companyPaymentDtl.paymentStatusFlag",'A'));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -1886,7 +1900,9 @@ public String addNewUser(EmployeeFormBean employeeFormBean ){
 	Transaction tx =  session.beginTransaction();
 	EmployeeDetails employeeDetails = new EmployeeDetails();
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
-	employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
+	if(null !=employeeFormBean.getOfficeId() && !employeeFormBean.getOfficeId().equals("")){
+	  employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
+	}
 	employeeDetails.setLoginUserName(employeeFormBean.getUsername());
 	employeeDetails.setLoginPassword(employeeFormBean.getPassword());
 	employeeDetails.setEmailAddr(employeeFormBean.getEmail());
@@ -1909,8 +1925,10 @@ public String editUser(EmployeeFormBean employeeFormBean ){
 	EmployeeDetails employeeDetails = (EmployeeDetails)session.get(EmployeeDetails.class,Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserId(Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
-	employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
-	employeeDetails.setLoginUserName(employeeFormBean.getUsername());
+	if(null !=employeeFormBean.getOfficeId() && !employeeFormBean.getOfficeId().equals("")){
+	 employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
+	}
+	 employeeDetails.setLoginUserName(employeeFormBean.getUsername());
 	employeeDetails.setLoginPassword(employeeFormBean.getPassword());
 	employeeDetails.setEmailAddr(employeeFormBean.getEmail());
 	employeeDetails.setPhoneNum(Long.parseLong(employeeFormBean.getMobile()));
@@ -2093,6 +2111,147 @@ public String addPayment(PaymentFormBean paymentFormBean ){
 	Session session = sessionFactory.openSession();
 	Transaction tx =  session.beginTransaction();
 	MasterPayment masterPayment = new MasterPayment();
+/*	masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId()));*/
+	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
+	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
+	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
+	masterPayment.setGstAmount(paymentFormBean.getGstAmount());
+	masterPayment.setGstPercent(paymentFormBean.getGstPercent());
+	masterPayment.setTotalAmount(paymentFormBean.getTotalAmount());
+	masterPayment.setStatusFlag('A');
+	masterPayment.setUpdateTs(new Date());
+	masterPayment.setCreateTs(new Date());
+	masterPayment.setUpdateUserId("Administrator");
+	masterPayment.setCreateUserId("Administrator");
+	session.save(masterPayment);
+	tx.commit();
+		return "Payment Added Successfully";
+	}
+
+
+public String eeAddPayment(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
+	companyDtl.setActive(2);
+	companyDtl.setPaymentStatus(0);
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,2));
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+	
+	
+	
+	Transaction tx =  session.beginTransaction();
+	MasterPayment masterPayment = new MasterPayment();
+	masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId()));
+	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
+	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
+	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
+	masterPayment.setGstAmount(paymentFormBean.getGstAmount());
+	masterPayment.setGstPercent(paymentFormBean.getGstPercent());
+	masterPayment.setTotalAmount(paymentFormBean.getTotalAmount());
+	masterPayment.setStatusFlag('A');
+	masterPayment.setUpdateTs(new Date());
+	masterPayment.setCreateTs(new Date());
+	masterPayment.setUpdateUserId("Administrator");
+	masterPayment.setCreateUserId("Administrator");
+	session.save(masterPayment);
+	tx.commit();
+		return "Payment Added Successfully";
+	}
+
+
+public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,5));
+	companyDtl.setActive(3);
+	companyDtl.setPaymentStatus(0);
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+	
+	Transaction tx =  session.beginTransaction();
+	MasterPayment masterPayment = new MasterPayment();
+	masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId()));
+	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
+	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
+	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
+	masterPayment.setGstAmount(paymentFormBean.getGstAmount());
+	masterPayment.setGstPercent(paymentFormBean.getGstPercent());
+	masterPayment.setTotalAmount(paymentFormBean.getTotalAmount());
+	masterPayment.setStatusFlag('A');
+	masterPayment.setUpdateTs(new Date());
+	masterPayment.setCreateTs(new Date());
+	masterPayment.setUpdateUserId("Administrator");
+	masterPayment.setCreateUserId("Administrator");
+	session.save(masterPayment);
+	tx.commit();
+		return "Payment Added Successfully";
+	}
+
+
+
+public String eePaymentPendingApproved(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction transaction =  session.beginTransaction();
+	transaction.begin();
+	CompanyPaymentDtl  companyPaymentDtl = (CompanyPaymentDtl) session.get(CompanyPaymentDtl.class, Integer.parseInt(paymentFormBean.getCompanyPaymentDtlID()));
+	companyPaymentDtl.setPaymentStatusFlag('A');
+	companyPaymentDtl.setManagementComments(paymentFormBean.getPaymentTypeDesc());
+	session.update(companyPaymentDtl);
+	transaction.commit();
+	
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,3));
+	companyDtl.setActive(2);
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+	
+		return "Payment Approved";
+	}
+
+public String eePaymentCompletedApproved(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,4));
+	companyDtl.setInspectionDate(paymentFormBean.getInspectedDate());
+	companyDtl.setActive(2);
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+	
+		return "Inspected Date Saved";
+	}
+
+public String eeFullPaymentApproved(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,5));
+	companyDtl.setActive(2);
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+	
+	Transaction tx =  session.beginTransaction();
+	MasterPayment masterPayment = new MasterPayment();
+	masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId()));
 	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
 	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
 	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
@@ -2107,6 +2266,37 @@ public String addPayment(PaymentFormBean paymentFormBean ){
 	tx.commit();
 		return "Payment Added Successfully";
 	}
+
+public String eeMCApprovedBtn(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,6));
+	companyDtl.setActive(2);
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+		return "Payment Approved";
+	}
+
+
+public String mcApprovePayment(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Transaction tx1 =  session.beginTransaction();
+	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
+	companyDtl.setActive(2);
+	companyDtl.setUpdateTs(new Date());
+	companyDtl.setUpdateUserId("Administrator");
+	session.update(companyDtl);
+	tx1.commit();
+		return "Payment Details Approved";
+	}
+
+
+
 public String editPayment(PaymentFormBean paymentFormBean ){
 	Session session = sessionFactory.openSession();
 	Transaction tx =  session.beginTransaction();
@@ -2574,15 +2764,30 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			return cr.list();
 		}
 	
+	public List<DDPaymentFormBean> getFixedPaymentAmount(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+				.createCriteria("masterPayment.paymentType","paymentType")
+				.setProjection(Projections.projectionList()
+			            .add(Projections.property("masterPayment.paymentAmount"),"paymentAmount")
+			            .add(Projections.property("masterPayment.gstPercent"),"gstPercent")  
+			            .add(Projections.property("masterPayment.gstAmount"),"gstAmount")
+			            .add(Projections.property("masterPayment.totalAmount"),"totalAmount") )
+				.add(Restrictions.eq("paymentType.paymentTypeId", 1))
+				.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+		
+                 List<DDPaymentFormBean> list = cr.list();
+				
+			return list;
+		}
 	
-
 	
 	
 	
 	// Maha new method
 	
 	@Override
-	public List<CompanyDtl> listBeforeInspection(CompanyDtlBean companyDtlBean) {
+	public List<CompanyDtl> eePendingApplication(CompanyDtlBean companyDtlBean) {
 		// TODO Auto-generated method stub
 
 		
@@ -2594,12 +2799,13 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 		
 			
 			
-			Criteria cr = session.createCriteria(CompanyDtl.class,"app")
-					.createCriteria("app.office","office")
-					.createCriteria("app.eeStatus","status")
-			         .add(Restrictions.eq("status.statusId", 1))
-			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
-					.add(Restrictions.eq("app.statusFlag", 'Y')).add(Restrictions.eq("app.insStatusId",1 ));
+			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.eeStatus","eeStatus")
+			         .add(Restrictions.eq("eeStatus.statusId", 1))
+			         .add(Restrictions.eq("companyDtl.active", 2))
+			         .add(Restrictions.eq("companyDtl.paymentStatus", 1))
+			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
 			
 			companyDtls=cr.list();
 			
@@ -2615,7 +2821,280 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 	}
 	
 	
+	@Override
+	public List<DDPaymentFormBean> eePaymentPending(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
+					.createAlias("companyPaymentDtl.appId","companyDtl",JoinType.RIGHT.ordinal())
+					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.eeStatus","eeStatus")
+					
+					.setProjection(Projections.projectionList()
+							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
+				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
+				            .add(Projections.property("companyPaymentDtl.paymentAmount"),"paymentAmount")  
+				            
+				            .add(Projections.property("companyPaymentDtl.managementComments"),"managementComments")
+				            .add(Projections.property("companyPaymentDtl.paymentStatusFlag"),"paymentStatusFlag")
+				            .add(Projections.property("companyPaymentDtl.ddNo"),"ddNo")
+				            .add(Projections.property("companyPaymentDtl.ddDate"),"ddDate")
+				            .add(Projections.property("companyPaymentDtl.ddBankName"),"ddBankName")
+				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.appId"),"appId") 
+				           
+				           )
+			         .add(Restrictions.eq("eeStatus.statusId", 2))
+			         .add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag", 'N'))
+			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
+			         .add(Restrictions.eq("companyDtl.active", 2));
+							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+
 	
+
+	@Override
+	public List<DDPaymentFormBean> eePaymentCompleted(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.eeStatus","eeStatus")
+					.setProjection(Projections.projectionList()
+										            
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.appId"),"appId") 
+				           
+				           )
+					 .add(Restrictions.eq("companyDtl.active", 2))
+					 .add(Restrictions.eq("eeStatus.statusId", 3))
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+
+	
+	@Override
+	public List<DDPaymentFormBean> eeInspectedApplication(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.eeStatus","eeStatus")
+					.setProjection(Projections.projectionList()				            
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.appId"),"appId") 
+				           
+				           )
+					 .add(Restrictions.eq("companyDtl.active", 2))
+					 .add(Restrictions.eq("eeStatus.statusId", 4))
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+
+	@Override
+	public List<DDPaymentFormBean> eeMCApproved(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.eeStatus","eeStatus")
+					.setProjection(Projections.projectionList()
+										            
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.appId"),"appId") 
+				           
+				           )
+					 .add(Restrictions.eq("companyDtl.active", 2))
+					 .add(Restrictions.eq("eeStatus.statusId", 5))
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+
+	
+	@Override
+	public List<DDPaymentFormBean> eeFullPaymentCompleted(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
+					.createCriteria("companyPaymentDtl.appId","companyDtl")
+					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.eeStatus","eeStatus")
+					.setProjection(Projections.projectionList()
+							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
+				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
+				            .add(Projections.property("companyPaymentDtl.paymentAmount"),"paymentAmount")  
+				            
+				            .add(Projections.property("companyPaymentDtl.managementComments"),"managementComments")
+				            .add(Projections.property("companyPaymentDtl.paymentStatusFlag"),"paymentStatusFlag")
+				            .add(Projections.property("companyPaymentDtl.ddNo"),"ddNo")
+				            .add(Projections.property("companyPaymentDtl.ddDate"),"ddDate")
+				            .add(Projections.property("companyPaymentDtl.ddBankName"),"ddBankName")
+				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.appId"),"appId") 
+				           
+				           )
+					 .add(Restrictions.eq("companyDtl.active", 2))
+					 .add(Restrictions.eq("eeStatus.statusId", 6))
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
+					 .add(Restrictions.eq("companyDtl.paymentStatus",1))
+					 .add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag",'A'));
+							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+
+	
+
+	@Override
+	public List<DDPaymentFormBean> eeExecution(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+
+			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
+					.createCriteria("companyPaymentDtl.appId","companyDtl")
+					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.eeStatus","eeStatus")
+					.setProjection(Projections.projectionList()
+							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
+				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
+				            .add(Projections.property("companyPaymentDtl.paymentAmount"),"paymentAmount")  
+				            
+				            .add(Projections.property("companyPaymentDtl.managementComments"),"managementComments")
+				            .add(Projections.property("companyPaymentDtl.paymentStatusFlag"),"paymentStatusFlag")
+				            .add(Projections.property("companyPaymentDtl.ddNo"),"ddNo")
+				            .add(Projections.property("companyPaymentDtl.ddDate"),"ddDate")
+				            .add(Projections.property("companyPaymentDtl.ddBankName"),"ddBankName")
+				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
+				            .add(Projections.property("companyDtl.legCompName"),"legCompName") 
+				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
+				            .add(Projections.property("companyDtl.appId"),"appId") 
+				           
+				           )
+					 .add(Restrictions.eq("companyDtl.active", 2))
+					 .add(Restrictions.eq("eeStatus.statusId", 7))
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
+					 .add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag",'N'));
+							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			
+			appDetails=cr.list();
+			
+			
+			
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+
 	
 	
 	

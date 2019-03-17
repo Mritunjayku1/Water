@@ -1,12 +1,5 @@
 package com.water.bean;
 
-import java.util.Date;
-
-import com.water.model.EmployeeDetails;
-import com.water.model.MasterCategory;
-import com.water.model.MasterStatus;
-import com.water.model.SmsTemp;
-
 public class CompanyDtlBean {
 
 	private String appId;
@@ -106,6 +99,8 @@ public class CompanyDtlBean {
 	private String updateUserId;
 	
 	private String office;
+	
+	private Integer paymentStatus;
 
 	public String getAppId() {
 		return appId;
@@ -521,6 +516,14 @@ public class CompanyDtlBean {
 
 	public void setOffice(String office) {
 		this.office = office;
+	}
+
+	public Integer getPaymentStatus() {
+		return paymentStatus;
+	}
+
+	public void setPaymentStatus(Integer paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 	

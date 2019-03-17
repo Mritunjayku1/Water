@@ -36,6 +36,10 @@ public class MasterPayment  implements Serializable {
 	private Integer paymentId;
 	
 	 @ManyToOne(optional = true)
+	 @JoinColumn(name = "APP_ID")
+	 private CompanyDtl appId;
+	
+	 @ManyToOne(optional = true)
 	 @JoinColumn(name = "PAYMENT_TYPE_ID")
 	 private MasterPaymentType paymentType;
 
@@ -200,6 +204,16 @@ public class MasterPayment  implements Serializable {
 
 	public void setPaymentType(MasterPaymentType paymentType) {
 		this.paymentType = paymentType;
+	}
+
+
+	public CompanyDtl getAppId() {
+		return appId;
+	}
+
+
+	public void setAppId(CompanyDtl appId) {
+		this.appId = appId;
 	}	
 	
 }

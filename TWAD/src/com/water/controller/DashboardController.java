@@ -405,11 +405,11 @@ public class DashboardController {
 
 		gson = new Gson();
 
-		List<ApplicationBean> applicationBeanList = new ArrayList<>();
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
 
 		for (int i = 0; i < jsonArray.length(); i++) {
-			ApplicationBean applicationBean = gson.fromJson(
-					jsonArray.getString(i), ApplicationBean.class);
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
 			applicationBeanList.add(applicationBean);
 		}
 
@@ -3411,8 +3411,8 @@ public class DashboardController {
 	
 	//New method by Mahalingam
 	
-	@RequestMapping(value = "/eeBeforeInsp", method = RequestMethod.GET)
-	public ModelAndView mcBeforeInsp(
+	@RequestMapping(value = "/eePendingApplication", method = RequestMethod.GET)
+	public ModelAndView eePendingApplication(
 			@ModelAttribute("dashboardForm") ComplaintBean complaintBean,HttpSession session)
 			throws JSONException {
 
@@ -3429,8 +3429,30 @@ public class DashboardController {
 
 		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
 
+		
+
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getPaymentTypeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<PaymentFormBean> paymenttypeFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			PaymentFormBean paymentTypeFormBean = gson.fromJson(
+					jsonArray1.getString(i), PaymentFormBean.class);
+			paymenttypeFormBeanList.add(paymentTypeFormBean);
+		}
+
+		model.put("paymentTypeDtl", paymenttypeFormBeanList);
+
+		
+		
 		ResponseEntity<String> out = restTemplate.exchange(
-				WaterDashboardService + "listBeforeInspection",
+				WaterDashboardService + "eePendingApplication",
 				HttpMethod.POST, entity, String.class);
 
 		JSONArray jsonArray = new JSONArray(out.getBody().toString());
@@ -3447,10 +3469,412 @@ public class DashboardController {
 
 		model.put("appBean", applicationBeanList);
 		// model.put("categoryCount", publicdashboard());
-		return new ModelAndView("eebeforeInsp", "list", model);
+		return new ModelAndView("eePendingApplication", "list", model);
+	}
+	
+	@RequestMapping(value = "/eeAddPayment", method = RequestMethod.POST)
+	@ResponseBody
+	public String eeAddPayment(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeAddPayment", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+	
+
+	
+
+	@RequestMapping(value = "/eePaymentPending", method = RequestMethod.GET)
+	public ModelAndView eePaymentPending(HttpSession session)
+			throws JSONException {
+
+		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
+		if(null != session.getAttribute("OfficeId")){
+		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eePaymentPending",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		// model.put("categoryCount", publicdashboard());
+		return new ModelAndView("eePaymentPending", "list", model);
+	}
+	
+	@RequestMapping(value = "/eePaymentPendingApproved", method = RequestMethod.POST)
+	@ResponseBody
+	public String eePaymentPendingApproved(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eePaymentPendingApproved", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
 	}
 	
 
+	@RequestMapping(value = "/eePaymentCompleted", method = RequestMethod.GET)
+	public ModelAndView eePaymentCompleted(HttpSession session)
+			throws JSONException {
+		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
+		if(null != session.getAttribute("OfficeId")){
+		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eePaymentCompleted",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		// model.put("categoryCount", publicdashboard());
+		return new ModelAndView("eePaymentCompleted", "list", model);
+	}
+	
+	
+	@RequestMapping(value = "/eePaymentCompletedApproved", method = RequestMethod.POST)
+	@ResponseBody
+	public String eePaymentCompletedApproved(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eePaymentCompletedApproved", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/eeInspectedApplication", method = RequestMethod.GET)
+	public ModelAndView eeInspectedApplication(HttpSession session)
+			throws JSONException {
+
+		
+		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
+		if(null != session.getAttribute("OfficeId")){
+		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
+		
+		
+
+
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getPaymentTypeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<PaymentFormBean> paymenttypeFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			PaymentFormBean paymentTypeFormBean = gson.fromJson(
+					jsonArray1.getString(i), PaymentFormBean.class);
+			paymenttypeFormBeanList.add(paymentTypeFormBean);
+		}
+
+		model.put("paymentTypeDtl", paymenttypeFormBeanList);
+
+
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeInspectedApplication",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		// model.put("categoryCount", publicdashboard());
+		return new ModelAndView("eeInspectedApplication", "list", model);
+	}
+	
+	
+	@RequestMapping(value = "/eeAddFullPayment", method = RequestMethod.POST)
+	@ResponseBody
+	public String eeAddFullPayment(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeAddFullPayment", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/eeMCApproved", method = RequestMethod.GET)
+	public ModelAndView eeMCApproved(HttpSession session)
+			throws JSONException {
+
+		
+		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
+		if(null != session.getAttribute("OfficeId")){
+		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeMCApproved",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		// model.put("categoryCount", publicdashboard());
+		return new ModelAndView("eeMCApproved", "list", model);
+	}
+	
+	@RequestMapping(value = "/eeFullPaymentApproved", method = RequestMethod.POST)
+	@ResponseBody
+	public String eeFullPaymentApproved(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeFullPaymentApproved", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+	@RequestMapping(value = "/eeMCApprovedBtn", method = RequestMethod.POST)
+	@ResponseBody
+	public String eeMCApprovedBtn(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeMCApprovedBtn", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+	
+	
+	@RequestMapping(value = "/mcApprovePayment", method = RequestMethod.POST)
+	@ResponseBody
+	public String mcApprovePayment(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "mcApprovePayment", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/eeFullPaymentCompleted", method = RequestMethod.GET)
+	public ModelAndView eeFullPaymentCompleted(HttpSession session)
+			throws JSONException {
+
+		
+		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
+		if(null != session.getAttribute("OfficeId")){
+		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeFullPaymentCompleted",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		// model.put("categoryCount", publicdashboard());
+		return new ModelAndView("eeFullPaymentCompleted", "list", model);
+	}
+	
+
+	@RequestMapping(value = "/eeExecution", method = RequestMethod.GET)
+	public ModelAndView eeExecution(HttpSession session)
+			throws JSONException {
+
+		
+		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
+		if(null != session.getAttribute("OfficeId")){
+		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		}
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(companyDtlBean,headers);
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeExecution",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DDPaymentFormBean> applicationBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DDPaymentFormBean applicationBean = gson.fromJson(
+					jsonArray.getString(i), DDPaymentFormBean.class);
+			applicationBeanList.add(applicationBean);
+		}
+
+		model.put("appBean", applicationBeanList);
+		// model.put("categoryCount", publicdashboard());
+		return new ModelAndView("eeExecution", "list", model);
+	}
+	
+	
+	
+	
 	
 	
 	

@@ -837,19 +837,19 @@ div.tabArrow {
                                     <div class="input-group">
                                         <span class="input-group-addon"><img
 											src="library/img/RupeeImage.png" /></span>
-                                        <input class="form-control" placeholder="Auto Genearated" type="text" id="ipf" name="cost" readonly style="width: 125px;" maxlength="3" />
+                                        <input class="form-control" placeholder="Auto Genearated" type="text" name="cost" readonly style="width: 125px;" maxlength="3" value="${list.fixedPaymentAmount.getPaymentAmount()}" />
                                     </div>
                                 </div>
                                 <div style="margin-left: 10px; display: inline-block;">
                                     <label><b>GST Amount<font
 											style="color: rgb(128, 128, 128); font-size: 12px;">(GST
-												@ 18 % )</font>:
+												@ ${list.fixedPaymentAmount.getGstPercent()}% )</font>:
 									</b></label>
                                     <br />
                                     <div class="input-group">
                                         <span class="input-group-addon"><img
 											src="library/img/RupeeImage.png" /></span>
-                                        <input class="form-control" placeholder="GST @ 18 % " type="text" id="gstAmount" readonly style="width: 125px;" name="gstAmount" />
+                                        <input class="form-control" placeholder="GST @ 18 % " type="text" id="gstAmount" readonly style="width: 125px;" name="gstAmount"  value="${list.fixedPaymentAmount.getGstAmount()}" />
                                     </div>
                                 </div>
                             </div>
@@ -863,7 +863,7 @@ div.tabArrow {
                                 <div class="input-group">
                                     <span class="input-group-addon"><img
 										src="library/img/RupeeImage.png" /></span>
-                                    <input class="form-control" placeholder="Ex: Cost * GST 18 %" type="text" id="totalAmount" readonly name="totalAmount" />
+                                    <input class="form-control" placeholder="Ex: Cost * GST 18 %" type="text" id="totalAmount" readonly name="totalAmount"  value="${list.fixedPaymentAmount.getTotalAmount()}"/>
                                 </div>
                             </div>
                             <br />

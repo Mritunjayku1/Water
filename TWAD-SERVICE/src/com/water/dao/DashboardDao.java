@@ -6,6 +6,7 @@ import com.water.bean.ApplicationBean;
 import com.water.bean.CmwWaterConnBean;
 import com.water.bean.CompanyDtlBean;
 import com.water.bean.DDPaymentFormBean;
+import com.water.bean.PaymentFormBean;
 import com.water.model.Application;
 import com.water.model.CompanyDtl;
 
@@ -17,7 +18,9 @@ public interface DashboardDao {
 	public List<Application> listCePendingApplicationDtls();
 	public List<Application> listceApprovedApplicationDtls();
 	public List<Application> listEeApprovedApplicationDtls();
-	
+	public String addPayment(PaymentFormBean paymentFormBean );
+	public String eeAddPayment(PaymentFormBean paymentFormBean );
+	public String eeAddFullPayment(PaymentFormBean paymentFormBean );
 	public List<DDPaymentFormBean> registeredApplication();
 	public List<DDPaymentFormBean> approvedApplication();
 	public List<DDPaymentFormBean> rejectedApplication();
@@ -28,7 +31,13 @@ public interface DashboardDao {
 	public DDPaymentFormBean paymentViewForm(DDPaymentFormBean ddPaymentFormBean);
 	public List<Application> listViewAllApplication();
 	
-	public List<CompanyDtl> listBeforeInspection(CompanyDtlBean companyDtlBean);
+	public List<CompanyDtl> eePendingApplication(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eePaymentPending(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eePaymentCompleted(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eeInspectedApplication(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eeMCApproved(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eeFullPaymentCompleted(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eeExecution(CompanyDtlBean companyDtlBean);
 	public List<CompanyDtl> listMOU();
 	public List<CompanyDtl> listEstimate();
 	public List<CompanyDtl> listAfterInspection();
@@ -50,7 +59,7 @@ public interface DashboardDao {
 	
 	
 	public List<Application> listEePaymentPendingApplicationDtls();
-	public List<Application> listMcPendingApplicationDtls();
+	public List<DDPaymentFormBean> listMcPendingApplicationDtls();
 	public List<Application> listTrackApplication();
 	public List<Application> listMcApprovedApplicationDtls();
 	public List<Application> listEePendingApplicationDtls();

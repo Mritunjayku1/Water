@@ -3,6 +3,9 @@ package com.water.bean;
 public class PaymentFormBean {
 	
 	private String paymentId;
+	private String companyPaymentDtlID;
+	private String inspectedDate;
+	private String appId;
 	private String paymentTypeId;
 	private String paymentType;
 	private String paymentAmount;
@@ -67,6 +70,24 @@ public class PaymentFormBean {
 	}
 	public void setPaymentTypeId(String paymentTypeId) {
 		this.paymentTypeId = paymentTypeId;
+	}
+	public String getAppId() {
+		return appId;
+	}
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+	public String getCompanyPaymentDtlID() {
+		return companyPaymentDtlID;
+	}
+	public void setCompanyPaymentDtlID(String companyPaymentDtlID) {
+		this.companyPaymentDtlID = companyPaymentDtlID;
+	}
+	public String getInspectedDate() {
+		return inspectedDate;
+	}
+	public void setInspectedDate(String inspectedDate) {
+		this.inspectedDate = inspectedDate;
 	}
 
 }
