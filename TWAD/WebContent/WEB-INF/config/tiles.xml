@@ -270,12 +270,26 @@
 
 	
 
-	<definition name="eePendingApplication" extends="EEbase.definition">
+	<!-- <definition name="eePendingApplication" extends="EEbase.definition">
 		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
 		<put-attribute name="body"
 			value="/WEB-INF/views/JSP/Application/eePendingApplication.jsp"></put-attribute>
+	</definition> -->
+	<definition name="eeApplicationFeePending" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eeApplicationFeePending.jsp"></put-attribute>
 	</definition>
-	
+	<definition name="eeUpfrontChargesPending" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eeUpfrontChargesPending.jsp"></put-attribute>
+	</definition>
+	<definition name="eeFullPaymentPending" extends="EEbase.definition">
+		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/JSP/Application/eeFullPaymentPending.jsp"></put-attribute>
+	</definition>
 	
 	<definition name="eePaymentPending" extends="EEbase.definition">
 		<put-attribute name="title" value="E-Water | EE Before Inspection"></put-attribute>

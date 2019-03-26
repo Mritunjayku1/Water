@@ -260,30 +260,19 @@ div.tabArrow {
 
 		});
 
-		/* $('#reqMldId').blur(function () {
+	 $('#reqMldId').blur(function () {
 
-		//var whichPayment = $('input[name="paymentMode"]:checked').val();
 		var reqMldId = $('#reqMldId').val();
 
 		if (reqMldId != "") {
 			$.ajax({
 				type: "POST",
-				url: "getIpfAmount.do",
+				url: "getReqMLDCost.do",
 				data: {
 					'reqMldId': reqMldId
 				},
 				success: function (response) {
-
-					var gst = (response * 18) / 100;
-					var res = response;
-					//var g1=parseInt(gst);
-					var g1 = parseInt(gst);
-					var t1 = parseInt(res);
-					var total = g1 + t1;
-
-					$('#ipf').val(response);
-					$('#gstAmount').val(g1);
-					$('#totalAmount').val(total);
+					$('#upfrontChargesId').val(response);
 
 				}
 
@@ -292,7 +281,7 @@ div.tabArrow {
 
 		});
 
-		 */
+		
 
 		$('input[type="text"]').each(function() {
 			$(this).attr('data-content', $(this).attr('placeholder'));
@@ -820,14 +809,37 @@ div.tabArrow {
                         </td>
 
                         <td>
+                        
+                        
+                          <div>
+                                <div style="display: inline-block;float: left;">
+                                   <label><b>REQs of water<font style="color: rgb(128, 128, 128); font-size: 10px;"> (in MLD):</font></b></label> <span style="color: red;">*</span><br/>
+                                       <input placeholder="Ex: 12345" type="text" id="reqMldId" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onkeypress="gst()" name="reqMld" style="margin-right: 5px; width: 130px;" maxlength="5" data-toggle="popover" data-trigger="focus" data-placement="right" title="Enter Requirement of water" />
+                                        <a href="library/MLD.pdf" download><img src="library/img/pdf-image.jpg" width="35px" height="40px" style="position: absolute; cursor: pointer;"></a>
+                                </div>
+                                <div style="margin-left: 22px; display: inline-block;">
+                                    <label><b>Upfront Charges:</b></label>
+                                    <br />
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><img
+											src="library/img/RupeeImage.png" /></span>
+                                        <input class="form-control" placeholder="Ex 222" type="text" id="upfrontChargesId" readonly style="width: 125px;" name="upfrontCharges"  value="" />
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        <%-- 
+                        
+                        
+                        
                             <div>
-                                <label><b>Requirement of water in MLD:</b></label> <span style="color: red;">*</span>
+                                <label><b>Requirement of water<font style="color: rgb(128, 128, 128); font-size: 10px;"> in MLD:</font></b></label> <span style="color: red;">*</span>
                                 <br />
                                 <div class="input-group">
                                     <input placeholder="Ex: 12345" type="text" id="reqMldId" onkeypress='return event.charCode >= 48 && event.charCode <= 57' onkeypress="gst()" name="reqMld" style="margin-right: 5px; width: 130px;" maxlength="5" data-toggle="popover" data-trigger="focus" data-placement="right" title="Enter Requirement of water" />
                                 </div>
 
-                            </div>
+                            </div> --%>
                             <br />
                         </td>
                     </tr>
@@ -835,7 +847,7 @@ div.tabArrow {
                         <td valign="top">
                             <div>
                                 <div style="display: inline-block;">
-                                    <label><b>Cost:</b></label>
+                                    <label><b>Application Fee:</b></label>
                                     <div class="input-group">
                                         <span class="input-group-addon"><img
 											src="library/img/RupeeImage.png" /></span>

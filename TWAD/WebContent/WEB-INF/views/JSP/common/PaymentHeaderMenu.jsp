@@ -44,7 +44,7 @@
 	float: left;
 	height: 26px;
 	line-height: 26px;
-	padding: 0 25px;
+	padding: 0 20px;
 	text-decoration: none;
 	color: #FFFFFF;
 	font-weight: bold;
@@ -150,19 +150,45 @@ color: #FFFFFF;
 background: #E05400;
 background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
 }
+
+#HDropdown-orange-classic span{
+padding:3px 7px;
+border-radius:50px;
+background-color: brown;
+}
+
 </style>
 
 
 <script type="text/javascript">
 $(function(){
+	
+	$.ajax({
+		type:"GET",
+		url:"getApplicationCount.do",
+		data:{},
+		  contentType: "application/json",
+	      dataType:"json",
+		success:function(response){
+			//alert(response.approvedApplication)
+			$('#pendingCount').text(response.penndingApplication);
+			$('#approvedCount').text(response.approvedApplication);
+			$('#rejectedCount').text(response.rejectedApplication);
+			
+			
+		}
+	});
+	
 	var url = window.location.href;
 		$('ul li').removeClass('selectionClass');
+		
+		if(url.indexOf("index")>0){
+			$('ul li:nth-child(1)').addClass('selectionClass');
+			}
 		if(url.indexOf("paymentDashboard")>0){
-		$('ul li:nth-child(1)').addClass('selectionClass');
+		$('ul li:nth-child(2)').addClass('selectionClass');
 		}
-		if(url.indexOf("paymentPendingList")>0){
-			$('ul li:nth-child(2)').addClass('selectionClass');
-		}
+		
 		if(url.indexOf("registeredApplication")>0){
 			$('ul li:nth-child(3)').addClass('selectionClass');
 		}
@@ -173,15 +199,8 @@ $(function(){
 		if(url.indexOf("rejectedApplication")>0){
 			$('ul li:nth-child(5)').addClass('selectionClass');
 		}
-		
-		if(url.indexOf("paymentRejectedList")>0){
-			$('ul li:nth-child(6)').addClass('selectionClass');
-			}
-		if(url.indexOf("paymentApprovedList")>0){
-			$('ul li:nth-child(7)').addClass('selectionClass');
-			}
 		if(url.indexOf("paymentViewAll")>0){
-			$('ul li:nth-child(8)').addClass('selectionClass');
+			$('ul li:nth-child(6)').addClass('selectionClass');
 			}
 	
 });
@@ -192,15 +211,13 @@ $(function(){
 
 <div>
 	<ul id="HDropdown-orange-classic">
-
-		<li><a href="paymentDashboard.do"> Dashboard</a></li>
-		<li><a href="paymentPendingList.do">Pending Payment</a></li>
-		<li><a href="registeredApplication.do"> Registered Application</a></li>
-		<li><a href="approvedApplication.do"> Approved Application</a></li>
-		<li><a href="rejectedApplication.do"> Rejected Application</a></li>
-		<li><a href="paymentRejectedList.do">Rejected DD</a></li>
-		<li><a href="paymentApprovedList.do">Approved DD</a></li>
-		<li><a href="paymentViewAll.do">View All DD </a></li>
+	
+	    <li><a href="index.do"> Home</a></li>
+        <li><a href="paymentDashboard.do"> Dashboard</a></li>
+		<li><a href="registeredApplication.do"> Pending Application &nbsp; <span id="pendingCount"></span> </a><!-- <span>5</span> --></li>
+		<li><a href="approvedApplication.do"> Approved Application  &nbsp; <span id="approvedCount"></span></a></li>
+		<li><a href="rejectedApplication.do"> Rejected Application  &nbsp; <span id="rejectedCount"></span></a></li>
+		<li><a href="paymentViewAll.do">View All Application </a></li>
     </ul>
 </div>
 <br>

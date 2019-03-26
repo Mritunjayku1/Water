@@ -406,7 +406,7 @@ div[role="dialog"] {
 
 					<DIV class=""> 
 						<DIV class="form-group">
-							<form:input path="LoginName" autocomplete="off" autofocus="true" class="form-control" id="username" placeholder="User Name" required="true" value="EEUSER1" />
+							<form:input path="LoginName" autocomplete="off" autofocus="true" class="form-control" id="username" placeholder="User Name" required="true" value="EESOW" />
 						</DIV>
 					</DIV>
 					<DIV class="">

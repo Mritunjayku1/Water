@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -24,6 +26,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,6 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -88,6 +95,39 @@ public class ApplicationController {
 		String EC_Folder;
 
 		Gson gson;
+		
+		
+		
+		@RequestMapping(value = "/getDDAmount", method = RequestMethod.GET)
+		@ResponseBody
+		public String getDDAmount(String appId,String mobileNum,String paymentType) throws JsonGenerationException, JsonMappingException, IOException {
+
+			List<AppFormBean> list = new  ArrayList<>();
+			
+			RestTemplate restTemplate = new RestTemplate();
+			AppFormBean appFormBean =new AppFormBean();
+			
+			appFormBean.setAppId(appId);
+			appFormBean.setMobileNum(Long.parseLong(mobileNum));
+			appFormBean.setPaymentType(Integer.parseInt(paymentType));
+			
+			
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			@SuppressWarnings("unchecked")
+			HttpEntity<?> entity = new HttpEntity(appFormBean, headers);
+
+			ResponseEntity<AppFormBean> output = restTemplate.exchange(
+					ApplicationService + "getDDAmount", HttpMethod.POST,
+					entity, AppFormBean.class);
+			
+			ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+			String json = ow.writeValueAsString(output.getBody());
+			
+			
+			return json;
+
+		}
 		
 		@RequestMapping(value = "/paymentResponse", method = RequestMethod.POST,headers="Accept=application/json")
 		@ResponseBody
@@ -562,37 +602,27 @@ public class ApplicationController {
 	}
 	
 	
-	@RequestMapping(value = "/getIpfAmount", method = RequestMethod.POST)
+	@RequestMapping(value = "/getReqMLDCost", method = RequestMethod.POST)
 	@ResponseBody
-	public String getIpfAmount(@RequestParam String reqMldId) {
-		String initialPaymentCost=null;
+	public String getReqMLDCost(@RequestParam String reqMldId) {
 		int MldId=Integer.parseInt(reqMldId);
-		//MldId
 		  if(MldId<=1000)
 		   {
 			  MldId=1000;
-			 // initialPaymentCost="100000";
-			//  initialPaymentCost="2";
 		   }
 	   else if(MldId<= 1500 && MldId>1000)
 		   {
 		   MldId=1500;
 		  
-		// initialPaymentCost="150000";
-		  // initialPaymentCost="3";
 		   
 		   }
 	   else  if( MldId > 1500 && MldId<= 2000 )
 	   {
 		   MldId=2000;
-		  // initialPaymentCost="200000";
-		  // initialPaymentCost="2";
 	   }
 	   else if ( MldId>2000)
 	   {
 		   MldId=2500; 
-		// initialPaymentCost="250000";
-		  // initialPaymentCost="2";
 	   }
 AppFormBean appbean=new AppFormBean();
 appbean.setReqMld(String.valueOf(MldId));
@@ -1152,6 +1182,9 @@ appbean.setReqMld(String.valueOf(MldId));
 		for (int i = 0; i < files.length; i++) {
 			MultipartFile file = files[i];
 			String name = file.getOriginalFilename();
+			if(name.equals("")){
+				continue;
+			}
 			try {
 				byte[] bytes = file.getBytes();
 
@@ -1192,6 +1225,9 @@ appbean.setReqMld(String.valueOf(MldId));
 		for (int i = 0; i < files.length; i++) {
 			MultipartFile file = files[i];
 			String name = file.getOriginalFilename();
+			if(name.equals("")){
+				continue;
+			}
 			String filesType=file.getOriginalFilename().split("\\.")[1];
 			
 			if(filesType.equals("mp4")||filesType.equals("mp3"))
@@ -1231,8 +1267,8 @@ appbean.setReqMld(String.valueOf(MldId));
 public ModelAndView checkApplicationStatus( @RequestParam String appId) {
 	if(appId !=null && !appId.equals("") ){
 
-		ApplicationBean applicationBean = new ApplicationBean();
-		applicationBean.setAppId(appId);
+		DDPaymentFormBean ddPaymentFormBean = new DDPaymentFormBean();
+		ddPaymentFormBean.setAppId(appId);
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -1241,9 +1277,9 @@ public ModelAndView checkApplicationStatus( @RequestParam String appId) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<?> entity = new HttpEntity(applicationBean, headers);
+		HttpEntity<?> entity = new HttpEntity(ddPaymentFormBean, headers);
 
-		ResponseEntity<String> out = restTemplate.exchange(
+		/*ResponseEntity<String> out = restTemplate.exchange(
 				WaterDashboardService + "getApplicationDetails", HttpMethod.POST, entity,
 				String.class);
 
@@ -1251,8 +1287,16 @@ public ModelAndView checkApplicationStatus( @RequestParam String appId) {
 		gson = new Gson();
 		applicationBean = gson.fromJson(out.getBody().toString(),
 				ApplicationBean.class);
-
-		model.put("application", applicationBean);
+*/
+		
+		ResponseEntity<DDPaymentFormBean> output = restTemplate.exchange(
+				WaterDashboardService + "paymentViewForm", HttpMethod.POST,
+				entity, DDPaymentFormBean.class);
+		
+		ddPaymentFormBean = output.getBody();
+		
+		
+		model.put("application", ddPaymentFormBean);
 		//model.put("categoryCount", publicdashboard());
 		return new ModelAndView("checkApplicationStatus", "list", model);
 	

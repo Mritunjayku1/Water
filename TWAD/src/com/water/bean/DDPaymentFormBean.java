@@ -39,15 +39,51 @@ public class DDPaymentFormBean {
 	private String village;
 	private String pinCode;
 	private String surveyFieldNo;
-	private Integer isNewConnection;
+	private Integer isNewConnection=0;
 	private String reqMld;
+	private String applicationFee;
 	private String gstPercent;
 	private String gstAmount;
 	private String totalAmount;
 	private Integer intrPlumStatus;
-	private Integer workType;
-	private Integer paymentStatus;
+	private Integer workType=0;
+	private Integer paymentStatus=0;
+	private String mcUser;
+	private Integer upfrontCharges=0;
 	
+	private String isNewConnectionDisplay;
+	private String intrPlumStatusDisplay;
+	private String workTypeDisplay;
+	private String paymentStatusDisplay;
+	private String createDate;
+	
+	public String getIsNewConnectionDisplay() {
+		return isNewConnectionDisplay;
+	}
+	public void setIsNewConnectionDisplay(String isNewConnectionDisplay) {
+		this.isNewConnectionDisplay = isNewConnectionDisplay;
+	}
+	public String getIntrPlumStatusDisplay() {
+		return intrPlumStatusDisplay;
+	}
+	public void setIntrPlumStatusDisplay(String intrPlumStatusDisplay) {
+		this.intrPlumStatusDisplay = intrPlumStatusDisplay;
+	}
+	public String getWorkTypeDisplay() {
+		return workTypeDisplay;
+	}
+	public void setWorkTypeDisplay(String workTypeDisplay) {
+		this.workTypeDisplay = workTypeDisplay;
+	}
+	public String getPaymentStatusDisplay() {
+		return paymentStatusDisplay;
+	}
+	public void setPaymentStatusDisplay(String paymentStatusDisplay) {
+		this.paymentStatusDisplay = paymentStatusDisplay;
+	}
+	public void setPinCode(String pinCode) {
+		this.pinCode = pinCode;
+	}
 	public String getCdoorNo() {
 		return cdoorNo;
 	}
@@ -299,6 +335,30 @@ public class DDPaymentFormBean {
 	}
 	public void setGstPercent(String gstPercent) {
 		this.gstPercent = gstPercent;
+	}
+	public String getMcUser() {
+		return mcUser;
+	}
+	public void setMcUser(String mcUser) {
+		this.mcUser = mcUser;
+	}
+	public Integer getUpfrontCharges() {
+		return upfrontCharges;
+	}
+	public void setUpfrontCharges(Integer upfrontCharges) {
+		this.upfrontCharges = upfrontCharges;
+	}
+	public String getApplicationFee() {
+		return applicationFee;
+	}
+	public void setApplicationFee(String applicationFee) {
+		this.applicationFee = applicationFee;
+	}
+	public String getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 
 }

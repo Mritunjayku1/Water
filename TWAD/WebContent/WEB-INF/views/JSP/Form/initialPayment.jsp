@@ -1,3 +1,7 @@
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http//www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -7,7 +11,7 @@
 	href="library/assets/plugins/bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" href="library/assets/css/main.css" />
 <link rel="stylesheet" href="library/assets/css/theme.css" />
-<link rel="stylesheet" href="library/assets/css/MoneAdmin.css" />
+<!-- <link rel="stylesheet" href="library/assets/css/MoneAdmin.css" /> -->
 <link rel="stylesheet"
 	href="library/assets/plugins/Font-Awesome/css/font-awesome.css" />
 <!--END GLOBAL STYLES -->
@@ -45,10 +49,17 @@ input[type="button"] {
     color: white;
     margin-top: 30px;
 }
+input[type="text"],select {
+	width: 280px;
+    height: 40px;
+    padding: 5px;
+    border: 1px solid #cccccc;
+}
 
-#initialId tr:nth-child(even) {background: white;height:40px;}
-#initialId tr:nth-child(odd) {background:#EDEDED ;height:40px;}
-
+input[readonly]{
+background-color: #eeeeee;
+border: 1px solid #cccccc;
+}
 
 .tdPadding{
 padding-left:305px;
@@ -75,15 +86,19 @@ $(document).ready(function(){
 	function validateForm(){
 	 
 	    var numberReg =  /^[0-9]+$/;
+	    var mobileReg =  /^[0-9]{10}$/;
 	    var dateReg =  /^\d{2}-\d{2}-\d{4}$/;
+	  
+	    var paymentTypeId = $('#paymentTypeId');
 	    var appId  =	$("#appId");
-	    var paymentDDAmountId = $('#paymentDDAmountId');
+	    var mobileNumId = $('#mobileNumId');
+	     var paymentDDAmountId = $('#paymentDDAmountId');
 	    var paymentDDNoId = $('#paymentDDNoId');
 	    var paymentDDDateId = $('#paymentDDDateId');
 	    var paymentDDBankNameId = $('#paymentDDBankNameId');
 	    var flag = true;
 	
-	    var inputVal = new Array(appId, paymentDDAmountId,paymentDDNoId,paymentDDDateId,paymentDDBankNameId);
+	    var inputVal = new Array(paymentTypeId,appId,mobileNumId,paymentDDAmountId,paymentDDNoId,paymentDDDateId,paymentDDBankNameId);
 		
 
 	     $('.error').hide();
@@ -93,7 +108,12 @@ $(document).ready(function(){
 	        	inputVal[i].focus();
 	        	flag = false;
 	        }
-	        else if(inputVal[i].attr('id')=='paymentDDAmountId' && !numberReg.test(inputVal[i].val())){
+	        else if(inputVal[i].attr('id')=='mobileNumId' && !mobileReg.test(inputVal[i].val())){
+	        	inputVal[i].after('<span class="error"> Please enter your correct Mobile No</span>');
+	        	inputVal[i].focus();
+	        	flag = false;
+	        }
+	         else if(inputVal[i].attr('id')=='paymentDDAmountId' && !numberReg.test(inputVal[i].val())){
 	        	inputVal[i].after('<span class="error"> Please enter DD Amount in Numeric</span>');
 	        	inputVal[i].focus();
 	        	flag = false;
@@ -103,12 +123,7 @@ $(document).ready(function(){
 	        	inputVal[i].focus();
 	        	flag = false;
 	        }
-	       /*  else if(inputVal[i].attr('id')=='paymentDDDateId' && !dateReg.test(inputVal[i].val())){
-	        	inputVal[i].after('<span class="error"> Please enter date in DD-MM-YYYY format </span>');
-	        	inputVal[i].focus();
-	        	flag = false;
-	        }  */
-		
+	      
 	}
 
 
@@ -136,6 +151,45 @@ $(document).ready(function(){
 			}
 		}
 		});
+	
+	
+	$('#appId,#mobileNumId').blur(function(){
+		var appId = $('#appId').val();
+		var mobileNumId = $('#mobileNumId').val();
+		var paymentTypeId = $('#paymentTypeId').val();
+		if(appId != "" && mobileNumId != ""){
+			$.ajax({
+				type : "GET",
+				url : "getDDAmount.do",
+				/* contentType: "application/json;charset=utf-8",
+		        dataType: "json", */
+				data : {"appId":appId,"mobileNum":mobileNumId,"paymentType":paymentTypeId},
+				async : false,
+                success : function(response) {
+                	response = JSON.parse(response);
+					$('#legCompNameId').val(response.legCompName);
+					$('#paymentDDAmountId').val(response.totalAmount);
+					
+				}
+				});
+		}
+		else{
+			return false;
+		}
+	});
+	
+$('#paymentTypeId').change(function(){
+		if($(this).val()!=""){
+			$('#mobileNumId').blur();
+		}
+		else{
+			return false;
+		}
+});
+	
+	
+	
+	
 	});
 	
 
@@ -146,11 +200,11 @@ $(document).ready(function(){
 <body>
 
 
-<table align="center" style="width: 1200px; font-size: 28px;">
+<table align="center" style="width: 1200px; font-size: 28px;background-color: white;">
 
-
-<tr><td valign="middle" style="height:155px;width: 100%;"> 
-   <table width="100%">
+		<tr>
+			<td valign="middle" colspan="2" style="height: 130px; width: 100%;">
+				<table width="100%">
 					<tbody>
 						<tr>
 							<td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px"
@@ -163,18 +217,25 @@ $(document).ready(function(){
 						</tr>
 					</tbody>
 				</table>
-  </td></tr>
-  <tr>
-			<td height="25px">
-			
-			<div style="padding: 0px; width: 100%;">
-                <div style="background-image: url(library/img/border_bg.gif); height: 7px; background-repeat: repeat-x;">
-                    &nbsp;</div>
-            </div>
 			</td>
-			</tr>
-  
-  
+		</tr>
+
+
+		<tr>
+
+
+
+			<td colspan="2" height="10px">
+
+				<div style="padding: 0px; width: 100%;">
+					<div
+						style="background-image: url(library/img/border_bg.jpg); height: 10px; background-repeat: repeat-x;">
+						&nbsp;</div>
+				</div>
+			</td>
+			<td></td>
+		</tr>
+
 			
 	</table>
 	<img src="library/img/loader.gif" style="display: none;" id="loading_image">
@@ -189,12 +250,40 @@ $(document).ready(function(){
 	<form id="formId" style="width:970px;margin-left: 195px;">
 	<table id="initialId" width="100%" align="center" style="margin-left: 0px;">	
 	
-	
+<tr><td class="tdPadding" width="50%"><b>Payment Type:</b><span style="color:red;">*</span></td><td>
+<select  id="paymentTypeId" name="paymentType">
+				 <option value="">--Select Payment Type--</option>
+                                    <c:forEach items="${list.paymentTypeDtl}" var="app" varStatus="count">
+                                        <option value="${app.getPaymentId()}">${app.getPaymentType()}</option>
+                                    </c:forEach>
+                </select>
+
+</td></tr>	
 <tr><td class="tdPadding" width="50%"><b>Enter Application Ref:</b><span style="color:red;">*</span></td><td><input type="text" placeholder ="Enter Application Ref" id="appId" name="appId" value=""/></td></tr>
- <!-- <tr><td class="tdPadding" width="50%"><b>GST Amount(GST @ 18 %):</b><span style="color:red;">*</span></td><td><input type="text" readonly placeholder ="Auto populate"  id="paymentGSTAmountId" name="paymentGSTAmount" style="background-color: lightgrey;"/></td></tr> -->
- <tr><td class="tdPadding" width="50%"><b>DD Amount:</b><span style="color:red;">*</span></td><td><input type="text" placeholder ="DD Amount" title="Please enter DD Amount" id="paymentDDAmountId" name="paymentAmount" /></td></tr>
+ <tr><td  class="tdPadding" width="50%">
+ 
+                                <label><b>Mobile Number:</b></label> <span style="color: red;">*</span></td><td>
+                                <input placeholder="Ex: 1234567891" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="mobileNumId" name="mobileNum" maxlength="10" data-toggle="popover" data-trigger="focus" data-placement="right" title="Enter Mobile No." />
+                           
+ 
+ <tr><td  class="tdPadding" width="50%">
+  
+                                <label><b>Legal Name of Company:</b></label></td><td>
+                                <input placeholder="Ex: ABC Company" type="text" id="legCompNameId" name="legCompName" readonly data-toggle="popover" data-trigger="focus" data-placement="right" title="Enter Company Name" />
+
+                         
+ </td></tr>
+ <tr><td class="tdPadding" width="50%"><b>DD Amount:</b></td><td>
+  <div class="input-group">
+                                        <span class="input-group-addon"><img
+											src="library/img/RupeeImage.png" /></span>
+                                        <input type="text" placeholder ="DD Amount" title="Please enter DD Amount" id="paymentDDAmountId" name="paymentAmount" readonly style="width: 245px;" />
+                                    </div>
+ 
+ 
+ </td></tr>
  <tr><td class="tdPadding" width="50%"><b>DD NO:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="123456" title="Please Enter DD No" id="paymentDDNoId" name="ddNo"/></td></tr>
- <tr><td class="tdPadding" width="50%"><b>DD Date:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="DD-MM-YYYY" readonly title="Please Enter DD Date" class="ddDateClass" id="paymentDDDateId" name="ddDate" /></td></tr>
+ <tr><td class="tdPadding" width="50%"><b>DD Date:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="DD-MM-YYYY" readonly title="Please Enter DD Date" class="ddDateClass" id="paymentDDDateId" name="ddDate"/></td></tr>
  <tr><td class="tdPadding" width="50%"><b>Bank Name:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="Ex Indian Bank" title="Please Enter Bank Name" id="paymentDDBankNameId" name="ddBankName"/></td></tr>
 
 <tr><td colspan="2" align="center" style="height: 50px;">

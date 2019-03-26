@@ -75,18 +75,18 @@ table.display .td {
 			<td><spring:message code="label.totalComplaints" /> <%-- <form:hidden
 					path="complaintStatus" value="0" /> --%>
 				<!--  <a
-				href="javascript:fnSubmitForm('0');"> --> <span class='count'>${list.count.getTotalRegister()}</span>
-			<!-- </a> --> <input type="hidden" id='totalCount' name='totalCount'
-				value="${list.count.getTotalRegister()}" /></td>
+				href="javascript:fnSubmitForm('0');"> --> <span class='count'>${list.count.getApplicationFeePending()}</span>
+			<!-- </a> --> <input type="hidden" id='applicationFeeCount' name='applicationFeeCount'
+				value="${list.count.getApplicationFeePending()}" /></td>
 		</form:form>
 
 		<form:form method='get' id="1" commandName="dashboardForm"
 			action="eeBeforeInsp.do">
 			<td><spring:message code="label.newComplaints" /> <%-- <form:hidden
 					path="complaintStatus" value="1" />  --%>
-				<a href="javascript:fnSubmitForm('1');"><span class='count'>${list.count.getPenndingApplication()}</span></a>
-				<input type="hidden" id='newCount' name='newCount'
-				value="${list.count.getPenndingApplication()}" /></td>
+				<a href="javascript:fnSubmitForm('1');"><span class='count'>${list.count.getUpfrontChargesPending()}</span></a>
+				<input type="hidden" id='upfrontChargesCount' name='upfrontChargesCount'
+				value="${list.count.getUpfrontChargesPending()}" /></td>
 		</form:form>
 
 		<form:form method='get' id="2" commandName="dashboardForm"
@@ -94,22 +94,22 @@ table.display .td {
 			<td><spring:message code="label.assignedComplaints" /> <%-- <form:hidden
 					path="complaintStatus" value="2" /> --%>  <a
 				href="javascript:fnSubmitForm('2');"> 
-				<span class='count'>${list.count.getApprovedApplication()}</span>
-			</a>  <input type="hidden" id='assignCount'
-				name='assignCount' value="${list.count.getApprovedApplication()}" /></td>
+				<span class='count'>${list.count.getFullPaymentPending()}</span>
+			</a>  <input type="hidden" id='fullPaymentCount'
+				name='fullPaymentCount' value="${list.count.getFullPaymentPending()}" /></td>
 		</form:form>
-
+<%-- 
 <form:form method='get' id="3" commandName="dashboardForm"
 			action="eeConPaidApp.do">
-			<td><spring:message code="label.paymentPaidapp" /> <%-- <form:hidden
-					path="complaintStatus" value="2" /> --%> <!-- <a
+			<td><spring:message code="label.paymentPaidapp" /> <form:hidden
+					path="complaintStatus" value="2" /> <!-- <a
 				href="javascript:fnSubmitForm('2');"> -->
 			<a href="javascript:fnSubmitForm('3');">	<span class='count'>${list.count.getPaidApplication()}</span></a>
 			<!-- </a> --> <input type="hidden" id='paidCount'
 				name='paidCount' value="${list.count.getPaidApplication()}" /></td>
 		</form:form>
 
-
+ --%>
 
 		<%-- <form:form method='post' id="10" commandName="dashboardForm"
 			action="#">
@@ -182,9 +182,9 @@ table.display .td {
 </div>
 <div></div>
 <script>
-	/* var totalCount = parseInt($('#totalCount').val());
-	var newCount = parseInt($('#newCount').val());
-	var assignCount = parseInt($('#assignCount').val());
+	/* var applicationFeeCount = parseInt($('#applicationFeeCount').val());
+	var upfrontChargesCount = parseInt($('#upfrontChargesCount').val());
+	var fullPaymentCount = parseInt($('#fullPaymentCount').val());
 	var acknowledgedCount = parseInt($('#acknowledgedCount').val());
 	var closedbyfieldofficer = parseInt($('#closedbyfieldofficer').val());
 	var resolvedCount = parseInt($('#resolvedCount').val());
@@ -204,14 +204,14 @@ table.display .td {
 	var category11=parseInt($("#category11").val());
 	var category12=parseInt($("#category12").val()); */
 
-	var totalCount = parseInt($('#totalCount').val());
-	var newCount = parseInt($('#newCount').val());
-	var assignCount = parseInt($('#assignCount').val());
-	var paidCount = parseInt($('#paidCount').val());
+	var applicationFeeCount = parseInt($('#applicationFeeCount').val());
+	var upfrontChargesCount = parseInt($('#upfrontChargesCount').val());
+	var fullPaymentCount = parseInt($('#fullPaymentCount').val());
+	//var paidCount = parseInt($('#paidCount').val());
 
-	/* var totalCount = 10;
-	var newCount = 20;
-	var assignCount = 30; */
+	/* var applicationFeeCount = 10;
+	var upfrontChargesCount = 20;
+	var fullPaymentCount = 30; */
 	var acknowledgedCount = 20;
 	var closedbyfieldofficer = 40;
 	var resolvedCount = 20;
@@ -233,17 +233,14 @@ table.display .td {
 	var category12 = 20;
 
 	var data = [ {
-		"Compliants" : "Total Register",
-		"Count" : totalCount
+		"Compliants" : "Application Fee Pending",
+		"Count" : applicationFeeCount
 	}, {
-		"Compliants" : "Pending Application",
-		"Count" : newCount
+		"Compliants" : "Upfront Fee Pending",
+		"Count" : upfrontChargesCount
 	}, {
-		"Compliants" : "Approved",
-		"Count" : assignCount
-	}, {
-		"Compliants" : "Paid",
-		"Count" : paidCount
+		"Compliants" : "Full Payment Pending",
+		"Count" : fullPaymentCount
 	} /* , {
 			"Compliants" : "Escalated",
 			"Count" : closedbyfieldofficer
@@ -264,7 +261,7 @@ table.display .td {
 
 	];
 
-	fnPlotPieChart(data, "compliantDashboard", "Total Application:" + totalCount);
+	fnPlotPieChart(data, "compliantDashboard", "Total Pending Application:" + (applicationFeeCount + upfrontChargesCount + fullPaymentCount));
 </script>
 
 <c:if test="${!empty sessionScope.complaintID}">

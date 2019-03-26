@@ -159,11 +159,14 @@ background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
 $(function(){
 	var url = window.location.href;
 		$('ul li').removeClass('selectionClass');
+		if(url.indexOf("index")>0){
+			$('ul li:nth-child(1)').addClass('selectionClass');
+			}
 		if(url.indexOf("configrationManagement")>0){
-		$('ul li:nth-child(1)').addClass('selectionClass');
+		$('ul li:nth-child(2)').addClass('selectionClass');
 		}
 		if(url.indexOf("categoryManagement")>0){
-			$('ul li:nth-child(2)').addClass('selectionClass');
+			$('ul li:nth-child(3)').addClass('selectionClass');
 			}
 		/* if(url.indexOf("reConnectionTypeManagement")>0){
 			$('ul li:nth-child(3)').addClass('selectionClass');
@@ -172,22 +175,22 @@ $(function(){
 			$('ul li:nth-child(4)').addClass('selectionClass');
 			} */
 		if(url.indexOf("districtManagement")>0){
-			$('ul li:nth-child(3)').addClass('selectionClass');
-			}
-		if(url.indexOf("districtTalukManagement")>0){
 			$('ul li:nth-child(4)').addClass('selectionClass');
 			}
-		if(url.indexOf("talukVillageManagement")>0){
+		if(url.indexOf("districtTalukManagement")>0){
 			$('ul li:nth-child(5)').addClass('selectionClass');
 			}
-		if(url.indexOf("officeLocation")>0){
+		if(url.indexOf("talukVillageManagement")>0){
 			$('ul li:nth-child(6)').addClass('selectionClass');
 			}
-		if(url.indexOf("paymentType.do")>0){
+		if(url.indexOf("officeLocation")>0){
 			$('ul li:nth-child(7)').addClass('selectionClass');
 			}
-		if(url.indexOf("payment.do")>0){
+		if(url.indexOf("paymentType.do")>0){
 			$('ul li:nth-child(8)').addClass('selectionClass');
+			}
+		if(url.indexOf("payment.do")>0){
+			$('ul li:nth-child(9)').addClass('selectionClass');
 			}
 });
 
@@ -198,7 +201,7 @@ $(function(){
 
 <div>
 	<ul id="HDropdown-orange-classic">
-	
+	 <li><a href="index.do"> Home</a></li>
 	 <li><a href="configrationManagement.do" > User</a> </li> 
 	 <li><a href="categoryManagement.do">Category Type</a></li>
 	<!--  <li><a href="reConnectionTypeManagement.do">Connection Type</a></li>

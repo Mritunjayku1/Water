@@ -10,8 +10,36 @@ public class DashboardCountBean {
 	private Integer yesCount;
 	private Integer noCount;
 	private Integer NACount;
+	
+	private Integer applicationFeePending;
+	private Integer upfrontChargesPending;
+	private Integer fullPaymentPending;
 
    
+	public Integer getApplicationFeePending() {
+		return applicationFeePending;
+	}
+
+	public void setApplicationFeePending(Integer applicationFeePending) {
+		this.applicationFeePending = applicationFeePending;
+	}
+
+	public Integer getUpfrontChargesPending() {
+		return upfrontChargesPending;
+	}
+
+	public void setUpfrontChargesPending(Integer upfrontChargesPending) {
+		this.upfrontChargesPending = upfrontChargesPending;
+	}
+
+	public Integer getFullPaymentPending() {
+		return fullPaymentPending;
+	}
+
+	public void setFullPaymentPending(Integer fullPaymentPending) {
+		this.fullPaymentPending = fullPaymentPending;
+	}
+
 	public Integer getPaidApplication() {
 		return paidApplication;
 	}

@@ -27,11 +27,13 @@ public interface DashboardDao {
 	public List<DDPaymentFormBean> paymentPendingList();
 	public List<DDPaymentFormBean> paymentRejectedList();
 	public List<DDPaymentFormBean> paymentApprovedList();
-	public List<DDPaymentFormBean> ddPaymentViewAllList();
-	public DDPaymentFormBean paymentViewForm(DDPaymentFormBean ddPaymentFormBean);
+	public List<CompanyDtl> ddPaymentViewAllList();
+	public CompanyDtl paymentViewForm(DDPaymentFormBean ddPaymentFormBean);
 	public List<Application> listViewAllApplication();
 	
-	public List<CompanyDtl> eePendingApplication(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eeApplicationFeePending(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eeUpfrontChargesPending(CompanyDtlBean companyDtlBean);
+	public List<DDPaymentFormBean> eeFullPaymentPending(CompanyDtlBean companyDtlBean);
 	public List<DDPaymentFormBean> eePaymentPending(CompanyDtlBean companyDtlBean);
 	public List<DDPaymentFormBean> eePaymentCompleted(CompanyDtlBean companyDtlBean);
 	public List<DDPaymentFormBean> eeInspectedApplication(CompanyDtlBean companyDtlBean);

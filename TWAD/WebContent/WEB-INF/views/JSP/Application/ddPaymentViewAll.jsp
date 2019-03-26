@@ -59,7 +59,7 @@ $(function(){
 <tr>
 		<td colspan='8'
 			style='text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;'>
-			Approved Application</td>
+			View All Application</td>
 	</tr>
 </table>
 
@@ -87,10 +87,15 @@ $(function(){
                                            <!--  <th style="color:black !important"></th> -->
                                             <th style="color:black !important"><b>App Ref#</b></th>
                                             <th style="color:black !important"><b> Name of Company</b></th>
-                                           <!--  <th style="color:black !important"><b>Category Type</b></th>
-                                            <th style="color:black !important"><b>Correspondence Address</b></th> -->
-                                             <th style="color:black !important"><b>Registered Date</b></th>
-                                             <th style="color:black !important"><b>Management Comments</b></th>
+                                             <th style="color:black !important"><b> Contact Person Name</b></th>
+                                            <th style="color:black !important"><b>Category Type</b></th>
+                                            <th style="color:black !important"><b>Correspondence Address</b></th>
+                                             <th style="color:black !important"><b>Site Address</b></th>
+                                             <th style="color:black !important"><b>Mobile No</b></th>
+                                             <th style="color:black !important"><b>Email</b></th>
+                                             <th style="color:black !important"><b>Office Name</b></th>
+                                             <th style="color:black !important"><b>REQs MLD</b></th> 
+                                             <th style="color:black !important"><b>Status</b></th>
                                         
                                         </tr>
                                     </thead>
@@ -104,11 +109,15 @@ $(function(){
           								
           							<td > <a href="paymentViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
                                             <td>${app.getLegCompName()}</td>
-                                            <%--  <td>${app.getCategoryType()}</td>
+                                            <td>${app.getContactPersonName()}</td>
+                                             <td>${app.getCategoryType()}</td>
                                             <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
-                                           --%>
-                                             <td class="center">${app.getCreateTs()}</td>
-                                              <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;">${app.getManagementComments()}</textarea></td>
+                                            <td class="center">${app.getDoorNo()} ${app.getPlotNo()} ${app.getStreetName()},${app.getPinCode()} </td>
+                                          <td>${app.getMobileNum()}</td>
+                                          <td>${app.getEmailAddr()}</td>
+                                             <td class="center">${app.getOfficeName()}</td>
+                                             <td class="center">${app.getReqMld()}</td>
+                                              <td class="center"><textarea  name="managementComments" style="width:100%;height:100%;">${app.getManagementComments()}</textarea></td>
                                                 
                                         </tr>	 
           									 

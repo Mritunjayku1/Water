@@ -145,7 +145,7 @@
 
 <div>
 	<table	 height="130px" style='background-color: white;'>
-		<tr>
+		<tr style='background-color: white;'>
 			<td width="20%" align="center"><img src="library/img/twad_logo.gif" width="110px"
 								height="106px" style="margin-left: 50px;"></td>
 							<td width="40%" align="center"><img src="library/img/middleImage.png" width="560px"

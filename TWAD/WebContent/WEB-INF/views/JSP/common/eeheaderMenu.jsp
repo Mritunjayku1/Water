@@ -2,7 +2,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <style>
-#HDropdown-orange-classic {
+#HDropdown-orange-classic,#paymentPendingId {
 	margin: 0;
 	padding: 0px;
 	background: linear-gradient(to bottom, #FFFFFF 1%, #1589FF 0%) repeat
@@ -30,7 +30,7 @@
 		scroll 0 0 rgba(0, 0, 0, 0);
 }
 
-#HDropdown-orange-classic li {
+#HDropdown-orange-classic li,#paymentPendingId li {
 	display: inline;
 	position: relative;
 	float: left;
@@ -42,12 +42,26 @@
 	float: left;
 	height: 26px;
 	line-height: 26px;
-	padding: 0 25px;
+	padding: 0 15px;
 	text-decoration: none;
 	color: #FFFFFF;
 	font-weight: bold;
 	font-size: 13px;
 	border-left: solid 1px #E6D9D9;
+}
+
+
+#paymentPendingId li a {
+    display: block;
+    float: left;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 10px;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 13px;
+    border-left: solid 1px #E6D9D9;
 }
 
 #HDropdown-orange-classic li a:hover {
@@ -79,6 +93,13 @@
 	background: #E05400;
 	background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
 }
+
+#paymentPendingId li a:hover {
+	/* 	color: #FFFFFF; */
+	background: #E05400;
+	background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
+}
+
 
 #HDropdown-orange-classic li ul li {
 	display: block;
@@ -148,40 +169,118 @@ color: #FFFFFF;
 background: #E05400;
 background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
 }
+
+#HDropdown-orange-classic span{
+padding:3px 7px;
+border-radius:50px;
+background-color: brown;
+}
+
 </style>
 
 <script>
 
 $(function(){
+	
+	$.ajax({
+		type:"GET",
+		url:"getEEDashboardCount.do",
+		data:{},
+		  contentType: "application/json",
+	      dataType:"json",
+		success:function(response){
+			//alert(response.approvedApplication)
+			$('#applicationFeeCount').text(response.applicationFeePending);
+			$('#upfrontChargesCount').text(response.upfrontChargesPending);
+			$('#fullPaymentCount').text(response.fullPaymentPending);
+			
+			
+		}
+	});
+	
+	
+	$('#paymentPendingliId').hover(function(){
+		$('#paymentPendingId').css({'display':'block'});
+	});
+	
+	$('ul#HDropdown-orange-classic li').not('#paymentPendingliId').hover(function(){
+		$('#paymentPendingId').css({'display':'none'});
+	});
+	
+	
+	
+	$('#paymentPendingliId').click(function(){
+		sessionStorage.setItem('isPaymentPendingTabClicked', "true");
+		$('#paymentPendingId').css({'display':'block'});
+	});
+	
+	$('ul#HDropdown-orange-classic li').not('#paymentPendingliId').click(function(){
+		sessionStorage.setItem('isPaymentPendingTabClicked', "false");
+		$('#paymentPendingId').css({'display':'none'});
+	});
+	
+	if(sessionStorage.getItem('isPaymentPendingTabClicked')=="true"){
+		$('#paymentPendingId').css({'display':'block'});
+	}
+	else{
+		$('#paymentPendingId').css({'display':'none'});
+	}
+	
 	var url = window.location.href;
 		$('ul li').removeClass('selectionClass');
+		if(url.indexOf("index")>0){
+			$('ul li:nth-child(1)').addClass('selectionClass');
+			}
 		if(url.indexOf("eeDashboard")>0){
-		$('ul li:nth-child(1)').addClass('selectionClass');
+		$('ul#HDropdown-orange-classic li:nth-child(2)').addClass('selectionClass');
 		}
-		if(url.indexOf("eePendingApplication")>0){
-			$('ul li:nth-child(2)').addClass('selectionClass');
+		/* if(url.indexOf("eePendingApplication")>0){
+			$('ul#HDropdown-orange-classic li:nth-child(2)').addClass('selectionClass');
 			}
 		if(url.indexOf("eePaymentPending")>0){
-			$('ul li:nth-child(3)').addClass('selectionClass');
-			}
-		if(url.indexOf("eePaymentCompleted")>0){
-			$('ul li:nth-child(4)').addClass('selectionClass');
-			}
-		if(url.indexOf("eeInspectedApplication")>0){
-			$('ul li:nth-child(5)').addClass('selectionClass');
+			$('ul#HDropdown-orange-classic li:nth-child(3)').addClass('selectionClass');
+			} */
+		/* if(url.indexOf("eePaymentCompleted")>0){
+			$('ul#HDropdown-orange-classic li:nth-child(4)').addClass('selectionClass');
+			} */
+		/* if(url.indexOf("eeInspectedApplication")>0){
+			$('ul#HDropdown-orange-classic li:nth-child(4)').addClass('selectionClass');
 			}
 		if(url.indexOf("eeMCApproved")>0){
-			$('ul li:nth-child(6)').addClass('selectionClass');
+			$('ul#HDropdown-orange-classic li:nth-child(5)').addClass('selectionClass');
+			} */
+			
+		if(url.indexOf("eeApplicationFeePending")>0){
+			$('ul#HDropdown-orange-classic li:nth-child(3)').addClass('selectionClass');
 			}
+			if(url.indexOf("eeUpfrontChargesPending")>0){
+				$('ul#HDropdown-orange-classic li:nth-child(4)').addClass('selectionClass');
+				}
+			if(url.indexOf("eeFullPaymentPending")>0){
+				$('ul#HDropdown-orange-classic li:nth-child(5)').addClass('selectionClass');
+				}
 		if(url.indexOf("eeFullPaymentCompleted")>0){
-			$('ul li:nth-child(7)').addClass('selectionClass');
+			$('ul#HDropdown-orange-classic li:nth-child(6)').addClass('selectionClass');
 			}
 		if(url.indexOf("eeExecution")>0){
-			$('ul li:nth-child(8)').addClass('selectionClass');
+			$('ul#HDropdown-orange-classic li:nth-child(7)').addClass('selectionClass');
 			}
 		if(url.indexOf("eeViewAll")>0){
-			$('ul li:nth-child(9)').addClass('selectionClass');
+			$('ul#HDropdown-orange-classic li:nth-child(8)').addClass('selectionClass');
 			}
+		
+		/* if(url.indexOf("eePaymentCompleted")>0){
+			$('ul#HDropdown-orange-classic li:nth-child(3)').addClass('selectionClass');
+			$('ul#paymentPendingId li:nth-child(1)').addClass('selectionClass');
+			}
+			if(url.indexOf("eeUpfrontChargesPending")>0){
+				$('ul#HDropdown-orange-classic li:nth-child(3)').addClass('selectionClass');
+				$('ul#paymentPendingId li:nth-child(2)').addClass('selectionClass');
+				}
+			if(url.indexOf("eeFullPaymentPending")>0){
+				$('ul#HDropdown-orange-classic li:nth-child(3)').addClass('selectionClass');
+				$('ul#paymentPendingId li:nth-child(3)').addClass('selectionClass');
+				} */
 });
 
 </script>
@@ -190,17 +289,27 @@ $(function(){
 
 <div>
 	<ul id="HDropdown-orange-classic">
+	 <li><a href="index.do"> Home</a></li>
 		<li><a href="eeDashboard.do" > Dashboard</a></li>
-		<li><a href="eePendingApplication.do">Pending Application </a> </li>
-	    <li><a href="eePaymentPending.do">Payment Pending</a> </li>
-		<li><a href="eePaymentCompleted.do">1% Payment Completed</a></li>
-		<li><a href="eeInspectedApplication.do">Inspected Application</a></li>
-		<li><a href="eeMCApproved.do">MC Approved</a></li>
+		<!-- <li><a href="eeApplicationFeePending.do">Pending Application </a> </li>
+	    <li id="paymentPendingliId"><a href="eeApplicationFeePending.do">Payment Pending</a> </li> -->
+		<!-- <li><a href="eePaymentCompleted.do">1% Payment Completed</a></li> -->
+		<!-- <li><a href="eeInspectedApplication.do">Inspected Application</a></li>
+		<li><a href="eeMCApproved.do">MC Approved</a></li> -->
+		 <li><a href="eeApplicationFeePending.do">Application Fee Pending &nbsp; <span id="applicationFeeCount"></span> </a> </li>
+	    <li><a href="eeUpfrontChargesPending.do">Upfront Charges Pending &nbsp; <span id="upfrontChargesCount"></span> </a> </li>
+		<li><a href="eeFullPaymentPending.do">Full Payment Pending &nbsp; <span id="fullPaymentCount"></span> </a></li>
 		<li><a href="eeFullPaymentCompleted.do">Full Payment Completed</a></li>
 		<li><a href="eeExecution.do">Execution</a></li>
 		<li><a href="eeViewAll.do">View All Application </a> </li>  
 		
 </ul>
+ <!--       
+<ul id="paymentPendingId" style="width:600px;margin-top: 5px;margin-left: 100px;display: none;position: absolute; z-index: 100;">
+        <li><a href="eeApplicationFeePending.do">Application Fee Pending</a> </li>
+	    <li><a href="eeUpfrontChargesPending.do">Upfront Charges Pending</a> </li>
+		<li><a href="eeFullPaymentPending.do">Full Payment Pending</a></li>
+</ul> -->
 
 	
 </div>

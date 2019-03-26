@@ -82,47 +82,47 @@ $(function(){
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                
-                                    
-                                     <thead>
+                                    <thead>
                                         <tr>
                                            <!--  <th style="color:black !important"></th> -->
                                             <th style="color:black !important"><b>App Ref#</b></th>
                                             <th style="color:black !important"><b> Name of Company</b></th>
+                                             <th style="color:black !important"><b> Contact Person Name</b></th>
                                             <th style="color:black !important"><b>Category Type</b></th>
-                                            <th style="color:black !important"><b>Contact Person</b></th>
-                                             <th style="color:black !important"><b>Zone#</b></th>
                                             <th style="color:black !important"><b>Correspondence Address</b></th>
+                                             <th style="color:black !important"><b>Site Address</b></th>
+                                             <th style="color:black !important"><b>Mobile No</b></th>
+                                             <th style="color:black !important"><b>Email</b></th>
+                                             <th style="color:black !important"><b>Office Name</b></th>
+                                             <th style="color:black !important"><b>REQs MLD</b></th> 
+                                             <th style="color:black !important"><b>Status</b></th>
                                         
-                                          
-                                              <th style="color:black !important"><b>Status</b></th>
-                                         
                                         </tr>
                                     </thead>
                                     <tbody>
                                     
-                                    <c:forEach items="${list.appBean}" var="app" >
+                                     <c:forEach items="${list.appBean}" var="app" >
           
           									 
           									 
           								<tr class="odd gradeX">
-          								<%-- <c:set var="count" value="${count+1}" scope="page"/>  --%>
-          								<%-- <td class="center"><input type="radio" name="radio" id="ceRadio_${count}"/></td> --%>
-          							<td>	<a href="MCViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
+          								
+          							<td > <a href="MCViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
                                             <td>${app.getLegCompName()}</td>
-                                           <%--  <td>${app.getDivId()}</td> --%>
+                                            <td>${app.getContactPersonName()}</td>
                                              <td>${app.getCategoryType()}</td>
-                                            <td class="center">${app.getContactPersonName()}</td>
-                                            <td class="center">${app.getCmwssbZoneNum()}</td>
-                                             <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
-                                           
-                                           
-                                            <td class="center">${app.getAppStatus()}</td>
-                                         
+                                            <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
+                                            <td class="center">${app.getDoorNo()} ${app.getPlotNo()} ${app.getStreetName()},${app.getPinCode()} </td>
+                                          <td>${app.getMobileNum()}</td>
+                                          <td>${app.getEmailAddr()}</td>
+                                             <td class="center">${app.getOfficeName()}</td>
+                                             <td class="center">${app.getReqMld()}</td>
+                                              <td class="center"><textarea  name="managementComments" style="width:100%;height:100%;">${app.getManagementComments()}</textarea></td>
+                                                
                                         </tr>	 
           									 
           							 </c:forEach>
-                                    
+                          
                                     </tbody>
                                 </table>
                             </div>

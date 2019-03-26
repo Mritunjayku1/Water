@@ -37,6 +37,7 @@ import com.water.bean.DDPaymentFormBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.ForgotPasswordBean;
 import com.water.bean.LoginBean;
+import com.water.bean.PaymentFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 
 /**
@@ -288,8 +289,38 @@ public class AdminController {
 
 	}*/
 	@RequestMapping(value = "/initialPayment", method = RequestMethod.GET)
-	public ModelAndView initialPayment() {
-		return new ModelAndView("initialPayment");
+	public ModelAndView initialPayment() throws JSONException {
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+		
+
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getPaymentTypeDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		gson = new Gson();
+
+		List<PaymentFormBean> paymenttypeFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			PaymentFormBean paymentTypeFormBean = gson.fromJson(
+					jsonArray1.getString(i), PaymentFormBean.class);
+			paymenttypeFormBeanList.add(paymentTypeFormBean);
+		}
+
+		
+		
+		model.put("paymentTypeDtl", paymenttypeFormBeanList);
+
+		return new ModelAndView("initialPayment", "list", model);
 	}
 	
 	@RequestMapping(value = "/forgotPassword", method = RequestMethod.POST)

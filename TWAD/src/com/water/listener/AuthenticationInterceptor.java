@@ -41,10 +41,10 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 				&& !uri.equals("index.do") && !uri.equals("downloadFile.do") && !uri.equals("formRegister.do") 
 				&& !uri.equals("companyRegister.do") && !uri.equals("adminLogin.do") && !uri.equals("appAcknoledgement.do") && !uri.equals("uploadDocument.do")
 				&& !uri.equals("downloadImage.do") && !uri.equals("checkApplicationStatus.do") && !uri.equals("initialPayment.do")&& !uri.equals("initialPaymentOnline.do") 
-				&& !uri.equals("savePaymentsDetails.do") && !uri.equals("uploadMultipleFile.do") &&  !uri.equals("getPaymentAmount.do") &&  !uri.equals("InitialPayment.do") &&   !uri.equals("getIpfAmount.do")
+				&& !uri.equals("savePaymentsDetails.do") && !uri.equals("uploadMultipleFile.do") &&  !uri.equals("getPaymentAmount.do") &&  !uri.equals("InitialPayment.do") &&   !uri.equals("getReqMLDCost.do")
 				&&  !uri.equals("withdrawApp.do") &&  !uri.equals("saveOnlinePaymentsDetails.do") &&  !uri.equals("onlinePaymentResponse.do")  &&  !uri.equals("onlinePaymentResponseFailure.do") 
 				&&  !uri.equals("downloadTypePdf.do") &&  !uri.equals("onlineFinalResponseFailure.do") &&  !uri.equals("callEasyBusiness.do") && !uri.equals("ApplicationDetails.do") && !uri.equals("forgotPassword.do") 
-				&& !uri.equals("downloadPDF.do") && !uri.equals("saveDDPaymentDtls.do")   ) {
+				&& !uri.equals("downloadPDF.do") && !uri.equals("saveDDPaymentDtls.do") && !uri.equals("getDDAmount.do")   ) {
 			
 			if (request.getSession().getAttribute("LoginID") == null) {
 				response.sendRedirect("index.do");

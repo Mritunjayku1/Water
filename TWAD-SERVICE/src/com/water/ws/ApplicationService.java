@@ -2,6 +2,7 @@ package com.water.ws;
 
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -33,8 +34,12 @@ import com.water.model.CompanyDtl;
 import com.water.model.CompanyPaymentDtl;
 import com.water.model.ComplaintDetails;
 import com.water.model.MasterCategory;
+import com.water.model.MasterDistrict;
 import com.water.model.MasterPayment;
+import com.water.model.MasterPaymentType;
 import com.water.model.MasterStatus;
+import com.water.model.MasterTaluk;
+import com.water.model.MasterVillage;
 import com.water.model.SmsTemp;
 import com.water.model.TransctionMaster;
 import com.water.util.HibernateUtil;
@@ -209,19 +214,23 @@ public class ApplicationService {
 		applicationDtls.setCreateUserId(appFormBean.getLegCompName());
 		applicationDtls.setSurveyFieldNo(appFormBean.getSurveyFieldNo());
 		
-		applicationDtls.setDistrict(appFormBean.getDistrict());
-		applicationDtls.setTaluk(appFormBean.getTaluk());
-		applicationDtls.setVillage(appFormBean.getVillage());
+		applicationDtls.setDistrict( (MasterDistrict) session.get(MasterDistrict.class, Integer.parseInt(appFormBean.getDistrict())));
+		applicationDtls.setTaluk( (MasterTaluk) session.get(MasterTaluk.class, Integer.parseInt(appFormBean.getTaluk())));
+		applicationDtls.setVillage( (MasterVillage) session.get(MasterVillage.class, Integer.parseInt(appFormBean.getVillage())));
 
 		applicationDtls.setDoorNo(appFormBean.getDoorNo());
 		applicationDtls.setPlotNo(appFormBean.getPlotNo());
 		applicationDtls.setStreetName(appFormBean.getStreetName());
 		applicationDtls.setLocation(appFormBean.getLocation());
-		applicationDtls.setPincode(appFormBean.getPinCode());
+		applicationDtls.setPinCode(appFormBean.getPinCode());
 		applicationDtls.setCafId(appFormBean.getCafId());
 	//	applicationDtls.setCost(appFormBean.getCost());
+		//applicationDtls.setGstPercent(Integer.parseInt(appFormBean.getGstPercent()));
+		applicationDtls.setApplicationFee(Integer.parseInt(appFormBean.getCost()));
 		applicationDtls.setGstAmount(appFormBean.getGstAmount());
 		applicationDtls.setTotalAmount(appFormBean.getTotalAmount());
+		applicationDtls.setUpfrontCharges(appFormBean.getUpfrontCharges());
+		
 		applicationDtls.setInsStatusId(1);
 		//applicationDtls.setStatusFlag('E');
 		applicationDtls.setStatusFlag('Y');
@@ -470,13 +479,108 @@ public class ApplicationService {
 	}
 	
 	
+	
+	
+	
+	@POST
+	@Path("getDDAmount")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public AppFormBean getDDAmount(AppFormBean appFormBean) {
+		
+		AppFormBean appFormBeanRes = null;
+		Session session = sessionFactory.openSession();
+		
+		if(appFormBean.getPaymentType()==1){
+			Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+					.createCriteria("masterPayment.paymentType","paymentType")
+					.add(Restrictions.eq("paymentType.paymentTypeId", 1));
+			 List<MasterPayment> masterPaymentlist = cr.list();
+			 
+			 Criteria cr1 = session.createCriteria(CompanyDtl.class,"companyDtl")
+						.add(Restrictions.eq("companyDtl.appId", appFormBean.getAppId()))
+			            .add(Restrictions.eq("companyDtl.mobileNum", appFormBean.getMobileNum()));
+			 List<CompanyDtl> companyDtllist = cr1.list();
+				 
+				  appFormBeanRes = new AppFormBean();
+				 if(!masterPaymentlist.isEmpty())
+				     appFormBeanRes.setTotalAmount(masterPaymentlist.get(0).getTotalAmount());
+				 else{
+					 appFormBeanRes.setTotalAmount("NA"); 
+				 }
+				 if(!companyDtllist.isEmpty())
+				     appFormBeanRes.setLegCompName(companyDtllist.get(0).getLegCompName());
+				 else{
+					 appFormBeanRes.setStatusFlag('N'); 
+					 appFormBeanRes.setTotalAmount("NA"); 
+				 }
+				
+				 
+		}
+		else if(appFormBean.getPaymentType()==2){
+			
+			
+
+			Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+					.createCriteria("masterPayment.paymentType","paymentType")
+					.createCriteria("masterPayment.appId","companyDtl")
+					.add(Restrictions.eq("paymentType.paymentTypeId",2))
+					.add(Restrictions.eq("companyDtl.appId", appFormBean.getAppId()))
+		            .add(Restrictions.eq("companyDtl.mobileNum", appFormBean.getMobileNum()));
+			 List<MasterPayment> masterPaymentlist = cr.list();
+			
+				  appFormBeanRes = new AppFormBean();
+				 if(!masterPaymentlist.isEmpty()){
+				     appFormBeanRes.setTotalAmount(masterPaymentlist.get(0).getTotalAmount());
+				     appFormBeanRes.setLegCompName(masterPaymentlist.get(0).getAppId().getLegCompName());
+				 }
+				 else{
+					 appFormBeanRes.setTotalAmount("NA"); 
+				 }
+				
+				 
+				 
+		}
+		else{
+			Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+					.createCriteria("masterPayment.paymentType","paymentType")
+					.createCriteria("masterPayment.appId","companyDtl")
+					.add(Restrictions.eq("paymentType.paymentTypeId", appFormBean.getPaymentType()))
+					.add(Restrictions.eq("companyDtl.appId", appFormBean.getAppId()))
+		            .add(Restrictions.eq("companyDtl.mobileNum", appFormBean.getMobileNum()));
+			 List<MasterPayment> masterPaymentlist = cr.list();
+			/* 
+			 Criteria cr1 = session.createCriteria(CompanyDtl.class,"companyDtl")
+						.add(Restrictions.eq("companyDtl.appId", appFormBean.getAppId()))
+			            .add(Restrictions.eq("companyDtl.mobileNum", appFormBean.getMobileNum()));
+			 List<CompanyDtl> companyDtllist = cr1.list();
+				 */
+				  appFormBeanRes = new AppFormBean();
+				 if(!masterPaymentlist.isEmpty()){
+				     appFormBeanRes.setTotalAmount(masterPaymentlist.get(0).getTotalAmount());
+				     appFormBeanRes.setLegCompName(masterPaymentlist.get(0).getAppId().getLegCompName());
+				 }
+				 else{
+					 appFormBeanRes.setTotalAmount("NA"); 
+				 }
+				
+				 
+		}
+		
+        return appFormBeanRes;
+
+	}
+
+	
+	
+	
 	@POST
 	@Path("saveDDPaymentDtls")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String saveDDPaymentDtls(DDPaymentFormBean ddPaymentFormBean) {
 		Session session = sessionFactory.openSession();
-		Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+		/*Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
 				.createCriteria("masterPayment.appId","companyDtl")
 				.add(Restrictions.eq("companyDtl.appId", ddPaymentFormBean.getAppId()));
 		List<MasterPayment> paymentList = cr.list();
@@ -486,7 +590,7 @@ public class ApplicationService {
 			session.update(masterPayment);
 			tx.commit();
 		}
-		
+		*/
 		
 		
 		session.beginTransaction();
@@ -499,7 +603,9 @@ public class ApplicationService {
         companyPaymentDtl.setPaymentAmount(ddPaymentFormBean.getPaymentAmount());
         companyPaymentDtl.setDdBankName(ddPaymentFormBean.getDdBankName());
         companyPaymentDtl.setDdDate(ddPaymentFormBean.getDdDate());
-        companyPaymentDtl.setPaymentType(ddPaymentFormBean.getPaymentType());
+        companyPaymentDtl.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class, Integer.parseInt(ddPaymentFormBean.getPaymentType())));
+        companyPaymentDtl.setLegCompName(ddPaymentFormBean.getLegCompName());
+        companyPaymentDtl.setMobileNum(ddPaymentFormBean.getMobileNum());
         
         companyPaymentDtl.setCreateTs(new Date());
         companyPaymentDtl.setUpdateTs(new Date());

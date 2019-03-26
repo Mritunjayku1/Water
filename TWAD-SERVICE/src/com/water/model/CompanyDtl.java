@@ -80,12 +80,18 @@ public class CompanyDtl implements Serializable {
 	private String streetName;
 	@Column(name = "LOCATION", nullable = true, length = 100)
 	private String location;
-	@Column(name = "DISTRICT", nullable = false, length = 100)
-	private String district;
-	@Column(name = "TALUK", nullable = false, length = 100)
-	private String taluk;
-	@Column(name = "VILLAGE", nullable = false, length = 100)
-	private String village;
+	
+	@ManyToOne(targetEntity = MasterDistrict.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "DISTRICT_ID")
+	private MasterDistrict district;
+	
+	@ManyToOne(targetEntity = MasterTaluk.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "TALUK_ID")
+	private MasterTaluk taluk;
+	
+	@ManyToOne(targetEntity = MasterVillage.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "VILLAGE_ID")
+	private MasterVillage village;
 	@Column(name = "PINCODE", nullable = false, length = 100)
 	private String pinCode;
 	@Column(name = "SURVEY_FIELDNO", nullable = true, length = 100)
@@ -96,6 +102,11 @@ public class CompanyDtl implements Serializable {
 
 	@Column(name = "REQ_KLD", nullable = false, length = 100)
 	private String reqMld;
+	
+	@Column(name = "APPLICATION_FEE", nullable = false, length = 100)
+	private Integer applicationFee;
+	@Column(name = "GST_PERCENT", nullable = true, length = 100)
+	private Integer gstPercent=0;
 	
 	@Column(name = "GST_AMOUNT", nullable = false, length = 100)
 	private String gstAmount;
@@ -173,6 +184,11 @@ public class CompanyDtl implements Serializable {
 	private String cafId;
 	
 	
+	@Column(name = "MC_USER",nullable = true, length = 100)
+	private String mcUser;
+	
+	@Column(name = "UPFRONT_CHARGES", nullable = true,length = 100)
+	private Integer upfrontCharges;
 	
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -323,6 +339,26 @@ public class CompanyDtl implements Serializable {
 	}
 
 
+	public MasterOffice getOffice() {
+		return office;
+	}
+
+
+	public void setOffice(MasterOffice office) {
+		this.office = office;
+	}
+
+
+	public String getManagementComments() {
+		return managementComments;
+	}
+
+
+	public void setManagementComments(String managementComments) {
+		this.managementComments = managementComments;
+	}
+
+
 	public String getAddrPremSought() {
 		return addrPremSought;
 	}
@@ -373,32 +409,32 @@ public class CompanyDtl implements Serializable {
 	}
 
 
-	public String getDistrict() {
+	public MasterDistrict getDistrict() {
 		return district;
 	}
 
 
-	public void setDistrict(String district) {
+	public void setDistrict(MasterDistrict district) {
 		this.district = district;
 	}
 
 
-	public String getTaluk() {
+	public MasterTaluk getTaluk() {
 		return taluk;
 	}
 
 
-	public void setTaluk(String taluk) {
+	public void setTaluk(MasterTaluk taluk) {
 		this.taluk = taluk;
 	}
 
 
-	public String getVillage() {
+	public MasterVillage getVillage() {
 		return village;
 	}
 
 
-	public void setVillage(String village) {
+	public void setVillage(MasterVillage village) {
 		this.village = village;
 	}
 
@@ -408,7 +444,7 @@ public class CompanyDtl implements Serializable {
 	}
 
 
-	public void setPincode(String pinCode) {
+	public void setPinCode(String pinCode) {
 		this.pinCode = pinCode;
 	}
 
@@ -440,6 +476,26 @@ public class CompanyDtl implements Serializable {
 
 	public void setReqMld(String reqMld) {
 		this.reqMld = reqMld;
+	}
+
+
+	public String getGstAmount() {
+		return gstAmount;
+	}
+
+
+	public void setGstAmount(String gstAmount) {
+		this.gstAmount = gstAmount;
+	}
+
+
+	public String getTotalAmount() {
+		return totalAmount;
+	}
+
+
+	public void setTotalAmount(String totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 
 
@@ -522,118 +578,24 @@ public class CompanyDtl implements Serializable {
 		SmsId = smsId;
 	}
 
-	public String getInspectionDate() {
-		return inspectionDate;
+
+	public Integer getApplicationStatus() {
+		return applicationStatus;
 	}
 
 
-	public void setInspectionDate(String inspectionDate) {
-		this.inspectionDate = inspectionDate;
+	public void setApplicationStatus(Integer applicationStatus) {
+		this.applicationStatus = applicationStatus;
 	}
 
 
-	public Date getCompletionDate() {
-		return completionDate;
+	public Integer getPaymentStatus() {
+		return paymentStatus;
 	}
 
 
-	public void setCompletionDate(Date completionDate) {
-		this.completionDate = completionDate;
-	}
-
-
-	public Date getCommissionDate() {
-		return commissionDate;
-	}
-
-
-	public void setCommissionDate(Date commissionDate) {
-		this.commissionDate = commissionDate;
-	}
-
-
-	public String getTentativeDate() {
-		return tentativeDate;
-	}
-
-
-	public void setTentativeDate(String tentativeDate) {
-		this.tentativeDate = tentativeDate;
-	}
-
-
-	public String getCafId() {
-		return cafId;
-	}
-
-
-	public void setCafId(String cafId) {
-		this.cafId = cafId;
-	}
-
-
-	public Date getCreateTs() {
-		return createTs;
-	}
-
-
-	public void setCreateTs(Date createTs) {
-		this.createTs = createTs;
-	}
-
-
-	public String getCreateUserId() {
-		return createUserId;
-	}
-
-
-	public void setCreateUserId(String createUserId) {
-		this.createUserId = createUserId;
-	}
-
-
-	public Date getUpdateTs() {
-		return updateTs;
-	}
-
-
-	public void setUpdateTs(Date updateTs) {
-		this.updateTs = updateTs;
-	}
-
-
-	public String getUpdateUserId() {
-		return updateUserId;
-	}
-
-
-	public void setUpdateUserId(String updateUserId) {
-		this.updateUserId = updateUserId;
-	}
-
-
-	public String getGstAmount() {
-		return gstAmount;
-	}
-
-
-	public void setGstAmount(String gstAmount) {
-		this.gstAmount = gstAmount;
-	}
-
-
-	public String getTotalAmount() {
-		return totalAmount;
-	}
-
-
-	public void setTotalAmount(String totalAmount) {
-		this.totalAmount = totalAmount;
-	}
-
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public void setPaymentStatus(Integer paymentStatus) {
+		this.paymentStatus = paymentStatus;
 	}
 
 
@@ -647,13 +609,13 @@ public class CompanyDtl implements Serializable {
 	}
 
 
-	public Integer getApplicationStatus() {
-		return applicationStatus;
+	public String getInspectionDate() {
+		return inspectionDate;
 	}
 
 
-	public void setApplicationStatus(Integer applicationStatus) {
-		this.applicationStatus = applicationStatus;
+	public void setInspectionDate(String inspectionDate) {
+		this.inspectionDate = inspectionDate;
 	}
 
 
@@ -707,33 +669,128 @@ public class CompanyDtl implements Serializable {
 	}
 
 
-	public MasterOffice getOffice() {
-		return office;
+	public Date getCompletionDate() {
+		return completionDate;
 	}
 
 
-	public void setOffice(MasterOffice office) {
-		this.office = office;
+	public void setCompletionDate(Date completionDate) {
+		this.completionDate = completionDate;
 	}
 
 
-	public String getManagementComments() {
-		return managementComments;
+	public Date getCommissionDate() {
+		return commissionDate;
 	}
 
 
-	public void setManagementComments(String managementComments) {
-		this.managementComments = managementComments;
+	public void setCommissionDate(Date commissionDate) {
+		this.commissionDate = commissionDate;
 	}
 
 
-	public Integer getPaymentStatus() {
-		return paymentStatus;
+	public String getTentativeDate() {
+		return tentativeDate;
 	}
 
 
-	public void setPaymentStatus(Integer paymentStatus) {
-		this.paymentStatus = paymentStatus;
+	public void setTentativeDate(String tentativeDate) {
+		this.tentativeDate = tentativeDate;
+	}
+
+
+	public String getCafId() {
+		return cafId;
+	}
+
+
+	public void setCafId(String cafId) {
+		this.cafId = cafId;
+	}
+
+
+	public String getMcUser() {
+		return mcUser;
+	}
+
+
+	public void setMcUser(String mcUser) {
+		this.mcUser = mcUser;
+	}
+
+
+	public Integer getUpfrontCharges() {
+		return upfrontCharges;
+	}
+
+
+	public void setUpfrontCharges(Integer upfrontCharges) {
+		this.upfrontCharges = upfrontCharges;
+	}
+
+
+	public Date getCreateTs() {
+		return createTs;
+	}
+
+
+	public void setCreateTs(Date createTs) {
+		this.createTs = createTs;
+	}
+
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+
+	public Date getUpdateTs() {
+		return updateTs;
+	}
+
+
+	public void setUpdateTs(Date updateTs) {
+		this.updateTs = updateTs;
+	}
+
+
+	public String getUpdateUserId() {
+		return updateUserId;
+	}
+
+
+	public void setUpdateUserId(String updateUserId) {
+		this.updateUserId = updateUserId;
+	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+	public Integer getGstPercent() {
+		return gstPercent;
+	}
+
+
+	public void setGstPercent(Integer gstPercent) {
+		this.gstPercent = gstPercent;
+	}
+
+
+	public Integer getApplicationFee() {
+		return applicationFee;
+	}
+
+
+	public void setApplicationFee(Integer applicationFee) {
+		this.applicationFee = applicationFee;
 	}
 
 

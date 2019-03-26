@@ -32,8 +32,15 @@ public class CompanyPaymentDtl  implements Serializable {
 	@JoinColumn(name = "APP_ID")
 	private CompanyDtl appId;
 
-	@Column(name = "PAYMENT_TYPE", nullable = true, length = 100)
-	private String paymentType;
+	 @ManyToOne(optional = true)
+	 @JoinColumn(name = "PAYMENT_TYPE_ID")
+	 private MasterPaymentType paymentType;
+	
+	@Column(name = "LEG_COMP_NAME", length = 100)
+	private String legCompName;
+	
+	@Column(name = "MOBILE_NUMBER", precision = 15, scale = 0)
+	private Long mobileNum;
 
 	@Column(name = "PAYMENT_AMOUNT", nullable = true, length = 100)
 	private String paymentAmount;
@@ -80,14 +87,6 @@ public class CompanyPaymentDtl  implements Serializable {
 
 	public void setAppId(CompanyDtl appId) {
 		this.appId = appId;
-	}
-
-	public String getPaymentType() {
-		return paymentType;
-	}
-
-	public void setPaymentType(String paymentType) {
-		this.paymentType = paymentType;
 	}
 
 	public String getPaymentAmount() {
@@ -194,4 +193,31 @@ public class CompanyPaymentDtl  implements Serializable {
 		this.paymentStatusFlag = paymentStatusFlag;
 	}
 
+	public MasterPaymentType getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(MasterPaymentType paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public String getLegCompName() {
+		return legCompName;
+	}
+
+	public void setLegCompName(String legCompName) {
+		this.legCompName = legCompName;
+	}
+
+	public Long getMobileNum() {
+		return mobileNum;
+	}
+
+	public void setMobileNum(Long mobileNum) {
+		this.mobileNum = mobileNum;
+	}
+
+	
+	
+	
 }

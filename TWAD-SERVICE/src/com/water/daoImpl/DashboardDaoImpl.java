@@ -11,10 +11,12 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 
+import com.water.bean.AppFormBean;
 import com.water.bean.ApplicationBean;
 import com.water.bean.CategoryFormBean;
 import com.water.bean.CmwWaterConnBean;
@@ -201,8 +203,8 @@ public class DashboardDaoImpl implements DashboardDao {
 
 			Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
 					.createAlias("masterPayment.appId","companyDtl",JoinType.RIGHT.ordinal())
-					
-					.setProjection(Projections.projectionList()
+					.createCriteria("masterPayment.paymentType", "paymentType")
+					.setProjection(Projections.distinct(Projections.projectionList()
 				            .add(Projections.property("masterPayment.paymentAmount"),"paymentAmount") 
 				            .add(Projections.property("masterPayment.gstPercent"),"gstPercent")  
 				            .add(Projections.property("masterPayment.gstAmount"),"gstAmount")  
@@ -212,8 +214,9 @@ public class DashboardDaoImpl implements DashboardDao {
 				            .add(Projections.property("companyDtl.contactPersonName"),"contactPersonName") 
 				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
-				           )
-			         .add(Restrictions.eq("companyDtl.active", 3));
+				           ))
+			         .add(Restrictions.eq("companyDtl.active", 3))
+			         .add(Restrictions.eq("paymentType.paymentTypeId", 3));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -1384,6 +1387,9 @@ public class DashboardDaoImpl implements DashboardDao {
 
 			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
 					.createAlias("companyDtl.categoryType", "categoryType")
+					.createAlias("companyDtl.district", "district")
+					.createAlias("companyDtl.taluk", "taluk")
+					.createAlias("companyDtl.village", "village")
 					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
 					.setProjection(Projections.projectionList()
 					.add(Projections.property("companyDtl.appId"),"appId")
@@ -1406,9 +1412,9 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.plotNo"),"plotNo")
 					.add(Projections.property("companyDtl.streetName"),"streetName")
 					.add(Projections.property("companyDtl.location"),"location")
-					.add(Projections.property("companyDtl.district"),"district")
-					.add(Projections.property("companyDtl.taluk"),"taluk")
-					.add(Projections.property("companyDtl.village"),"village")
+					.add(Projections.property("district.districtName"),"district")
+					.add(Projections.property("taluk.talukName"),"taluk")
+					.add(Projections.property("village.villageName"),"village")
 					.add(Projections.property("companyDtl.pinCode"),"pinCode")
 					.add(Projections.property("companyDtl.surveyFieldNo"),"surveyFieldNo")
 					.add(Projections.property("companyDtl.isNewConnection"),"isNewConnection")
@@ -1450,6 +1456,9 @@ public class DashboardDaoImpl implements DashboardDao {
 
 			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
 					.createAlias("companyDtl.categoryType", "categoryType")
+					.createAlias("companyDtl.district", "district")
+					.createAlias("companyDtl.taluk", "taluk")
+					.createAlias("companyDtl.village", "village")
 					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
 					.setProjection(Projections.projectionList()
 					.add(Projections.property("companyDtl.appId"),"appId")
@@ -1472,9 +1481,9 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.plotNo"),"plotNo")
 					.add(Projections.property("companyDtl.streetName"),"streetName")
 					.add(Projections.property("companyDtl.location"),"location")
-					.add(Projections.property("companyDtl.district"),"district")
-					.add(Projections.property("companyDtl.taluk"),"taluk")
-					.add(Projections.property("companyDtl.village"),"village")
+					.add(Projections.property("district.districtName"),"district")
+					.add(Projections.property("taluk.talukName"),"taluk")
+					.add(Projections.property("village.villageName"),"village")
 					.add(Projections.property("companyDtl.pinCode"),"pinCode")
 					.add(Projections.property("companyDtl.surveyFieldNo"),"surveyFieldNo")
 					.add(Projections.property("companyDtl.isNewConnection"),"isNewConnection")
@@ -1517,6 +1526,9 @@ public class DashboardDaoImpl implements DashboardDao {
 
 			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
 					.createAlias("companyDtl.categoryType", "categoryType")
+					.createAlias("companyDtl.district", "district")
+					.createAlias("companyDtl.taluk", "taluk")
+					.createAlias("companyDtl.village", "village")
 					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
 					.setProjection(Projections.projectionList()
 					.add(Projections.property("companyDtl.appId"),"appId")
@@ -1539,9 +1551,9 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.plotNo"),"plotNo")
 					.add(Projections.property("companyDtl.streetName"),"streetName")
 					.add(Projections.property("companyDtl.location"),"location")
-					.add(Projections.property("companyDtl.district"),"district")
-					.add(Projections.property("companyDtl.taluk"),"taluk")
-					.add(Projections.property("companyDtl.village"),"village")
+					.add(Projections.property("district.districtName"),"district")
+					.add(Projections.property("taluk.talukName"),"taluk")
+					.add(Projections.property("village.villageName"),"village")
 					.add(Projections.property("companyDtl.pinCode"),"pinCode")
 					.add(Projections.property("companyDtl.surveyFieldNo"),"surveyFieldNo")
 					.add(Projections.property("companyDtl.isNewConnection"),"isNewConnection")
@@ -1712,38 +1724,17 @@ public class DashboardDaoImpl implements DashboardDao {
 	}
 
 	@Override
-	public List<DDPaymentFormBean> ddPaymentViewAllList() {
+	public List<CompanyDtl> ddPaymentViewAllList() {
 		// TODO Auto-generated method stub
 
 		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		
-		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		List<CompanyDtl> appDetails = new ArrayList<CompanyDtl>();
 		try {
 			
-
-			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
-					.createCriteria("companyPaymentDtl.appId","CompanyDtl")
-					.setProjection(Projections.projectionList()
-							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
-				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
-				            .add(Projections.property("companyPaymentDtl.paymentAmount"),"paymentAmount")  
-				            
-				            .add(Projections.property("companyPaymentDtl.managementComments"),"managementComments")
-				            .add(Projections.property("companyPaymentDtl.paymentStatusFlag"),"paymentStatusFlag")
-				            .add(Projections.property("companyPaymentDtl.ddNo"),"ddNo")
-				            
-				            .add(Projections.property("companyPaymentDtl.ddDate"),"ddDate")
-				            .add(Projections.property("companyPaymentDtl.ddBankName"),"ddBankName")
-				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
-				            .add(Projections.property("CompanyDtl.legCompName"),"legCompName") 
-				            .add(Projections.property("CompanyDtl.contactPersonName"),"contactPersonName") 
-				            .add(Projections.property("CompanyDtl.appId"),"appId") 
-				           
-				           )
-					 .add(Restrictions.eq("CompanyDtl.active", 1));
-							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+           Criteria cr = session.createCriteria(CompanyDtl.class,"CompanyDtl");
 					
 			
 			appDetails=cr.list();
@@ -1756,44 +1747,23 @@ public class DashboardDaoImpl implements DashboardDao {
 	}
 
 	@Override
-	public DDPaymentFormBean paymentViewForm(DDPaymentFormBean ddPaymentFormBean) {
+	public CompanyDtl paymentViewForm(DDPaymentFormBean ddPaymentFormBean) {
 		// TODO Auto-generated method stub
 
 		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		
-		DDPaymentFormBean appDetails = new DDPaymentFormBean();
+	CompanyDtl appDetails = new CompanyDtl();
 		try {
 			
-
-			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
-					.createCriteria("companyPaymentDtl.appId","CompanyDtl")
-					.setProjection(Projections.projectionList()
-							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
-				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
-				            .add(Projections.property("companyPaymentDtl.paymentAmount"),"paymentAmount")  
-				            
-				            .add(Projections.property("companyPaymentDtl.managementComments"),"managementComments")
-				            .add(Projections.property("companyPaymentDtl.paymentStatusFlag"),"paymentStatusFlag")
-				            .add(Projections.property("companyPaymentDtl.ddNo"),"ddNo")
-				            
-				            .add(Projections.property("companyPaymentDtl.ddDate"),"ddDate")
-				            .add(Projections.property("companyPaymentDtl.ddBankName"),"ddBankName")
-				            .add(Projections.property("companyPaymentDtl.createTs"),"createTs")				            
-				            .add(Projections.property("CompanyDtl.legCompName"),"legCompName") 
-				            .add(Projections.property("CompanyDtl.contactPersonName"),"contactPersonName") 
-				            .add(Projections.property("CompanyDtl.appId"),"appId") 
-				           
-				           )
-					 .add(Restrictions.eq("CompanyDtl.active", 1)).add(Restrictions.eq("CompanyDtl.appId", ddPaymentFormBean.getAppId()));
-							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
-					
+           Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
+           .add(Restrictions.eq("companyDtl.appId", ddPaymentFormBean.getAppId()));
 			
-			appDetails=(DDPaymentFormBean)cr.uniqueResult();
+			appDetails=(CompanyDtl)cr.uniqueResult();
 			
-			
-		} catch (Exception e) {
+		
+				} catch (Exception e) {
 			// TODO: handle exception
 		}
 		return appDetails;
@@ -2141,6 +2111,13 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	session.update(companyDtl);
 	tx1.commit();
 	
+	Transaction transaction =  session.beginTransaction();
+	transaction.begin();
+	CompanyPaymentDtl  companyPaymentDtl = (CompanyPaymentDtl) session.get(CompanyPaymentDtl.class, Integer.parseInt(paymentFormBean.getCompanyPaymentDtlID()));
+	companyPaymentDtl.setPaymentStatusFlag('A');
+	companyPaymentDtl.setManagementComments(paymentFormBean.getPaymentTypeDesc());
+	session.update(companyPaymentDtl);
+	transaction.commit();
 	
 	
 	Transaction tx =  session.beginTransaction();
@@ -2168,13 +2145,23 @@ public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
 	
 	Transaction tx1 =  session.beginTransaction();
 	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
-	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,5));
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,3));
 	companyDtl.setActive(3);
+	companyDtl.setInspectionDate(paymentFormBean.getInspectedDate());
 	companyDtl.setPaymentStatus(0);
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
 	tx1.commit();
+	
+	Transaction transaction =  session.beginTransaction();
+	transaction.begin();
+	CompanyPaymentDtl  companyPaymentDtl = (CompanyPaymentDtl) session.get(CompanyPaymentDtl.class, Integer.parseInt(paymentFormBean.getCompanyPaymentDtlID()));
+	companyPaymentDtl.setPaymentStatusFlag('A');
+	companyPaymentDtl.setManagementComments(paymentFormBean.getPaymentTypeDesc());
+	session.update(companyPaymentDtl);
+	transaction.commit();
+	
 	
 	Transaction tx =  session.beginTransaction();
 	MasterPayment masterPayment = new MasterPayment();
@@ -2210,7 +2197,7 @@ public String eePaymentPendingApproved(PaymentFormBean paymentFormBean ){
 	
 	Transaction tx1 =  session.beginTransaction();
 	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
-	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,3));
+	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,4));
 	companyDtl.setActive(2);
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
@@ -2287,7 +2274,8 @@ public String mcApprovePayment(PaymentFormBean paymentFormBean ){
 	Transaction tx1 =  session.beginTransaction();
 	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
 	companyDtl.setActive(2);
-	companyDtl.setEeStatus((MasterStatus) session.get(MasterStatus.class, 5));
+	companyDtl.setMcUser(paymentFormBean.getMcUser());
+	companyDtl.setEeStatus((MasterStatus) session.get(MasterStatus.class, 3));
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
@@ -2787,38 +2775,103 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 	// Maha new method
 	
 	@Override
-	public List<CompanyDtl> eePendingApplication(CompanyDtlBean companyDtlBean) {
+	public List<DDPaymentFormBean> eeApplicationFeePending(CompanyDtlBean companyDtlBean) {
 		// TODO Auto-generated method stub
 
 		
 		Session session = sessionFactory.openSession();
 		session.beginTransaction();
 		
-		List<CompanyDtl> companyDtls = new ArrayList<CompanyDtl>();
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
 		try {
-		
 			
+			String query = "select CompanyPaytDtl. COMPANY_PAYMENTDTL_ID as companyPaymentDtlID, paymenttyp4_.PAYMENT_TYPE as paymentType, "
+					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
+					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
+					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createTs, companydtl1_.LEG_COMP_NAME as legCompName, "
+					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
+					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ "where eestatus3_.STATUS_ID=1 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
 			
-			Criteria cr = session.createCriteria(CompanyDtl.class,"companyDtl")
-					.createCriteria("companyDtl.office","office")
-					.createCriteria("companyDtl.eeStatus","eeStatus")
-			         .add(Restrictions.eq("eeStatus.statusId", 1))
-			         .add(Restrictions.eq("companyDtl.active", 2))
-			         .add(Restrictions.eq("companyDtl.paymentStatus", 1))
-			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+			SQLQuery sqlQuery = session.createSQLQuery(query);
 			
-			companyDtls=cr.list();
-			
-			
+			sqlQuery.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			appDetails=sqlQuery.list();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+	
+	
+	
+	@Override
+	public List<DDPaymentFormBean> eeUpfrontChargesPending(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
 
 		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
 			
+			String query = "select CompanyPaytDtl. COMPANY_PAYMENTDTL_ID as companyPaymentDtlID, paymenttyp4_.PAYMENT_TYPE as paymentType, "
+					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
+					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
+					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createTs, companydtl1_.LEG_COMP_NAME as legCompName, "
+					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
+					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ "where eestatus3_.STATUS_ID=2 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
+			
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			
+			sqlQuery.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			appDetails=sqlQuery.list();
 
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		return companyDtls;
+		return appDetails;
 	}
+	
+	@Override
+	public List<DDPaymentFormBean> eeFullPaymentPending(CompanyDtlBean companyDtlBean) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
+		try {
+			
+			String query = "select CompanyPaytDtl. COMPANY_PAYMENTDTL_ID as companyPaymentDtlID, paymenttyp4_.PAYMENT_TYPE as paymentType, "
+					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
+					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
+					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createTs, companydtl1_.LEG_COMP_NAME as legCompName, "
+					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
+					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ "where eestatus3_.STATUS_ID=3 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
+			
+			SQLQuery sqlQuery = session.createSQLQuery(query);
+			
+			sqlQuery.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
+					
+			appDetails=sqlQuery.list();
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return appDetails;
+	}
+	
+	
 	
 	
 	@Override
@@ -2855,7 +2908,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
 				           )
-			         .add(Restrictions.eq("eeStatus.statusId", 2))
+			         .add(Restrictions.eq("eeStatus.statusId", 1))
 			         /*.add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag", 'N'))*/
 			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
 			         .add(Restrictions.eq("companyDtl.active", 2));
@@ -3007,11 +3060,12 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 
 			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
 					.createCriteria("companyPaymentDtl.appId","companyDtl")
+					.createCriteria("companyPaymentDtl.paymentType","paymentType")
 					.createCriteria("companyDtl.office","office")
 					.createCriteria("companyDtl.eeStatus","eeStatus")
 					.setProjection(Projections.projectionList()
 							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
-				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
+				            .add(Projections.property("paymentType.paymentType"),"paymentType")
 				            .add(Projections.property("companyPaymentDtl.paymentAmount"),"paymentAmount")  
 				            
 				            .add(Projections.property("companyPaymentDtl.managementComments"),"managementComments")
@@ -3026,7 +3080,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				           
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
-					 .add(Restrictions.eq("eeStatus.statusId", 6))
+					 .add(Restrictions.eq("eeStatus.statusId", 4))
 					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
 					
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
@@ -3078,7 +3132,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				           
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
-					 .add(Restrictions.eq("eeStatus.statusId", 7))
+					 .add(Restrictions.eq("eeStatus.statusId", 5))
 					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
@@ -3095,7 +3149,26 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 	}
 
 	
-	
+	public DDPaymentFormBean getUpfrontCharges(DDPaymentFormBean ddPaymentFormBean ){
+		
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
+				.createCriteria("masterPayment.paymentType","paymentType")
+				.add(Restrictions.eq("paymentType.paymentTypeId", 1));
+		 List<MasterPayment> masterPaymentlist = cr.list();
+		 
+		 Criteria cr1 = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.add(Restrictions.eq("companyDtl.appId", ddPaymentFormBean.getAppId()));
+		 List<CompanyDtl> companyDtllist = cr1.list();
+		 
+		 ddPaymentFormBean.setGstPercent(masterPaymentlist.get(0).getGstPercent());
+		 ddPaymentFormBean.setUpfrontCharges(companyDtllist.get(0).getUpfrontCharges());
+		
+		 return ddPaymentFormBean;
+			 
+	}
 	
 	
 	

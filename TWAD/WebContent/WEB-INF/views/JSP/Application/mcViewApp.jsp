@@ -448,7 +448,7 @@ $(function(){
                                              
 											<td><button
 													class="paymentClass" id="${app.getAppId()}"
-													style="width: auto;">Accepted</button>
+													style="width: auto;">Approved</button>
 													
 													<button onclick="EERejected(this.id)"
 													class="cancelbtn" id="${app.getAppId()}"

@@ -68,26 +68,17 @@ table.display .td {
 	<tr>
 		<form:form method='get' id="0" commandName="dashboardForm"
 			action="ceViewApp.do">
-			<td><spring:message code="label.paymentTotalDD" /> <%-- <form:hidden
+			<td><spring:message code="label.totalPendingApplication" /> <%-- <form:hidden
 					path="complaintStatus" value="0" /> --%><!--  <a
 				href="javascript:fnSubmitForm('0');"> -->
-				<span class='count'>${list.count.getTotalRegister()}</span><!-- </a> -->
-				<input type="hidden" id='totalCount' name='totalCount'
-				value="${list.count.getTotalRegister()}" /></td>
-		</form:form>
-
-		<form:form method='get' id="1" commandName="dashboardForm"
-			action="ceViewApp.do">
-			<td><spring:message code="label.paymentPendingDD" /> <%-- <form:hidden
-					path="complaintStatus" value="1" />  --%><a
-				href="javascript:fnSubmitForm('1');"><span class='count'>${list.count.getPenndingApplication()}</span></a>
-				<input type="hidden" id='pendingCount' name='newCount'
+				<span class='count'>${list.count.getPenndingApplication()}</span><!-- </a> -->
+				<input type="hidden" id='pendingCount' name='pendingCount'
 				value="${list.count.getPenndingApplication()}" /></td>
 		</form:form>
 
 		<form:form method='get' id="2" commandName="dashboardForm"
 			action="ceApproved.do">
-			<td><spring:message code="label.paymentApprovedDD" /> <%-- <form:hidden
+			<td><spring:message code="label.totalApprovedApplication" /> <%-- <form:hidden
 					path="complaintStatus" value="2" /> --%> <a
 				href="javascript:fnSubmitForm('2');"><span class='count'>${list.count.getApprovedApplication()}</span></a>
 				<input type="hidden" id='approvedCount' name='assignCount'
@@ -96,7 +87,7 @@ table.display .td {
 
 		<form:form method='get' id="3" commandName="dashboardForm"
 			action="eeConPaidApp.do">
-			<td><spring:message code="label.paymentRejectedDD" /> <%-- <form:hidden
+			<td><spring:message code="label.totalRejectedApplication" /> <%-- <form:hidden
 					path="complaintStatus" value="2" /> --%> <!-- <a
 				href="javascript:fnSubmitForm('2');"> -->
 			<!-- <a href="javascript:fnSubmitForm('3');"> -->	<span class='count'>${list.count.getRejectedApplication()}</span><!-- </a> -->
@@ -158,7 +149,7 @@ table.display .td {
 </div>
 <div></div>
 <script>
-	/* var totalCount = parseInt($('#totalCount').val());
+	/* var pendingCount = parseInt($('#pendingCount').val());
 	var newCount = parseInt($('#newCount').val());
 	var assignCount = parseInt($('#assignCount').val());
 	var acknowledgedCount = parseInt($('#acknowledgedCount').val());
@@ -180,8 +171,7 @@ table.display .td {
 	var category11=parseInt($("#category11").val());
 	var category12=parseInt($("#category12").val()); */
 
-	var totalCount =  parseInt($('#totalCount').val());
-	var pendingCount =parseInt($('#pendingCount').val());
+	var pendingCount =  parseInt($('#pendingCount').val());
 	var approvedCount = parseInt($('#approvedCount').val());
 	var rejectedCount = parseInt($('#rejectedCount').val());
 	/* var acknowledgedCount = 20;
@@ -204,9 +194,6 @@ table.display .td {
 	var category12 = 20; */
 
 	var data = [ {
-		"Compliants" : "Total DD",
-		"Count" : totalCount
-	}, {
 		"Compliants" : "Pending",
 		"Count" : pendingCount
 	}, {
@@ -220,7 +207,7 @@ table.display .td {
 
 	];
 
-	fnPlotPieChart(data, "compliantDashboard", "Total DD Count:" + totalCount);
+	fnPlotPieChart(data, "compliantDashboard", "Total Registered Application Count:" + (pendingCount +approvedCount+rejectedCount));
 </script>
 
 <c:if test="${!empty sessionScope.complaintID}">

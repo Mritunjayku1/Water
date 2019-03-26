@@ -56,7 +56,8 @@ public class AppFormBean {
      private String taluk;
      private String village;
      private String cost;
-
+     private String gstPercent;
+     private Integer upfrontCharges;
      
 		public String getSurveyFieldNo() {
 		return surveyFieldNo;
@@ -402,6 +403,18 @@ public class AppFormBean {
 	}
 	public void setCost(String cost) {
 		this.cost = cost;
+	}
+	public Integer getUpfrontCharges() {
+		return upfrontCharges;
+	}
+	public void setUpfrontCharges(Integer upfrontCharges) {
+		this.upfrontCharges = upfrontCharges;
+	}
+	public String getGstPercent() {
+		return gstPercent;
+	}
+	public void setGstPercent(String gstPercent) {
+		this.gstPercent = gstPercent;
 	}
 	
 	
