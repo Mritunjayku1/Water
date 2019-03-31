@@ -175,6 +175,10 @@ $(function(){
 			$('#approvedCount').text(response.approvedApplication);
 			$('#rejectedCount').text(response.rejectedApplication);
 			
+			localStorage.setItem("localStorage_penndingApplication",response.penndingApplication);
+			localStorage.setItem("localStorage_approvedApplication",response.approvedApplication);
+			localStorage.setItem("localStorage_rejectedApplication",response.rejectedApplication);
+			
 			
 		}
 	});

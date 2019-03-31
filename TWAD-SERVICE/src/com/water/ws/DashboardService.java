@@ -2525,7 +2525,7 @@ else if(app.getActive()==3 && app.getPaymentStatus()==0){
 		
 		CompanyDtl app = new DashboardDaoImpl().paymentViewForm(ddPaymentFormBean);
 		
-
+if(app !=null){
 ddPaymentFormBean.setAppId(app.getAppId());
 ddPaymentFormBean.setLegCompName(app.getLegCompName());
 ddPaymentFormBean.setCdoorNo(app.getCdoorNo());
@@ -2633,6 +2633,7 @@ else if(app.getActive()==3 && app.getPaymentStatus()==0){
 	ddPaymentFormBean.setManagementComments(StatusConstant.EEUSER_APPROVED_UPFRONT_CHARGES+"\n"+StatusConstant.MCUSER_PENDING_FULL_PAYMENT_APPROVAL);
 }	
 
+}
 		return ddPaymentFormBean;
 	}
 

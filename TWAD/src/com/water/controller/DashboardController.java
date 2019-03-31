@@ -55,7 +55,9 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.html.WebColors;
 import com.itextpdf.text.pdf.CMYKColor;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
@@ -1436,7 +1438,7 @@ public class DashboardController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		RestTemplate restTemplate = new RestTemplate();
+	/*	RestTemplate restTemplate = new RestTemplate();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -1452,7 +1454,7 @@ public class DashboardController {
 				DashboardCountBean.class);
 
 		model.put("count", dashboard);
-		model.put("categoryCount", publicdashboard());
+		model.put("categoryCount", publicdashboard());*/
 		return new ModelAndView("ddPaymentDashboard", "list", model);
 	}
 
@@ -2782,7 +2784,7 @@ public class DashboardController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		RestTemplate restTemplate = new RestTemplate();
+		/*RestTemplate restTemplate = new RestTemplate();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -2798,7 +2800,7 @@ public class DashboardController {
 				DashboardCountBean.class);
 
 		model.put("count", dashboard);
-		model.put("categoryCount", publicdashboard());
+		model.put("categoryCount", publicdashboard());*/
 		return new ModelAndView("eedashboard", "list", model);
 	}
 
@@ -2852,7 +2854,7 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(value = "/downloadFiles", method = RequestMethod.GET)
-	public void downloadFiles(@RequestParam String fileName,@RequestParam String appId,HttpServletResponse response)
+	public void downloadFiles(@RequestParam String fileName,@RequestParam String appId,@RequestParam String fileLocation,HttpServletResponse response)
 			 throws MalformedURLException, IOException {
 			 try {
 				 
@@ -2862,12 +2864,18 @@ public class DashboardController {
 					response.setHeader(headerKey, headerValue);
 					ServletOutputStream out;
 					out = response.getOutputStream();
-					FileInputStream fin = new FileInputStream("c:/EC/"+appId +"/"+ fileName);
+					FileInputStream fin = null;
+					if(fileLocation.equals("admin")){
+						 fin = new FileInputStream("c:/EC/"+appId +"/Admin/"+ fileName);
+					}
+					else{
+					   fin = new FileInputStream("c:/EC/"+appId +"/"+ fileName);
+					}
 
 					BufferedInputStream bin = new BufferedInputStream(fin);
 					BufferedOutputStream bout = new BufferedOutputStream(out);
 					int ch = 0;
-					;
+					
 					while ((ch = bin.read()) != -1) {
 						bout.write(ch);
 					}
@@ -3605,10 +3613,116 @@ public class DashboardController {
 				WaterDashboardService + "eeAddPayment", HttpMethod.POST,
 				entity, String.class);
 
+		getConsentForm(paymentFormBean);
+		
 		String res = out.getBody();
 		return res;
 	}
 	
+
+	public void getConsentForm(PaymentFormBean paymentFormBean){
+		
+
+
+		File dir = new File("c:/EC/"+paymentFormBean.getAppId()+"/Admin");
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		Font blackFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL, new CMYKColor(0, 0, 0, 255));
+		/*Font redFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 10, Font.NORMAL, new CMYKColor(0, 1f, 1f, 0));
+		Font blackFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 8, Font.NORMAL, new CMYKColor(0, 0, 0, 255));
+		Font blueFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 20, Font.BOLD, new CMYKColor(1f, 0.498f, 0, 0));
+		Font greyFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9, Font.NORMAL, new CMYKColor(0, 0, 0, 255));
+		Font blackHeaderFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 9, Font.BOLD, new CMYKColor(0, 0, 0, 255));
+		
+		*/
+		Document document = new Document();
+	      try
+	      {
+	         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dir.getAbsolutePath()+"/ConsentForm.pdf"));
+	         document.open();
+	         
+		     PdfPTable tableHeader = new PdfPTable(1);
+			 BaseColor myforeColor = WebColors.getRGBColor("#800000");
+			    Font font = new Font();
+			    font.setColor(myforeColor);
+		    PdfPCell cell2 = new PdfPCell(new Phrase("Consent Form",font));
+		    cell2.setFixedHeight(30f);
+		    BaseColor myColor = WebColors.getRGBColor("#FCFCF4");
+		    cell2.setBackgroundColor(myColor);
+		   
+		    cell2.setVerticalAlignment(Element.ALIGN_MIDDLE);
+		    cell2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			tableHeader.addCell(cell2);
+		     
+		     
+	         
+	         
+	         PdfPTable consentFormTable = new PdfPTable(2);
+	         float[] columnWidths = new float[]{50f, 50f};
+	         consentFormTable.setWidths(columnWidths);
+	         PdfPCell label1=new PdfPCell(new Paragraph("Application Id",blackFont));
+	        // label1.setBorder(Rectangle.NO_BORDER);
+	         label1.setPadding(10);
+	         consentFormTable.addCell(label1);
+	         PdfPCell value1=new PdfPCell(new Paragraph(paymentFormBean.getAppId(),blackFont));
+	         //value1.setBorder(Rectangle.NO_BORDER);
+	         value1.setPadding(10);
+	         consentFormTable.addCell(value1);
+	         
+	         PdfPCell label2=new PdfPCell(new Paragraph("Legal Name of Company",blackFont));
+	        // label2.setBorder(Rectangle.NO_BORDER);
+	         label2.setPadding(10);
+	         consentFormTable.addCell(label2);
+	         PdfPCell value2=new PdfPCell(new Paragraph(paymentFormBean.getLegCompName(),blackFont));
+	        // value2.setBorder(Rectangle.NO_BORDER);
+	         value2.setPadding(10);
+	         consentFormTable.addCell(value2);
+	         
+	         PdfPCell label3=new PdfPCell(new Paragraph("Name of contact person",blackFont));
+	         //label3.setBorder(Rectangle.NO_BORDER);
+	         label3.setPadding(10);
+	         consentFormTable.addCell(label3);
+	         PdfPCell value3=new PdfPCell(new Paragraph(paymentFormBean.getContactPersonName(),blackFont));
+	        // value3.setBorder(Rectangle.NO_BORDER);
+	         value3.setPadding(10);
+	         consentFormTable.addCell(value3);
+	         
+	         PdfPCell label4=new PdfPCell(new Paragraph("Reference File",blackFont));
+	        // label4.setBorder(Rectangle.NO_BORDER);
+	         label4.setPadding(10);
+	         consentFormTable.addCell(label4);
+	         PdfPCell value4=new PdfPCell(new Paragraph(paymentFormBean.getReferenceFile(),blackFont));
+	        // value4.setBorder(Rectangle.NO_BORDER);
+	         value4.setPadding(10);
+	         consentFormTable.addCell(value4);
+	         
+	         PdfPCell label5=new PdfPCell(new Paragraph("Reference Date",blackFont));
+	        // label5.setBorder(Rectangle.NO_BORDER);
+	         label5.setPadding(10);
+	         consentFormTable.addCell(label5);
+	         PdfPCell value5=new PdfPCell(new Paragraph(paymentFormBean.getReferenceDate(),blackFont));
+	        // value5.setBorder(Rectangle.NO_BORDER);
+	         value5.setPadding(10);
+	         consentFormTable.addCell(value5);
+	        
+	         
+	         document.add(tableHeader);
+		document.add(consentFormTable);
+         document.close();
+         writer.close();
+         
+      } catch (DocumentException e)
+      {
+         e.printStackTrace();
+      } catch (FileNotFoundException e)
+      {
+         e.printStackTrace();
+      }
+		
+	
+		
+	}
 	
 	
 	

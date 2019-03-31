@@ -164,8 +164,10 @@ $(function(){
                                            <!--  <th style="color:black !important"></th> -->
                                             <th style="color:black !important"><b>App Ref#</b></th>
                                             <th style="color:black !important"><b> Name of Company</b></th>
-                                           <!--  <th style="color:black !important"><b>Category Type</b></th>
-                                            <th style="color:black !important"><b>Correspondence Address</b></th> -->
+                                              <th style="color:black !important"><b> District</b></th>
+                                                <th style="color:black !important"><b>Taluk</b></th>
+                                                  <th style="color:black !important"><b> Village</b></th>
+                                          
                                              <th style="color:black !important"><b>Registered Date</b></th>
                                               <th style="color:black !important"><b>Office Name</b></th>
                                              <th style="color:black !important"><b>Management Comments</b></th>
@@ -183,14 +185,15 @@ $(function(){
           								
           							<td > <a href="paymentViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
                                             <td>${app.getLegCompName()}</td>
-                                            <%--  <td>${app.getCategoryType()}</td>
-                                            <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
-                                           --%>
+                                             <td>${app.getDistrict()}</td>
+                                              <td>${app.getTaluk()}</td>
+                                               <td>${app.getVillage()}</td>
+                                           
                                              <td class="center">${app.getCreateTs()}</td>
                                               <td class="center">
                                               
                                               <div class="ui-widget">
-                                                <input class="officeSearchClass" id="officeSearch_${app.getAppId()}">
+                                                <input class="officeSearchClass" id="officeSearch_${app.getAppId()}" title="To get all Office Name type % only" />
                                                </div>
  
                                               
@@ -286,8 +289,8 @@ $(function(){
 </c:choose>
 
 <!-- PAGE LEVEL SCRIPTS -->
-    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="library/assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="library/assets/plugins/dataTables/dataTables.bootstrap.js"></script>
      <script>
          $(document).ready(function () {
              $('#dataTables-example').dataTable();

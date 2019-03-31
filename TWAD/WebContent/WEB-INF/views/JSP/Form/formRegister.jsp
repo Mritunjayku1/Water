@@ -116,6 +116,14 @@ div.tabArrow {
 		$("#cpinCodeId").val("879787"); 
 		
 		
+		$(document).keydown(function (event) {
+		    if (event.keyCode == 123) { // Prevent F12
+		        return false;
+		    } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
+		        return false;
+		    }
+		});
+			
 		
 
 		$('#personalId').css({
@@ -588,7 +596,7 @@ div.tabArrow {
 </script>
 
 </head>
-<body style="margin: 0px; padding: 0px">
+<body oncontextmenu="return false;" style="margin: 0px; padding: 0px">
 
 <table id="mydiv" align="center" width="91%">
 

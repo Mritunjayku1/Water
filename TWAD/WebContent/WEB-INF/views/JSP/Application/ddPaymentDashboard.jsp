@@ -65,82 +65,8 @@ table.display .td {
 			Dashboard</td>
 	</tr>
 	
-	<tr>
-		<form:form method='get' id="0" commandName="dashboardForm"
-			action="ceViewApp.do">
-			<td><spring:message code="label.totalPendingApplication" /> <%-- <form:hidden
-					path="complaintStatus" value="0" /> --%><!--  <a
-				href="javascript:fnSubmitForm('0');"> -->
-				<span class='count'>${list.count.getPenndingApplication()}</span><!-- </a> -->
-				<input type="hidden" id='pendingCount' name='pendingCount'
-				value="${list.count.getPenndingApplication()}" /></td>
-		</form:form>
-
-		<form:form method='get' id="2" commandName="dashboardForm"
-			action="ceApproved.do">
-			<td><spring:message code="label.totalApprovedApplication" /> <%-- <form:hidden
-					path="complaintStatus" value="2" /> --%> <a
-				href="javascript:fnSubmitForm('2');"><span class='count'>${list.count.getApprovedApplication()}</span></a>
-				<input type="hidden" id='approvedCount' name='assignCount'
-				value="${list.count.getApprovedApplication()}" /></td>
-		</form:form>
-
-		<form:form method='get' id="3" commandName="dashboardForm"
-			action="eeConPaidApp.do">
-			<td><spring:message code="label.totalRejectedApplication" /> <%-- <form:hidden
-					path="complaintStatus" value="2" /> --%> <!-- <a
-				href="javascript:fnSubmitForm('2');"> -->
-			<!-- <a href="javascript:fnSubmitForm('3');"> -->	<span class='count'>${list.count.getRejectedApplication()}</span><!-- </a> -->
-			<!-- </a> --> <input type="hidden" id='rejectedCount'
-				name='paidCount' value="${list.count.getRejectedApplication()}" /></td>
-		</form:form>
-
-		<%-- <form:form method='post' id="10" commandName="dashboardForm"
-			action="#">
-			<td><spring:message code="label.esclation" /> <form:hidden
-					path="complaintStatus" value="10" /> <a
-				href="javascript:fnSubmitForm('10');"><span class='count'>${list.count.getTotalRegister()}</span></a>
-				<input type="hidden" id='escalationCount' name='escalationCount'
-				value="${list.count.getTotalRegister()}" /></td>
-		</form:form> --%>
-		
-	</tr>
-	
-
-
-	<input type="hidden" id='totalChannelCount' name='totalChannelCount'
-		value="${list.count.getTotalRegister()}" />
-	<input type="hidden" id='SMSChannelCount' name='SMSChannelCount'
-		value="${list.count.getTotalRegister()}" />
-	<input type="hidden" id='IVRChannelCount' name='EmailChannelCount'
-		value="${list.count.getTotalRegister()}" />
-	<input type="hidden" id='EmailChannelCount' name='AppChannelCount'
-		value="${list.count.getTotalRegister()}" />
-	<input type="hidden" id='mobileAppChannelCount'
-		name='mobileAppChannelCount'
-		value="${list.count.getTotalRegister()}" />
-	<input type="hidden" id='walkinCount' name='walkinCount'
-		value="${list.count.getTotalRegister()}" />
-	<input type="hidden" id='tappalCount' name='tappalCount'
-		value="${list.count.getTotalRegister()}" />
-
-	<c:set var="total" value="${0}" />
-	<c:set var="count" value="0" scope="page" />
-	<c:forEach items="${list.categoryCount}" var="category">
-		<c:set var="count" value="${count+1}" scope="page" />
-		<input type="hidden" id="category${count}"
-			value="${category.getCategoryCount()}" />
-		<c:set var="total" value="${total + category.getCategoryCount()}" />
-
-	</c:forEach>
-
-	<input type="hidden" value="${total}" id="categoryTotal" />
-
-
-
 </table>
-<br>
-<br>
+<br/>
 <div>
 
 	<div id=compliantDashboard
@@ -149,50 +75,15 @@ table.display .td {
 </div>
 <div></div>
 <script>
-	/* var pendingCount = parseInt($('#pendingCount').val());
-	var newCount = parseInt($('#newCount').val());
-	var assignCount = parseInt($('#assignCount').val());
-	var acknowledgedCount = parseInt($('#acknowledgedCount').val());
-	var closedbyfieldofficer = parseInt($('#closedbyfieldofficer').val());
-	var resolvedCount = parseInt($('#resolvedCount').val());
-	var rejectedCount = parseInt($('#rejectedCount').val());
 	
-	var categoryTotal=parseInt($("#categoryTotal").val());
-	var categoryMD=parseInt($("#category1").val());
-	var categoryGF=parseInt($("#category2").val());
-	var categoryLI=parseInt($("#category3").val());
-	var categoryPO=parseInt($("#category4").val());
-	var categoryDI=parseInt($("#category5").val());
-	var categoryVE=parseInt($("#category6").val());
-	var categoryPA=parseInt($("#category7").val());
-	var categoryPO=parseInt($("#category8").val());
-	var categoryEL=parseInt($("#category9").val());
-	var category10=parseInt($("#category10").val());
-	var category11=parseInt($("#category11").val());
-	var category12=parseInt($("#category12").val()); */
-
-	var pendingCount =  parseInt($('#pendingCount').val());
+	/* var pendingCount =  parseInt($('#pendingCount').val());
 	var approvedCount = parseInt($('#approvedCount').val());
 	var rejectedCount = parseInt($('#rejectedCount').val());
-	/* var acknowledgedCount = 20;
-	var closedbyfieldofficer = 40;
-	var resolvedCount = 20;
-	var rejectedCount = 30;
-
-	var categoryTotal = 20;
-	var categoryMD = 40;
-	var categoryGF = 50;
-	var categoryLI = 60;
-	var categoryPO = 20;
-	var categoryDI = 30;
-	var categoryVE = 30;
-	var categoryPA = 80;
-	var categoryPO = 40;
-	var categoryEL = 8
-	var category10 = 20;
-	var category11 = 10;
-	var category12 = 20; */
-
+	 */
+	var pendingCount =  parseInt(localStorage.getItem("localStorage_penndingApplication"));
+	var approvedCount = parseInt(localStorage.getItem("localStorage_approvedApplication"));
+	var rejectedCount = parseInt(localStorage.getItem("localStorage_rejectedApplication"));
+	
 	var data = [ {
 		"Compliants" : "Pending",
 		"Count" : pendingCount
@@ -209,33 +100,3 @@ table.display .td {
 
 	fnPlotPieChart(data, "compliantDashboard", "Total Registered Application Count:" + (pendingCount +approvedCount+rejectedCount));
 </script>
-
-<c:if test="${!empty sessionScope.complaintID}">
-	<div id='successBox'>
-		<h2>
-			Complaint Registration successful! complaint ID is <span
-				style='color: #1589FF'>${sessionScope.complaintID}</span>
-		</h2>
-
-	</div>
-	<script>
-		$("#successBox").dialog({
-			resizable : false,
-			height : 165,
-			width : "60%",
-			modal : true,
-			position : 'center',
-			title : "Information",
-			closeOnEscape : false,
-			dialogClass : "noclose",
-			buttons : {
-				"Ok" : function() {
-					$(this).dialog("close");
-				}
-			}
-		});
-	</script>
-</c:if>
-<%
-	session.setAttribute("complaintID", "");
-%>

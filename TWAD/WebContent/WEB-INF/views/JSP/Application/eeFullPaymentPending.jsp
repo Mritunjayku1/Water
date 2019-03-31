@@ -40,11 +40,24 @@ height:25px !important;
 <script type="text/javascript">
 
 $(function(){
+	var appId="";
 	$('input[name="approvedBtn"]').click(function(){
 		//alert(1);
-		var approvedAppRef = $(this).attr('id');
-		var appId = approvedAppRef.split("_");
-		var managementComments=$('#managementComments_'+appId[1]).val();
+		//var approvedAppRef = $(this).attr('id');
+		var appIdArray = $(this).attr("id").split("_");
+		appId =  appIdArray[1];
+		companyPaymentDtlID=appIdArray[2];
+
+		
+
+		var ddNo=$('#ddNo_'+appId).text();
+		if(ddNo == null || ddNo=='')
+		{
+		alert("Applicant not submitted DD !")
+		return false;
+		}
+		
+		var managementComments=$('#managementComments_'+appId).val();
 		if(managementComments == null || managementComments=='')
 		{
 		alert("Please enter the Comments !")
@@ -54,7 +67,7 @@ $(function(){
 		$.ajax({
 			type:"POST",
 			url:"eePaymentPendingApproved.do",
-			data:{'appId':appId[1],'paymentTypeDesc':managementComments,'companyPaymentDtlID':appId[2]},
+			data:{'appId':appId,'paymentTypeDesc':managementComments,'companyPaymentDtlID':companyPaymentDtlID},
 			success:function(response){
 				alert(response);
 				window.location.reload();
@@ -144,7 +157,7 @@ $(function(){
                                             
                                              <td>${app.getContactPersonName()}</td>
                                                <td>${app.getPaymentAmount()}</td>
-                                                <td>${app.getDdNo()}</td>
+                                                <td id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
                                                  <td>${app.getDdDate()}</td>
                                                   <td>${app.getDdBankName()}</td>
                                                    <td>${app.getPaymentStatusDisplay()}</td>
@@ -232,8 +245,8 @@ $(function(){
 </c:choose>
 
 <!-- PAGE LEVEL SCRIPTS -->
-    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="library/assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="library/assets/plugins/dataTables/dataTables.bootstrap.js"></script>
      <script>
          $(document).ready(function () {
              $('#dataTables-example').dataTable();

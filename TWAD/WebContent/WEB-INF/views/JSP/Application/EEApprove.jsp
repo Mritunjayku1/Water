@@ -6,10 +6,10 @@
 
  <link rel="stylesheet" href="library/assets/plugins/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="library/assets/css/main.css" />
-    <link rel="stylesheet" href="assets/css/theme.css" />
-    <link rel="stylesheet" href="assets/css/MoneAdmin.css" />
-    <link rel="stylesheet" href="assets/plugins/Font-Awesome/css/font-awesome.css" />
-	    <link rel="stylesheet" href="assets/plugins/validationengine/css/validationEngine.jquery.css" />
+    <link rel="stylesheet" href="library/assets/css/theme.css" />
+    <link rel="stylesheet" href="library/assets/css/MoneAdmin.css" />
+    <link rel="stylesheet" href="library/assets/plugins/Font-Awesome/css/font-awesome.css" />
+	    <link rel="stylesheet" href="library/assets/plugins/validationengine/css/validationEngine.jquery.css" />
  
  
 <link href="library/css/jquery-ui-1.8.21.custom.css" rel="stylesheet">

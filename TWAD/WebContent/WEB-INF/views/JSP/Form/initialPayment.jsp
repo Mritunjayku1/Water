@@ -142,9 +142,16 @@ $(document).ready(function(){
 				async : false,
 
 				success : function(response) {
-					alert(response);
+					response = JSON.parse(response);
 					$('#loading_image').hide();
-					window.location.reload();
+					
+					$('#ddAckApplicationRef').val(response.appId);
+					$('#ddAckCompanyName').val(response.legCompName);
+					$('#ddAckDDAmount').val(response.paymentAmount);
+					$('#ddAckDDNo').val(response.ddNo);
+					$('#ddAckDDDate').val(response.ddDate);
+					$('#ddAckPaymentType').val(response.paymentType);
+				    $('#ddAckHiddenForm').submit();
 				}
 				});
 		  
@@ -188,7 +195,13 @@ $('#paymentTypeId').change(function(){
 });
 	
 	
-	
+$(document).keydown(function (event) {
+    if (event.keyCode == 123) { // Prevent F12
+        return false;
+    } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
+        return false;
+    }
+}); 
 	
 	});
 	
@@ -197,7 +210,7 @@ $('#paymentTypeId').change(function(){
 </script>
 
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 
 <table align="center" style="width: 1200px; font-size: 28px;background-color: white;">
@@ -265,7 +278,7 @@ $('#paymentTypeId').change(function(){
                                 <label><b>Mobile Number:</b></label> <span style="color: red;">*</span></td><td>
                                 <input placeholder="Ex: 1234567891" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="mobileNumId" name="mobileNum" maxlength="10" data-toggle="popover" data-trigger="focus" data-placement="right" title="Enter Mobile No." />
                            
- 
+ </td></tr>
  <tr><td  class="tdPadding" width="50%">
   
                                 <label><b>Legal Name of Company:</b></label></td><td>
@@ -294,5 +307,18 @@ $('#paymentTypeId').change(function(){
 			</table>
 			
 		</form>
+		
+		<form style="display: hidden" action="ddAcknowledgement.jsp" method="POST" id="ddAckHiddenForm">
+    <input type="hidden" id="ddAckApplicationRef" name="applicationRef" value="" />
+    <input type="hidden" id="ddAckCompanyName" name="companyName" value="" />
+    <input type="hidden" id="ddAckApplicantName" name="applicantName" value="" />
+     <input type="hidden" id="ddAckDDAmount" name="ddAmount" value="" />
+      <input type="hidden" id="ddAckDDNo" name="ddNo" value="" />
+       <input type="hidden" id="ddAckDDDate" name="ddDate" value="" />
+    <input type="hidden" id="ddAckPaymentType" name="paymentType" value="" />
+
+</form>
+		
+		
 			</body>
 			</html>

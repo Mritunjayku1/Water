@@ -115,6 +115,13 @@ function validateAddForm() {
 			var appIdArray = $(this).attr("id").split("_");
 			appId =  appIdArray[1];
 			companyPaymentDtlID=appIdArray[2];
+
+			var ddNo=$('#ddNo_'+appId).text();
+			if(ddNo == null || ddNo=='')
+			{
+			alert("Applicant not submitted DD !")
+			return false;
+			}
 			$('#appId').val(appId);
 			$(".ui-dialog-content").dialog("close");
 			$( "#addDialog" ).dialog({ 'width':'600px','modal':'true'});
@@ -384,7 +391,7 @@ function validateAddForm() {
                                             
                                              <td>${app.getContactPersonName()}</td>
                                                <td>${app.getPaymentAmount()}</td>
-                                                <td>${app.getDdNo()}</td>
+                                                <td id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
                                                  <td>${app.getDdDate()}</td>
                                                   <td>${app.getDdBankName()}</td>
                                                    <td>${app.getPaymentStatusDisplay()}</td>
@@ -471,8 +478,8 @@ function validateAddForm() {
 </c:choose>
 
 <!-- PAGE LEVEL SCRIPTS -->
-    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="library/assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="library/assets/plugins/dataTables/dataTables.bootstrap.js"></script>
      <script>
          $(document).ready(function () {
              $('#dataTables-example').dataTable();

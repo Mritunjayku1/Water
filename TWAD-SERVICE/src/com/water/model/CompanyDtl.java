@@ -183,6 +183,15 @@ public class CompanyDtl implements Serializable {
 	@Column(name = "CAF_ID", length = 100)
 	private String cafId;
 	
+	@Column(name = "EE_REFERENCE_File", nullable = true, length = 26)
+	private String eeReferenceFile;
+	@Column(name = "EE_REFERENCE_DATE", nullable = true, length = 26)
+	private String eeReferenceDate;
+	@Column(name = "MC_REFERENCE_File", nullable = true, length = 26)
+	private String mcReferenceFile;
+	@Column(name = "MC_REFERENCE_DATE", nullable = true, length = 26)
+	private String mcReferenceDate;
+	
 	
 	@Column(name = "MC_USER",nullable = true, length = 100)
 	private String mcUser;
@@ -791,6 +800,46 @@ public class CompanyDtl implements Serializable {
 
 	public void setApplicationFee(Integer applicationFee) {
 		this.applicationFee = applicationFee;
+	}
+
+
+	public String getEeReferenceFile() {
+		return eeReferenceFile;
+	}
+
+
+	public void setEeReferenceFile(String eeReferenceFile) {
+		this.eeReferenceFile = eeReferenceFile;
+	}
+
+
+	public String getEeReferenceDate() {
+		return eeReferenceDate;
+	}
+
+
+	public void setEeReferenceDate(String eeReferenceDate) {
+		this.eeReferenceDate = eeReferenceDate;
+	}
+
+
+	public String getMcReferenceFile() {
+		return mcReferenceFile;
+	}
+
+
+	public void setMcReferenceFile(String mcReferenceFile) {
+		this.mcReferenceFile = mcReferenceFile;
+	}
+
+
+	public String getMcReferenceDate() {
+		return mcReferenceDate;
+	}
+
+
+	public void setMcReferenceDate(String mcReferenceDate) {
+		this.mcReferenceDate = mcReferenceDate;
 	}
 
 

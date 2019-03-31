@@ -300,7 +300,7 @@ html,body {
 								</tbody>
 							</table>
 					</a></li>
-					<li class="dropdown-slide" style="background-color: #FED367; width: 100%; border-bottom: 2px solid #fff; border-right: none !important;"><a href="/TwadWeb/checkApplicationStatus.do?appId=" class="dropdown-toggle" data-toggle="dropdown">
+					<li class="dropdown-slide" style="background-color: #FED367; width: 100%; border-bottom: 2px solid #fff; border-right: none !important;"><a href="/TwadWeb/checkApplicationStatus.do?appId=&mobileNum=" class="dropdown-toggle" data-toggle="dropdown">
 							<table style="width: 100%;" id="applicationStatus">
 								<tbody>
 									<tr>

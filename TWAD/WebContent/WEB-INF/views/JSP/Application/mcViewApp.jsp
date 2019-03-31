@@ -266,7 +266,7 @@ $(function(){
 			 $.ajax({
 				type:"POST",
 				url:"mcApprovePayment.do",
-				data:{'appId':appId,'mcUser':$("input[name='mcUser']:checked").val()},
+				data:{'appId':appId,'mcUser':$("input[name='mcUser']:checked").val(),'referenceFile':$('#referenceFileId').val(),'referenceDate':$('#referenceDateId').val()},
 				success:function(response){
 					alert(response);
 					window.location.reload();
@@ -275,6 +275,20 @@ $(function(){
 			});
 			}
 		
+	});
+	
+	$(".inspectionDate").datepicker({
+		dateFormat : 'dd-mm-yy',
+		changeMonth : true,
+		changeYear : true,
+		//maxDate : new Date(),
+		showOn : "button",
+		minDate : 0,
+		maxDate : "+2Y",
+		buttonImageOnly : true,
+	//	buttonText : "Select date",
+		buttonImage : "library/img/datepicker.png",
+		showAnim : "slideDown",
 	});
 	
 	
@@ -364,6 +378,14 @@ $(function(){
 		<td align="center"><input type="radio" name="mcUser" id="sltcId"  value="SLTC"/>SLTC</td>
 		<td align="center"><input type="radio" name="mcUser" id="boardId" value="Board"/>Board</td>
 		</tr>
+		
+		<tr><td><span><b>Reference File:</b></span></td><td>
+			<input placeholder="Reference File" type="text" id="referenceFileId" name="referenceFile"  /></td></tr>
+
+<tr><td><span><b>Reference Date:</b></span></td><td>
+			<input placeholder="Ex: DD-MM-YYYY" type="text" class="inspectionDate"  id="referenceDateId" name="referenceDate" readonly="readonly"  style="background-color: lightgrey;"/></td></tr>
+		
+		
 		<tr height="10px"></tr>
 <tr><td colspan="3" align="center">
 				<input type="button" value="Approve" id="userSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/>
@@ -595,8 +617,8 @@ $(function(){
 
 
 <!-- PAGE LEVEL SCRIPTS -->
-    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="library/assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="library/assets/plugins/dataTables/dataTables.bootstrap.js"></script>
      <script>
          $(document).ready(function () {
              $('#dataTables-example').dataTable();

@@ -15,6 +15,9 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.CharacterType;
+import org.hibernate.type.IntegerType;
+import org.hibernate.type.StringType;
 
 import com.water.bean.AppFormBean;
 import com.water.bean.ApplicationBean;
@@ -75,6 +78,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -89,6 +93,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -118,6 +123,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -156,6 +162,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -186,6 +193,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -227,6 +235,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -254,6 +263,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -278,6 +288,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -303,6 +314,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -328,6 +340,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -469,6 +482,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -501,6 +515,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -533,6 +548,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -563,6 +579,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 
@@ -828,6 +845,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -858,6 +876,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 
@@ -889,6 +908,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1436,6 +1456,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1506,6 +1527,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1575,6 +1597,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1627,6 +1650,7 @@ public class DashboardDaoImpl implements DashboardDao {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1671,6 +1695,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1719,6 +1744,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1742,6 +1768,7 @@ public class DashboardDaoImpl implements DashboardDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -1765,6 +1792,7 @@ public class DashboardDaoImpl implements DashboardDao {
 		
 				} catch (Exception e) {
 			// TODO: handle exception
+					e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -2106,6 +2134,9 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	companyDtl.setActive(2);
 	companyDtl.setPaymentStatus(0);
 	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,2));
+	companyDtl.setEeReferenceFile(paymentFormBean.getReferenceFile());
+	companyDtl.setEeReferenceDate(paymentFormBean.getReferenceDate());
+	
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
@@ -2274,8 +2305,10 @@ public String mcApprovePayment(PaymentFormBean paymentFormBean ){
 	Transaction tx1 =  session.beginTransaction();
 	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
 	companyDtl.setActive(2);
-	companyDtl.setMcUser(paymentFormBean.getMcUser());
 	companyDtl.setEeStatus((MasterStatus) session.get(MasterStatus.class, 3));
+	companyDtl.setMcUser(paymentFormBean.getMcUser());
+	companyDtl.setMcReferenceFile(paymentFormBean.getReferenceFile());
+	companyDtl.setMcReferenceDate(paymentFormBean.getReferenceDate());
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
@@ -2574,6 +2607,7 @@ public String editDistrict(DistrictFormBean categoryFormBean ){
 			}
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			return "District can't be deleted, First delete Village and Taluk then district";
 		}
 		finally {
@@ -2647,6 +2681,7 @@ public String editTaluk(DistrictTalukFormBean districtTalukFormBean ){
 			}
 		
 		}catch(Exception e){
+			e.printStackTrace();
 			return "Taluk can't be deleted, First delete Village then Taluk";
 		}
 		finally {
@@ -2729,6 +2764,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			}
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			return "Village isn't deleted";
 		}
 		finally{
@@ -2788,7 +2824,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			String query = "select CompanyPaytDtl. COMPANY_PAYMENTDTL_ID as companyPaymentDtlID, paymenttyp4_.PAYMENT_TYPE as paymentType, "
 					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
-					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createTs, companydtl1_.LEG_COMP_NAME as legCompName, "
+					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
 					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
 					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
@@ -2796,11 +2832,29 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query);
 			
+			sqlQuery.addScalar("companyPaymentDtlID", new IntegerType());
+			sqlQuery.addScalar("paymentType", new StringType());
+			sqlQuery.addScalar("paymentAmount", new StringType());
+			sqlQuery.addScalar("managementComments", new StringType());
+			
+			sqlQuery.addScalar("paymentStatusFlag", new CharacterType());
+			sqlQuery.addScalar("ddNo", new StringType());
+			sqlQuery.addScalar("ddDate", new StringType());
+			sqlQuery.addScalar("ddBankName", new StringType());
+			
+			sqlQuery.addScalar("createDate", new StringType());
+			sqlQuery.addScalar("legCompName", new StringType());
+			sqlQuery.addScalar("contactPersonName", new StringType());
+			sqlQuery.addScalar("paymentStatus", new IntegerType());
+			
+			sqlQuery.addScalar("appId", new StringType());
+			
 			sqlQuery.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			appDetails=sqlQuery.list();
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -2821,7 +2875,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			String query = "select CompanyPaytDtl. COMPANY_PAYMENTDTL_ID as companyPaymentDtlID, paymenttyp4_.PAYMENT_TYPE as paymentType, "
 					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
-					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createTs, companydtl1_.LEG_COMP_NAME as legCompName, "
+					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
 					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
 					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
@@ -2829,12 +2883,30 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query);
 			
+			sqlQuery.addScalar("companyPaymentDtlID", new IntegerType());
+			sqlQuery.addScalar("paymentType", new StringType());
+			sqlQuery.addScalar("paymentAmount", new StringType());
+			sqlQuery.addScalar("managementComments", new StringType());
+			
+			sqlQuery.addScalar("paymentStatusFlag", new CharacterType());
+			sqlQuery.addScalar("ddNo", new StringType());
+			sqlQuery.addScalar("ddDate", new StringType());
+			sqlQuery.addScalar("ddBankName", new StringType());
+			
+			sqlQuery.addScalar("createDate", new StringType());
+			sqlQuery.addScalar("legCompName", new StringType());
+			sqlQuery.addScalar("contactPersonName", new StringType());
+			sqlQuery.addScalar("paymentStatus", new IntegerType());
+			
+			sqlQuery.addScalar("appId", new StringType());
+			
 			sqlQuery.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			appDetails=sqlQuery.list();
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -2853,7 +2925,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			String query = "select CompanyPaytDtl. COMPANY_PAYMENTDTL_ID as companyPaymentDtlID, paymenttyp4_.PAYMENT_TYPE as paymentType, "
 					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
-					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createTs, companydtl1_.LEG_COMP_NAME as legCompName, "
+					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
 					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
 					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
@@ -2861,12 +2933,30 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query);
 			
+			sqlQuery.addScalar("companyPaymentDtlID", new IntegerType());
+			sqlQuery.addScalar("paymentType", new StringType());
+			sqlQuery.addScalar("paymentAmount", new StringType());
+			sqlQuery.addScalar("managementComments", new StringType());
+			
+			sqlQuery.addScalar("paymentStatusFlag", new CharacterType());
+			sqlQuery.addScalar("ddNo", new StringType());
+			sqlQuery.addScalar("ddDate", new StringType());
+			sqlQuery.addScalar("ddBankName", new StringType());
+			
+			sqlQuery.addScalar("createDate", new StringType());
+			sqlQuery.addScalar("legCompName", new StringType());
+			sqlQuery.addScalar("contactPersonName", new StringType());
+			sqlQuery.addScalar("paymentStatus", new IntegerType());
+			
+			sqlQuery.addScalar("appId", new StringType());
+			
 			sqlQuery.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			appDetails=sqlQuery.list();
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -2922,6 +3012,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -2963,6 +3054,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -3002,6 +3094,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -3041,6 +3134,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -3093,6 +3187,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}
@@ -3110,14 +3205,14 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 		List<DDPaymentFormBean> appDetails = new ArrayList<DDPaymentFormBean>();
 		try {
 			
-
 			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
 					.createCriteria("companyPaymentDtl.appId","companyDtl")
+					.createCriteria("companyPaymentDtl.paymentType","paymentType")
 					.createCriteria("companyDtl.office","office")
 					.createCriteria("companyDtl.eeStatus","eeStatus")
 					.setProjection(Projections.projectionList()
 							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
-				            .add(Projections.property("companyPaymentDtl.paymentType"),"paymentType")
+				            .add(Projections.property("paymentType.paymentType"),"paymentType")
 				            .add(Projections.property("companyPaymentDtl.paymentAmount"),"paymentAmount")  
 				            
 				            .add(Projections.property("companyPaymentDtl.managementComments"),"managementComments")
@@ -3131,8 +3226,9 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				            .add(Projections.property("companyDtl.appId"),"appId") 
 				           
 				           )
+			
 					 .add(Restrictions.eq("companyDtl.active", 2))
-					 .add(Restrictions.eq("eeStatus.statusId", 5))
+					 .add(Restrictions.eq("eeStatus.statusId", 4))
 					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
@@ -3144,6 +3240,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return appDetails;
 	}

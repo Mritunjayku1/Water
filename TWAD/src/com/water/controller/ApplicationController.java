@@ -230,7 +230,7 @@ public class ApplicationController {
 	
 	@RequestMapping(value = "/saveDDPaymentDtls", method = RequestMethod.POST)
 	@ResponseBody
-	public String saveDDPaymentDtls(DDPaymentFormBean ddPaymentFormBean) {
+	public String saveDDPaymentDtls(DDPaymentFormBean ddPaymentFormBean) throws JsonGenerationException, JsonMappingException, IOException {
 
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -250,7 +250,11 @@ public class ApplicationController {
 			applicationRef="DD Saved Successfully";
 		}
 		
-		return applicationRef;
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String response = ow.writeValueAsString(ddPaymentFormBean);
+		
+		
+		return response;
 
 	}
 	
@@ -1264,11 +1268,12 @@ appbean.setReqMld(String.valueOf(MldId));
 	
 	
 @RequestMapping(value = "/checkApplicationStatus", method = RequestMethod.GET)
-public ModelAndView checkApplicationStatus( @RequestParam String appId) {
+public ModelAndView checkApplicationStatus( @RequestParam String appId ,  @RequestParam String mobileNum) {
 	if(appId !=null && !appId.equals("") ){
 
 		DDPaymentFormBean ddPaymentFormBean = new DDPaymentFormBean();
 		ddPaymentFormBean.setAppId(appId);
+		//ddPaymentFormBean.setMobileNum(Long.parseLong(mobileNum));
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -1279,15 +1284,6 @@ public ModelAndView checkApplicationStatus( @RequestParam String appId) {
 
 		HttpEntity<?> entity = new HttpEntity(ddPaymentFormBean, headers);
 
-		/*ResponseEntity<String> out = restTemplate.exchange(
-				WaterDashboardService + "getApplicationDetails", HttpMethod.POST, entity,
-				String.class);
-
-		//ApplicationBean appBean = out.getBody();
-		gson = new Gson();
-		applicationBean = gson.fromJson(out.getBody().toString(),
-				ApplicationBean.class);
-*/
 		
 		ResponseEntity<DDPaymentFormBean> output = restTemplate.exchange(
 				WaterDashboardService + "paymentViewForm", HttpMethod.POST,
@@ -1295,8 +1291,14 @@ public ModelAndView checkApplicationStatus( @RequestParam String appId) {
 		
 		ddPaymentFormBean = output.getBody();
 		
-		
+		if(null != ddPaymentFormBean.getMobileNum() && ddPaymentFormBean.getMobileNum()==Long.parseLong(mobileNum))
+		{
 		model.put("application", ddPaymentFormBean);
+		}
+		else{
+			model.put("application", "Data not found");
+		}
+		
 		//model.put("categoryCount", publicdashboard());
 		return new ModelAndView("checkApplicationStatus", "list", model);
 	

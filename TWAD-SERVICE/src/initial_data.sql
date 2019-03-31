@@ -45,6 +45,7 @@ insert into MASTER_STATUS values('8','2017-06-04 10:10:10','Initial','Paid','Y',
 insert into MASTER_PAYMENT_TYPE values('1','2017-06-04 10:10:10','Initial','Application Fee','Application Fee','Y','2017-06-04 10:10:10','Initial');
 insert into MASTER_PAYMENT_TYPE values('2','2017-06-04 10:10:10','Initial','Upfront Charges','Upfront Charges','Y','2017-06-04 10:10:10','Initial');
 insert into MASTER_PAYMENT_TYPE values('3','2017-06-04 10:10:10','Initial','Full Payment','Full Payment','Y','2017-06-04 10:10:10','Initial');
+insert into MASTER_PAYMENT values(1,'2019-03-27 22:06:17','Administrator','10','10','100','','A','110','2019-03-27 22:06:17','Administrator',NULL,1);
 INSERT INTO MASTER_ROLE(CREATE_TS,CREATE_USERID,ROLE_DESC,ROLE_NAME,STATUS_FLAG,UPDATE_TS,UPDATE_USERID) VALUES('2017-06-03','Admin','ChiefExecutive','CE','Y','2017-06-03','Admin');
 INSERT INTO MASTER_ROLE(CREATE_TS,CREATE_USERID,ROLE_DESC,ROLE_NAME,STATUS_FLAG,UPDATE_TS,UPDATE_USERID) VALUES('2017-06-03','Admin','EngineerExecutive','EE','Y','2017-06-03','Admin');
 INSERT INTO MASTER_ROLE(CREATE_TS,CREATE_USERID,ROLE_DESC,ROLE_NAME,STATUS_FLAG,UPDATE_TS,UPDATE_USERID) VALUES('2017-06-03','Admin','ManagementCommitti','MC','Y','2017-06-03','Admin');

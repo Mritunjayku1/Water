@@ -112,11 +112,27 @@ function validateAddForm() {
 $(function() {
 	var appId="";
 	var companyPaymentDtlID="";
+	var legCompName="";
+	var contactPersonName="";
 	$('input[name="approveBtn"]').click(function(){
 		var appIdArray = $(this).attr("id").split("_");
 		appId =  appIdArray[1];
 		companyPaymentDtlID=appIdArray[2];
+		legCompName=appIdArray[3];
+		contactPersonName=appIdArray[4];
+		
+		var ddNo=$('#ddNo_'+appId).text();
+		if(ddNo == null || ddNo=='')
+		{
+		alert("Applicant not submitted DD !")
+		return false;
+		}
+		
 		$('#appId').val(appId);
+		$('#legCompName').val(legCompName);
+		$('#contactPersonName').val(contactPersonName);
+		
+		
 		$(".ui-dialog-content").dialog("close");
 		$( "#addDialog" ).dialog({ 'width':'600px','modal':'true'});
 		$('#paymentTypeId option[value="1"]').attr('disabled',true);
@@ -218,8 +234,15 @@ $(function() {
 				'gstPercent':$('#gstPercentId').val(),
 				'gstAmount':$('#gstAmountId').val(),
 				'totalAmount':$('#totalAmountId').val(),
+				'referenceFile':$('#referenceFileId').val(),
+				'referenceDate':$('#referenceDateId').val(),
 				'paymentDesc':$('#paymentDescId').val(),
-				'companyPaymentDtlID':companyPaymentDtlID},
+				'legCompName':$('#legCompName').val(),
+				'contactPersonName':$('#contactPersonName').val(),
+				'companyPaymentDtlID':companyPaymentDtlID
+				
+			
+			},
 			success:function(response){
 				alert(response);
 				
@@ -348,6 +371,8 @@ $(function(){
 <div id="addDialog" style="display: none;">
 <form id="uploadFormId" method="POST" enctype="multipart/form-data">
 <input type="hidden" name="appId" id="appId" value=''/>
+<input type="hidden" name="legCompName" id="legCompName" value=''/>
+<input type="hidden" name="contactPersonName" id="contactPersonName" value=''/>
 <img class="imgClose" src="library/img/Close_SMS.png"
 		style="width: 40px; border-width: 0px; float: right; margin-top: -11px; margin-right: -5px; cursor: pointer;">
 	<h2 class="bg_heading">Add Payment Details</h2>
@@ -371,6 +396,14 @@ $(function(){
 
 <tr><td><span><b>Total Amount:</b></span></td><td>
 			<input placeholder="Ex: 123" type="text" id="totalAmountId" name="totalAmount" readonly="readonly" value="0" style="background-color: lightgrey;"/></td></tr>
+
+<tr><td><span><b>Reference File:</b></span></td><td>
+			<input placeholder="Reference File" type="text" id="referenceFileId" name="referenceFile"  /></td></tr>
+
+<tr><td><span><b>Reference Date:</b></span></td><td>
+<input placeholder="Ex: DD-MM-YYYY" type="text" class="inspectionDate"  id="referenceDateId" name="referenceDate" readonly="readonly"  style="background-color: lightgrey;"/>
+			<!-- <input placeholder="Reference Date" type="text" id="referenceDateId" name="referenceDate"  /> --></td></tr>
+
 
 <tr><td colspan="2"><hr style="margin: 0px;width: 95%;"/></td></tr>
 
@@ -446,7 +479,7 @@ $(function(){
                                             
                                              <td>${app.getContactPersonName()}</td>
                                                <td>${app.getPaymentAmount()}</td>
-                                                <td>${app.getDdNo()}</td>
+                                                <td id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
                                                  <td>${app.getDdDate()}</td>
                                                   <td>${app.getDdBankName()}</td>
                                                    <td>${app.getPaymentStatusDisplay()}</td>
@@ -454,7 +487,7 @@ $(function(){
                                              <td class="center">${app.getCreateTs()}</td>
                                              <%--  <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td> --%>
                                               <td class="center"><input type="button" class="paymentClass"
-												name="approveBtn" id="approved_${app.getAppId()}_${app.getCompanyPaymentDtlID()}"
+												name="approveBtn" id="approved_${app.getAppId()}_${app.getCompanyPaymentDtlID()}_${app.getLegCompName()}_${app.getContactPersonName()}"
 												value="Add Payment..." /></td>
                                              <!--  <td class="center"> -->
                                              <%--  <input type="button" class="paymentClass" id="approved_${app.getAppId()}_${app.getCompanyPaymentDtlID()}" name="approvedBtn" style="width: auto;" value="Approved"/> --%>
@@ -536,8 +569,8 @@ $(function(){
 </c:choose>
 
 <!-- PAGE LEVEL SCRIPTS -->
-    <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="library/assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="library/assets/plugins/dataTables/dataTables.bootstrap.js"></script>
      <script>
          $(document).ready(function () {
              $('#dataTables-example').dataTable();

@@ -7,10 +7,10 @@
 
  <link rel="stylesheet" href="library/assets/plugins/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="library/assets/css/main.css" />
-    <link rel="stylesheet" href="assets/css/theme.css" />
-    <link rel="stylesheet" href="assets/css/MoneAdmin.css" />
-    <link rel="stylesheet" href="assets/plugins/Font-Awesome/css/font-awesome.css" />
-	    <link rel="stylesheet" href="assets/plugins/validationengine/css/validationEngine.jquery.css" />
+    <link rel="stylesheet" href="library/assets/css/theme.css" />
+    <link rel="stylesheet" href="library/assets/css/MoneAdmin.css" />
+    <link rel="stylesheet" href="library/assets/plugins/Font-Awesome/css/font-awesome.css" />
+	    <link rel="stylesheet" href="library/assets/plugins/validationengine/css/validationEngine.jquery.css" />
  
  
 <link href="library/css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
@@ -49,7 +49,7 @@ $(function(){
 $('.downloadfiles').click(function(){
 	var fileName=$(this).text();
 	var appId = $('#appId').val();
-	window.location.href="downloadFiles.do?fileName="+fileName+"&appId="+appId;
+	window.location.href="downloadFiles.do?fileName="+fileName+"&appId="+appId+"&fileLocation="+$(this).attr("name");
 });
 });
 
@@ -171,7 +171,7 @@ $('.downloadfiles').click(function(){
 			<td colspan="3">:
 			 <c:forEach items="${list.uploadedFiles}" var="fileName" >
 			
-			<a href="#" class="downloadfiles">${fileName}</a><br/>
+			<a href="#" class="downloadfiles" name="">${fileName}</a><br/>
 			</c:forEach>
 			
 			</td>
@@ -181,7 +181,7 @@ $('.downloadfiles').click(function(){
 			<td colspan="3">:
 			 <c:forEach items="${list.uploadedFilesByAdmin}" var="fileName" >
 			
-			<a href="#" class="downloadfiles">${fileName}</a><br/>
+			<a href="#" class="downloadfiles" name="admin">${fileName}</a><br/>
 			</c:forEach>
 			
 			</td>

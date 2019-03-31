@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http//www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -7,10 +8,10 @@
 
  <link rel="stylesheet" href="library/assets/plugins/bootstrap/css/bootstrap.css" />
     <link rel="stylesheet" href="library/assets/css/main.css" />
-    <link rel="stylesheet" href="assets/css/theme.css" />
-    <link rel="stylesheet" href="assets/css/MoneAdmin.css" />
-    <link rel="stylesheet" href="assets/plugins/Font-Awesome/css/font-awesome.css" />
-	    <link rel="stylesheet" href="assets/plugins/validationengine/css/validationEngine.jquery.css" />
+    <link rel="stylesheet" href="library/assets/css/theme.css" />
+    <link rel="stylesheet" href="library/assets/css/MoneAdmin.css" />
+    <link rel="stylesheet" href="library/assets/plugins/Font-Awesome/css/font-awesome.css" />
+	    <link rel="stylesheet" href="library/assets/plugins/validationengine/css/validationEngine.jquery.css" />
  
  
 <link href="library/css/jquery-ui-1.8.21.custom.css" rel="stylesheet">
@@ -80,10 +81,15 @@ $(document).ready(function(){
 			$('#appref').focus();
 			return false;
 		}
+		if($('#mobileNumId').val().length<10){
+			alert("Please enter Mobile No");
+			$('#mobileNumId').focus();
+			return false;
+		}
 		
 		 localStorage.setItem('isStatusButtonClicked', true);
 		 localStorage.setItem('isDetailButtonClicked', null);
-		window.location.href="checkApplicationStatus.do?appId="+$('#appref').val();
+		window.location.href="checkApplicationStatus.do?appId="+$('#appref').val() +"&mobileNum="+$('#mobileNumId').val();
 		
 	});
 	$('#appdetailbtn').click(function(){
@@ -92,10 +98,15 @@ $(document).ready(function(){
 			$('#appref').focus();
 			return false;
 		}
+		if($('#mobileNumId').val().length<10){
+			alert("Please enter Mobile No");
+			$('#mobileNumId').focus();
+			return false;
+		}
 		
 		 localStorage.setItem('isDetailButtonClicked', true);
 		 localStorage.setItem('isStatusButtonClicked', null);
-		 window.location.href="checkApplicationStatus.do?appId="+$('#appref').val();
+		 window.location.href="checkApplicationStatus.do?appId="+$('#appref').val() +"&mobileNum="+$('#mobileNumId').val();
 		
 	});
 	
@@ -167,22 +178,30 @@ $(document).ready(function(){
 			</tr>
 </tbody></table>	
 	<br/>
-	<table style="width:100%;height: 100px;"><tbody>
-	<tr>
-		<td style="text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;"> Application Ref: <input type="text" id="appref"/></td>
+	<table align="center" style="width:65%;height: 100px;"><tbody>
+	<tr style="text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;">
+		<td><label><b>Application Ref:</b></label> <span style="color: red;">*</span> <input type="text" id="appref"/></td>
+		<td><label><b>Mobile Number:</b></label> <span style="color: red;">*</span>
+		<input placeholder="Ex: 1234567891" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="mobileNumId" name="mobileNum" maxlength="10" title="Enter Mobile No." /></td>
 	</tr>
 	<tr>
-		<td align="center"><input type="button" id="apprefbtn" value="Get Application Status"/> <input type="button" id="appdetailbtn" style="margin-left:40px;" value="View Application Details"/><!-- <input type="button" id="withdrawAppbtn" style="margin-left:10px;" value="Withdraw Application"/> --><a href="/TwadWeb/index.do" style="margin-left:10px;">Back to Home Page </a></td>
+		<td align="center" colspan="2"><input type="button" id="apprefbtn" value="Get Application Status"/> <input type="button" id="appdetailbtn" style="margin-left:40px;" value="View Application Details"/><!-- <input type="button" id="withdrawAppbtn" style="margin-left:10px;" value="Withdraw Application"/> --><a href="/TwadWeb/index.do" style="margin-left:10px;">Back to Home Page </a></td>
 	</tr>
 	
 </tbody></table>
-<table id="statusHeader" class="table-bordered table table-striped display" style="width: 100%; font-size: 28px;display:none;">
+<c:if test="${'Data not found' ne list.application}">
+<table align="center" id="statusHeader" class="table-bordered table table-striped display" style="width: 75%; font-size: 28px;display:none;">
 
 	<tbody><tr>
 		<td style="text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;">Application Status ( ${list.application.getAppId()} )</td>
 	</tr>
 	
 </tbody></table>
+</c:if>
+
+<%-- <c:if test="${list.application}"> --%>
+<c:if test="${'Data not found' ne list.application}">
+
 <table id="statusTable" align="center" class="table-bordered table table-striped display" style="width: 50%;display:none;">
 <tbody>
 
@@ -313,7 +332,7 @@ $(document).ready(function(){
 
 	</table>
 		
-		
+		</c:if>
 		
 		
 			</body>

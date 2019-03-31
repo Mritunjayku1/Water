@@ -1,21 +1,21 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<link rel="stylesheet"
-	href="library/assets/plugins/bootstrap/css/bootstrap.css" />
-<link rel="stylesheet" href="library/assets/css/main.css" />
-<link rel="stylesheet" href="library/assets/css/theme.css" />
-<link rel="stylesheet" href="library/assets/css/MoneAdmin.css" />
-<link rel="stylesheet"
-	href="library/assets/plugins/Font-Awesome/css/font-awesome.css" />
 
-<!--END GLOBAL STYLES -->
+  
+    <!--END GLOBAL STYLES -->
 
-<!-- PAGE LEVEL STYLES -->
-<link href="library/assets/plugins/dataTables/dataTables.bootstrap.css"
-	rel="stylesheet" />
+    <!-- PAGE LEVEL STYLES -->
+    <link href="library/assets/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="library/assets/plugins/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="library/assets/css/main.css" />
+    <link rel="stylesheet" href="library/assets/css/theme.css" />
+    <link rel="stylesheet" href="library/assets/css/MoneAdmin.css" />
+    <link rel="stylesheet" href="library/assets/plugins/Font-Awesome/css/font-awesome.css" />
+	    <link rel="stylesheet" href="library/assets/plugins/validationengine/css/validationEngine.jquery.css" />
 
 <style>
+
 .bg_heading {
 	text-align: left;
     font-size: 20px;
@@ -24,49 +24,20 @@
     margin-left: 195px;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
-#menu3 {
-	background: #E05400;
-	background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
+input[type="search"]{
+height:30px !important;
+}
+input[type="text"]{
+height:25px !important;
 }
 
-input[type="search"] {
-	height: 30px !important;
-}
-
- input[type="file"] {
-    width: 330px;
-    height: 35px;
-    padding-top:9px;
-    }
-
-input[type="text"] {
-	width: 300px;
-    height: 35px;
-    padding: 5px;
-}
-
-#paymentTable input[type="button"] {
-	width: 100px;
-    height: 30px;
-}
-
-select {
-	width: 300px;
-    height: 35px;
-    padding: 5px;
-}
-
-#successMessage {
+#successMessage{
 	margin-left: 450px;
-	z-index: 20000;
-	margin-top: 20px;
-	position: absolute;
-	color: green;
-}
-
-.error {
-	color: red;
-}
+    z-index: 20000;
+    margin-top: 20px;
+    position: absolute;
+    color: green;
+    }
 </style>
 <script src='JS/complaints/searchComplaints.js'></script>
 
@@ -74,40 +45,6 @@ select {
 
 function validateAddForm() {
 	return true;
-	  	var numberReg = /^[0-9]*$/;
-
-	  	var paymentTypeId = $("#paymentTypeId");
-	  	var paymentAmount = $("#paymentAmountId");
-	  	var gstPercent = $("#gstPercentId");
-	  	
-	  	
-
-	  	var inputVal = new Array(paymentTypeId,paymentAmount,gstPercent);
-
-	  	$('.error').hide();
-	  	flag = true;
-	  	for (i = 0; i < inputVal.length; i++) {
-	  		if (inputVal[i].val() == "") {
-	  			inputVal[i]
-	  					.after('<br/><span class="error"> This field is required. </span>');
-	  			inputVal[i].focus();
-	  			flag = false;
-	  		} 
-	  		
-	  		else if (inputVal[i].attr('id') == 'paymentAmountId' &&  !numberReg.test(inputVal[i].val())) {
-	  			inputVal[i].after('<br/><span class="error"> Please enter Amount in Numeric only. </span>');
-	  			inputVal[i].focus();
-	  			flag = false;
-	  		}
-	  		else if (inputVal[i].attr('id') == 'gstPercentId' &&  !numberReg.test(inputVal[i].val())) {
-	  			inputVal[i].after('<br/><span class="error"> Please enter GST Percent in Numeric only. </span>');
-	  			inputVal[i].focus();
-	  			flag = false;
-	  		}
-	  		
-	  		
-	  	}
-	  	return flag;
 	  }
 
 
@@ -151,9 +88,7 @@ function validateAddForm() {
 	   	        });
 			}
 		});
-
-		
-	});
+});
 </script>
 
 <div id="addDialog" style="display: none;">
@@ -174,93 +109,96 @@ function validateAddForm() {
 		
 		</form>		
 		</div>
-		
-
-
-
 <table class='table-bordered table table-striped display'
 	style='width: 100%; font-size: 28px;'>
-
-	<tr>
+<tr>
 		<td colspan='8'
 			style='text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;'>
 			Full Payment Completed</td>
 	</tr>
 </table>
 
-<!--PAGE CONTENT -->
-<div id="content" style="margin-left: 0px !important">
-	<div id="successMessage"></div>
-	<div class="inner">
-		<div class="row"></div>
+        <div id="content" style="margin-left: 0px !important">
+<div id="successMessage"></div>
+            <div class="inner">
+                <div class="row">
+                    
+                </div>
+
+               
 
 
-
-
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="panel panel-default">
-
-					<div class="panel-body">
-						<div class="table-responsive">
-							<table class="table table-striped table-bordered table-hover"
-								id="dataTables-example">
-
-								<thead>
-									<tr>
-										<!--  <th style="color:black !important"></th> -->
-										<th style="color: black !important"><b>App Ref#</b></th>
-										<th style="color: black !important"><b> Name of
-												Company</b></th>
-										<th style="color: black !important"><b>Category Type</b></th>
-
-										<th style="color: black !important"><b>Correspondence
-												Address</b></th>
-										
-										
-										<th style="color: black !important"></th>
-									</tr>
-								</thead>
-								<tbody>
-
-									<c:forEach items="${list.appBean}" var="app">
-
-
-
-										<tr class="odd gradeX">
-											
-											<td><a href="EEViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
-											<td>${app.getLegCompName()}</td>
-											<td>${app.getCategoryType()}</td>
-                                         
-											<td class="center">${app.getCdoorNo()}
-												${app.getCplotNo()} ${app.getCstreetName()}
-												${app.getClocation()} ${app.getCpinCode()}</td>
-										<td class="center"></td> 
-											
-											<td class="center"><input type="button"
+                <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                           <!--  <th style="color:black !important"></th> -->
+                                            <th style="color:black !important"><b>App Ref#</b></th>
+                                            <th style="color:black !important"><b> Name of Company</b></th>
+                                             <th style="color:black !important"><b> Name of Person</b></th>
+                                              <th style="color:black !important"><b>Payment Type</b></th>
+                                            <th style="color:black !important"><b>Total Payment Amount</b></th>
+                                            <th style="color:black !important"><b>DD NO</b></th>
+                                             <th style="color:black !important"><b>DD Date</b></th>
+                                            <th style="color:black !important"><b>DD Bank Name</b></th>
+                                           <!--  <th style="color:black !important"><b>Payment Status</b></th> -->
+                                             <th style="color:black !important"><b>Registered Date</b></th>
+                                             <th style="color:black !important"><b>Management Comments</b></th>
+                                              <th></th>
+                                        
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    
+                                     <c:forEach items="${list.appBean}" var="app" >
+          
+          							
+          									 
+          								<tr class="odd gradeX">
+          							<td > <a href="EEViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
+                                            <td>${app.getLegCompName()}</td>
+                                            
+                                             <td>${app.getContactPersonName()}</td>
+                                             <td>${app.getPaymentType()}</td>
+                                               <td>${app.getPaymentAmount()}</td>
+                                                <td id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
+                                                 <td>${app.getDdDate()}</td>
+                                                  <td>${app.getDdBankName()}</td>
+                                                 <%--   <td>${app.getPaymentStatusDisplay()}</td> --%>
+                                           
+                                             <td class="center">${app.getCreateTs()}</td>
+                                              <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
+                                              
+                                             <td class="center"><input type="button"
 												name="approveBtn" id="${app.getAppId()}"
 												value="Send SMS/ Email" /></td>
-										</tr>
+                                           
+                                        </tr>	 
+          									 
+          							 </c:forEach>
+                          
+                                    </tbody>
+                                </table>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
 
-									</c:forEach>
-								</tbody>
-							</table>
-						</div>
-
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-	</div>
+            </div>
 
 
 
 
-</div>
-<!--END PAGE CONTENT -->
+        </div>
+       <!--END PAGE CONTENT -->
 <c:choose>
 	<c:when test="${!empty list.results}">
 
@@ -271,30 +209,13 @@ function validateAddForm() {
 				<tr>
 					<th><spring:message code="label.complaintNumber" /></th>
 					<th><spring:message code="label.channel" /></th>
-					<th style='min-width: 150px;'><spring:message
-							code="label.recievedDateTime" /></th>
+					<th style='min-width:150px;'><spring:message code="label.recievedDateTime" /></th>
 					<th><spring:message code="label.content" /></th>
 					<th><spring:message code="label.status" /></th>
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach items="${list.results}" var="results">
-					<tr>
-						<td>
-							<form method='post' id="${results.getComplaintID()}"
-								action="editComplaint.do">
-								<input type='hidden' name="complaintID"
-									value="${results.getComplaintID()}" /> <a
-									href="javascript:fnSubmitForm('<c:out value="${results.getComplaintID()}"/>');">${results.getComplaintNumber()}</a>
-							</form>
-						</td>
-
-						<td>${results.getComplaintSourceName()}</td>
-						<td>${results.getCreatedDate()}</td>
-						<td>${results.getComplaintContent()}</td>
-						<td>${results.getComplaintStatusName()}</td>
-					</tr>
-				</c:forEach>
+				
 			</tbody>
 		</table>
 	</c:when>
@@ -331,13 +252,12 @@ function validateAddForm() {
 	</c:otherwise>
 </c:choose>
 
-
 <!-- PAGE LEVEL SCRIPTS -->
-<script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-<script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
-<script>
-	$(document).ready(function() {
-		$('#dataTables-example').dataTable();
-	});
-</script>
-<!-- END PAGE LEVEL SCRIPTS -->
+    <script src="library/assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="library/assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+     <script>
+         $(document).ready(function () {
+             $('#dataTables-example').dataTable();
+         });
+    </script>
+     <!-- END PAGE LEVEL SCRIPTS -->

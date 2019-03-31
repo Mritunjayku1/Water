@@ -15,7 +15,23 @@ public class PaymentFormBean {
 	private String gstPercent;
 	private String totalAmount;
 	private String mcUser;
+	private String contactPersonName;
+	private String legCompName;
+	private String referenceFile;
+	private String referenceDate;
 	
+	public String getReferenceFile() {
+		return referenceFile;
+	}
+	public void setReferenceFile(String referenceFile) {
+		this.referenceFile = referenceFile;
+	}
+	public String getReferenceDate() {
+		return referenceDate;
+	}
+	public void setReferenceDate(String referenceDate) {
+		this.referenceDate = referenceDate;
+	}
 	public String getGstAmount() {
 		return gstAmount;
 	}
@@ -95,6 +111,18 @@ public class PaymentFormBean {
 	}
 	public void setMcUser(String mcUser) {
 		this.mcUser = mcUser;
+	}
+	public String getLegCompName() {
+		return legCompName;
+	}
+	public void setLegCompName(String legCompName) {
+		this.legCompName = legCompName;
+	}
+	public String getContactPersonName() {
+		return contactPersonName;
+	}
+	public void setContactPersonName(String contactPersonName) {
+		this.contactPersonName = contactPersonName;
 	}
 
 }

@@ -336,8 +336,8 @@ $('#deleteConnectionType').click(function(){
 				<input type="button" value="Update" id="editConnectionTypeBtn"/> <input type="button" value="Close" class="closeBtn"/>
 				
 		</div>
-	<script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
-    <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+	<script src="library/assets/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="library/assets/plugins/dataTables/dataTables.bootstrap.js"></script>
      <script>
          $(document).ready(function () {
              $('#dataTables-example').dataTable();

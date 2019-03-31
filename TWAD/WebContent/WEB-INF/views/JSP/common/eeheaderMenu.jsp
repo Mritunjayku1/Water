@@ -194,6 +194,10 @@ $(function(){
 			$('#upfrontChargesCount').text(response.upfrontChargesPending);
 			$('#fullPaymentCount').text(response.fullPaymentPending);
 			
+			localStorage.setItem("localStorage_applicationFeePending",response.applicationFeePending);
+			localStorage.setItem("localStorage_upfrontChargesPending",response.upfrontChargesPending);
+			localStorage.setItem("localStorage_fullPaymentPending",response.fullPaymentPending);
+			
 			
 		}
 	});
