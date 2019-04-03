@@ -2634,6 +2634,24 @@ else if(app.getActive()==3 && app.getPaymentStatus()==0){
 }	
 
 }
+List<DDPaymentFormBean> ddPaymentFormBeans = new ArrayList<>();
+
+List<CompanyPaymentDtl> companyPaymentDtlList = new DashboardDaoImpl().getpaymentList(ddPaymentFormBean.getAppId());
+
+for(CompanyPaymentDtl companyPaymentDtl :companyPaymentDtlList){
+	DDPaymentFormBean ddPaymentBean = new DDPaymentFormBean();
+	ddPaymentBean.setDdNo(companyPaymentDtl.getDdNo());
+	ddPaymentBean.setDdDate(companyPaymentDtl.getDdDate());
+	ddPaymentBean.setDdBankName(companyPaymentDtl.getDdBankName());
+	
+	ddPaymentBean.setPaymentType(companyPaymentDtl.getPaymentType().getPaymentType());
+	ddPaymentBean.setPaymentAmount(companyPaymentDtl.getPaymentAmount());
+	
+	ddPaymentFormBeans.add(ddPaymentBean);
+}
+
+ddPaymentFormBean.setPaymentList(ddPaymentFormBeans);
+
 		return ddPaymentFormBean;
 	}
 
@@ -2674,35 +2692,20 @@ else if(app.getActive()==3 && app.getPaymentStatus()==0){
 	}
 	
 	@POST
-	@Path("/getmcDashboardCount")
+	@Path("/getMCDashboardCount")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getmcDashboardCount() {
+	public String getMCDashboardCount() {
 
 		dashboardDao = new DashboardDaoImpl();
 		gson = new Gson();
 
-		//DashboardBean dashboardBean = new DashboardBean();
 		DashboardCountBean dashboardCountBean=new DashboardCountBean();
 
-		for (Object[] rowData : dashboardDao.getmcDashboardCount()) {
-			dashboardCountBean.setTotalRegister(Integer.parseInt(rowData[0]
-					.toString()));
-			dashboardCountBean.setPenndingApplication(Integer.parseInt(rowData[1]
-					.toString()));
-			dashboardCountBean.setApprovedApplication(Integer.parseInt(rowData[2]
-					.toString()));
-			dashboardCountBean.setPaidApplication(Integer.parseInt(rowData[3]
-					.toString()));
+		/*for (Object[] rowData : dashboardDao.getMCDashboardCount()) {
+			*/
+			dashboardCountBean.setPenndingApplication(Integer.parseInt(dashboardDao.getMCDashboardCount()));
 			
-
-			dashboardCountBean.setYesCount(3);
-
-			dashboardCountBean.setNoCount(30);
-
-			dashboardCountBean.setNACount(20);
-			dashboardCountBean.setNACount(20);
-
-		}
+		//}
 		return gson.toJson(dashboardCountBean);
 	}
 

@@ -1851,6 +1851,32 @@ public class DashboardController {
 			ddPaymentFormBean = gson.fromJson(out.getBody().toString(),DDPaymentFormBean.class);
 */
 			model.put("application", ddPaymentFormBean);
+			
+			File folder = new File("c:/EC/"+appId);
+			File[] listOfFiles = folder.listFiles();
+			List<String> fileList = new ArrayList<String>();
+			
+			    for (int i = 0;listOfFiles!=null &&  i < listOfFiles.length; i++) {
+			      if (listOfFiles[i].isFile()) {
+			    	  fileList.add(listOfFiles[i].getName());
+			      }
+			    }
+			    
+			    File folderAdmin = new File("c:/EC/"+appId+"/Admin");
+				File[] listOfFilesByAdmin = folderAdmin.listFiles();
+				List<String> uploadedFilesByAdmin = new ArrayList<String>();
+			    
+			    for (int i = 0;listOfFilesByAdmin!=null &&  i < listOfFilesByAdmin.length; i++) {
+				      if (listOfFilesByAdmin[i].isFile()) {
+				    	  uploadedFilesByAdmin.add(listOfFilesByAdmin[i].getName());
+				      }
+				    }
+			
+			    model.put("uploadedFiles", fileList);
+			    model.put("uploadedFilesByAdmin", uploadedFilesByAdmin);
+			    
+			
+			
 			return new ModelAndView("ddPaymentViewForm", "list", model);
 		}
 		
@@ -2803,6 +2829,27 @@ public class DashboardController {
 		model.put("categoryCount", publicdashboard());*/
 		return new ModelAndView("eedashboard", "list", model);
 	}
+	
+	@RequestMapping(value = "/getMCDashboardCount", method = RequestMethod.GET)
+	@ResponseBody
+	public String getMCDashboardCount() {
+
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getMCDashboardCount", HttpMethod.POST,
+				entity, String.class);
+
+		return out.getBody().toString();
+	}
+
+
 
 	@RequestMapping(value = "/mcdashboard", method = RequestMethod.GET)
 	public ModelAndView mcdashboard(
@@ -2810,7 +2857,7 @@ public class DashboardController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		RestTemplate restTemplate = new RestTemplate();
+		/*RestTemplate restTemplate = new RestTemplate();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -2826,7 +2873,7 @@ public class DashboardController {
 				DashboardCountBean.class);
 
 		model.put("count", dashboard);
-		model.put("categoryCount", publicdashboard());
+		model.put("categoryCount", publicdashboard());*/
 		return new ModelAndView("mcdashboard", "list", model);
 	}
 

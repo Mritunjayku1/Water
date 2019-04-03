@@ -1798,7 +1798,29 @@ public class DashboardDaoImpl implements DashboardDao {
 	}
 
 	
-	
+	public List<CompanyPaymentDtl> getpaymentList(String appId) {
+		// TODO Auto-generated method stub
+
+		
+		Session session = sessionFactory.openSession();
+		session.beginTransaction();
+		
+	List<CompanyPaymentDtl> appDetails = new ArrayList<>();
+		try {
+			
+           Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
+        		   .createCriteria("companyPaymentDtl.appId","companyDtl")
+           .add(Restrictions.eq("companyDtl.appId", appId));
+			
+			appDetails=cr.list();
+			
+		
+				} catch (Exception e) {
+			// TODO: handle exception
+					e.printStackTrace();
+		}
+		return appDetails;
+	}
 	
 	@Override
 	public String paymentApproved(ApplicationBean applicationBean) {
@@ -1857,18 +1879,17 @@ public class DashboardDaoImpl implements DashboardDao {
 
 	}
 	@Override
-	public List<Object[]> getmcDashboardCount() {
+	public String getMCDashboardCount() {
 
 		Session session = sessionFactory.openSession();
 		StringBuffer sqlQreyString = new StringBuffer();
 
-		List<Object[]> dashBoardCount = new ArrayList<Object[]>();
 
 		sqlQreyString.append(Constant.Get_MCDashboardCount);
 
 		SQLQuery query = session.createSQLQuery(sqlQreyString.toString());
-		dashBoardCount = query.list();
-		return dashBoardCount;
+		//dashBoardCount = query.uniqueResult();
+		return query.uniqueResult().toString();
 
 	}
 	

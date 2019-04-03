@@ -39,6 +39,10 @@ input[type="button"] {
 padding-left:10px;
 }
 
+#myPaymentTable td,#myPaymentTable th{
+padding-left:10px;
+}
+
 #myTable td span{
 margin-left:10px;
 }
@@ -51,13 +55,17 @@ $('.downloadfiles').click(function(){
 	var appId = $('#appId').val();
 	window.location.href="downloadFiles.do?fileName="+fileName+"&appId="+appId+"&fileLocation="+$(this).attr("name");
 });
+$('#backButton').click(function(){
+	window.history.go(-1);
+	
+	});
 });
 
 </script>
 </head>
 <body>
 <input type="hidden" id="appId" value="${list.application.getAppId()}"/>
-<table class="table-bordered table table-striped display" style="width: 100%; font-size: 28px;">
+<table class="table-bordered table table-striped display" style="width: 90%; font-size: 28px;">
 
 	<tbody><tr>
 		<td style="text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;">Application Details</td>
@@ -163,12 +171,12 @@ $('.downloadfiles').click(function(){
 			<td><b>Work Type</b></td>
 			<td>:<span class="lessWidth" id="workTypeId">${list.application.getWorkTypeDisplay()}</span></td>
 			<td><b>Application Status</b></td>
-			<td>:<span class="lessWidth" id="status">${list.application.getManagementComments()}</span></td>
+			<td>${list.application.getManagementComments()}</td>
 			
 		</tr>
 			 <tr>
 			<td><b>Uploaded Documents By Company</b></td>
-			<td colspan="3">:
+			<td colspan="3">
 			 <c:forEach items="${list.uploadedFiles}" var="fileName" >
 			
 			<a href="#" class="downloadfiles" name="">${fileName}</a><br/>
@@ -178,7 +186,7 @@ $('.downloadfiles').click(function(){
 		</tr> 
 		 <tr>
 			<td><b>Uploaded Documents By EE</b></td>
-			<td colspan="3">:
+			<td colspan="3">
 			 <c:forEach items="${list.uploadedFilesByAdmin}" var="fileName" >
 			
 			<a href="#" class="downloadfiles" name="admin">${fileName}</a><br/>
@@ -186,14 +194,56 @@ $('.downloadfiles').click(function(){
 			
 			</td>
 		</tr> 
-		<tr>
-			<td colspan="4" align="center"><input type="button" style="margin-right: 10px;"
-				id="printbtnId" onclick="javascript:window.print();"
-				name="industrialistSubmitBtn" value="Print" /><a href="eeBeforeInsp.do">Back</a></td>
-		</tr>
+		
 
 	</table>
+	<br/>
+	
+	<table class="table-bordered table table-striped display" style="width: 90%; font-size: 28px;">
 
+	<tbody><tr>
+		<td style="text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;">Payment Details</td>
+	</tr>
+	
+</tbody></table>
+
+	<table id="myPaymentTable" width="90%" align="center" style="background-color:#FCFCF4; ">
+	<tr height= "50px">
+	    <th width="20%">Payment Type</th>
+	    <th width="20%">DD No</th>
+	    <th width="20%">DD Date</th>
+	    <th width="20%">DD Amount</th>
+	    <th width="20%">Bank Name</th>
+	
+	</tr>
+	
+	 <c:forEach items="${list.application.getPaymentList()}" var="paymentDetail" >
+	 <tr height= "50px">
+	    <td>${paymentDetail.getPaymentType() }</td>
+	     <td>${paymentDetail.getDdNo() }</td>
+	      <td>${paymentDetail.getDdDate() }</td>
+	       <td>${paymentDetail.getPaymentAmount() }</td>
+	        <td>${paymentDetail.getDdBankName() }</td>
+	 
+	 </tr>
+			
+	</c:forEach>
+	
+	</table>
+	<br/>
+	
+	<table width="90%" align="center">
+	
+	<tr>
+			<td align="center"><input type="button" style="margin-right: 10px;"
+				id="printbtnId" onclick="javascript:window.print();"
+				name="industrialistSubmitBtn" value="Print" />
+				<input type="button" id="backButton" name="backButton" value="Back" />
+			</td>
+		</tr>
+	</table>
+
+<br/>
 
 </body>
 			</html>

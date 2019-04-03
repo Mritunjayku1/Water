@@ -148,10 +148,38 @@ color: #FFFFFF;
 background: #E05400;
 background: -webkit-linear-gradient(top, #FFFFFF 3%, #E05400 30%);
 }
+
+#HDropdown-orange-classic span{
+padding:3px 7px;
+border-radius:50px;
+background-color: brown;
+}
+
+
 </style>
 <script>
 
 $(function(){
+	
+	$.ajax({
+		type:"GET",
+		url:"getMCDashboardCount.do",
+		data:{},
+		  contentType: "application/json",
+	      dataType:"json",
+		success:function(response){
+			//alert(response.approvedApplication)
+			$('#pendingApplicationCount').text(response.penndingApplication);
+			
+			localStorage.setItem("localStorage_MCPendingapplication",response.penndingApplication);
+			
+			
+			
+		}
+	});
+	
+	
+	
 	var url = window.location.href;
 		$('ul li').removeClass('selectionClass');
 		if(url.indexOf("mcdashboard")>0){
@@ -174,7 +202,7 @@ $(function(){
 <div>
 	<ul id="HDropdown-orange-classic">
 		<li><a href="mcdashboard.do"  >Dashboard</a></li>
-		<li><a href="mcViewApp.do"> Pending  Application</a> </li>
+		<li><a href="mcViewApp.do"> Pending  Application &nbsp; <span id="pendingApplicationCount"></span></a> </li>
 	<li><a href="mcapproved.do" id='menu2'>Approved Application</a></li>
 		<li><a href="mcViewAll.do" id='menu2'>View All Application </a> </li>  
 		</ul>

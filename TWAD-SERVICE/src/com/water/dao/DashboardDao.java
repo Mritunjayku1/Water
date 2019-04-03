@@ -53,7 +53,7 @@ public interface DashboardDao {
 	
 	public List<Object[]> getceDashboardCount();
 	public List<Object[]> geteeDashboardCount();
-	public List<Object[]> getmcDashboardCount();
+	public String getMCDashboardCount();
 	public List<Object[]> getPaymentDashboardCount();
 	
 	

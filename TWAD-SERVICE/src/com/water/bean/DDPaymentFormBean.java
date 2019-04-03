@@ -1,6 +1,7 @@
 package com.water.bean;
 
 import java.util.Date;
+import java.util.List;
 
 public class DDPaymentFormBean {
 
@@ -56,6 +57,8 @@ public class DDPaymentFormBean {
 	private String workTypeDisplay;
 	private String paymentStatusDisplay;
 	private String createDate;
+	
+	private List<DDPaymentFormBean> paymentList;
 	
 	
 	public String getIsNewConnectionDisplay() {
@@ -366,6 +369,12 @@ public class DDPaymentFormBean {
 	}
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
+	}
+	public List<DDPaymentFormBean> getPaymentList() {
+		return paymentList;
+	}
+	public void setPaymentList(List<DDPaymentFormBean> paymentList) {
+		this.paymentList = paymentList;
 	}
 
 }

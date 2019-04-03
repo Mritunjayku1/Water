@@ -153,7 +153,7 @@
 							<td  width="20%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
 								height="130px"></td>
 			<td
-				style='text-align: right; width: 20%; color: #1589FF; text-shadow: 1px 7px 10px #a6a1a1; font-size: 14px;padding-right: 30px;'>
+				style='text-align: right; width: 20%; color: #1589FF; text-shadow: 1px 7px 10px #a6a1a1; font-size: 14px;padding-right: 80px;'>
 				Hi! <c:out value="${sessionScope.LoginName}" /> <a href='signOut.do'
 				title='Sign Out'><img src='library/img/logout.png'> Sign Out </a><br/><br/>
 				<a href="changePasswordPage.do">Change Password </a>

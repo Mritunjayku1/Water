@@ -1294,6 +1294,31 @@ public ModelAndView checkApplicationStatus( @RequestParam String appId ,  @Reque
 		if(null != ddPaymentFormBean.getMobileNum() && ddPaymentFormBean.getMobileNum()==Long.parseLong(mobileNum))
 		{
 		model.put("application", ddPaymentFormBean);
+		File folder = new File("c:/EC/"+appId);
+		File[] listOfFiles = folder.listFiles();
+		List<String> fileList = new ArrayList<String>();
+		
+		    for (int i = 0;listOfFiles!=null &&  i < listOfFiles.length; i++) {
+		      if (listOfFiles[i].isFile()) {
+		    	  fileList.add(listOfFiles[i].getName());
+		      }
+		    }
+		    
+		    File folderAdmin = new File("c:/EC/"+appId+"/Admin");
+			File[] listOfFilesByAdmin = folderAdmin.listFiles();
+			List<String> uploadedFilesByAdmin = new ArrayList<String>();
+		    
+		    for (int i = 0;listOfFilesByAdmin!=null &&  i < listOfFilesByAdmin.length; i++) {
+			      if (listOfFilesByAdmin[i].isFile()) {
+			    	  uploadedFilesByAdmin.add(listOfFilesByAdmin[i].getName());
+			      }
+			    }
+		
+		    model.put("uploadedFiles", fileList);
+		    model.put("uploadedFilesByAdmin", uploadedFilesByAdmin);
+
+		
+		
 		}
 		else{
 			model.put("application", "Data not found");

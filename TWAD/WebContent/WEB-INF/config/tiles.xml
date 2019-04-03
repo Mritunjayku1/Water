@@ -65,6 +65,21 @@
 		<put-attribute name="footer"
 			value="/WEB-INF/views/JSP/common/footer.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="EEbase.ViewForm"
+		template="/WEB-INF/views/JSP/common/mainTemplate.jsp">
+		<put-attribute name="title" value=""></put-attribute>
+		<put-attribute name="headerTop"
+			value="/WEB-INF/views/JSP/common/headerTop.jsp"></put-attribute>
+		<put-attribute name="headerMenu"
+			value=""></put-attribute>
+
+		<put-attribute name="menu" value="/WEB-INF/views/JSP/common/menu.jsp"></put-attribute>
+		<put-attribute name="body" value=""></put-attribute>
+		<put-attribute name="footer"
+			value="/WEB-INF/views/JSP/common/footer.jsp"></put-attribute>
+	</definition>
+	
 	<definition name="MCbase.definition"
 		template="/WEB-INF/views/JSP/common/mainTemplate.jsp">
 		<put-attribute name="title" value=""></put-attribute>
@@ -215,9 +230,9 @@
 		<put-attribute name="headerMenu" value="/WEB-INF/views/JSP/common/PaymentHeaderMenu.jsp"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/ddPaymentViewAll.jsp"></put-attribute>
 	</definition>
-	<definition name="ddPaymentViewForm" extends="CEbase.definition">
+	<definition name="ddPaymentViewForm" extends="EEbase.ViewForm">
 		<put-attribute name="title" value="E-Water | Home"></put-attribute>
-		<put-attribute name="headerMenu" value="/WEB-INF/views/JSP/common/PaymentHeaderMenu.jsp"></put-attribute>
+		<put-attribute name="headerMenu" value=""></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/ddPaymentViewForm.jsp"></put-attribute>
 	</definition>
 	
@@ -242,7 +257,7 @@
 
 
 	<!-- EE Tiles configuration Start -->
-<definition name="EEViewForm" extends="EEbase.definition">
+<definition name="EEViewForm" extends="EEbase.ViewForm">
 		<put-attribute name="title" value="E-Water | EE View Forms"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/EEViewForm.jsp"></put-attribute>
 	</definition>
@@ -382,7 +397,7 @@
 
 	<!-- MC Tiles configuration Start -->
 	
-	<definition name="MCViewForm" extends="MCbase.definition">
+	<definition name="MCViewForm" extends="EEbase.ViewForm">
 		<put-attribute name="title" value="E-Water | MC View Form"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Application/MCViewForm.jsp"></put-attribute>
 	</definition>
