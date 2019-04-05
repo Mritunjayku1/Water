@@ -99,6 +99,12 @@ div.tabArrow {
 
 
 <script type = "text/javascript" >
+
+window.onbeforeunload = function () {
+	  return "Are you sure you want to leave?";
+	};
+
+
 	$(document).ready(function() {
 		
 		

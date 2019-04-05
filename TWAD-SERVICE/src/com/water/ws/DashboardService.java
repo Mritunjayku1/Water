@@ -2660,7 +2660,7 @@ ddPaymentFormBean.setPaymentList(ddPaymentFormBeans);
 	@POST
 	@Path("/geteeDashboardCount")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String getDashboardCount() {
+	public String geteeDashboardCount() {
 
 		dashboardDao = new DashboardDaoImpl();
 		gson = new Gson();
@@ -2674,6 +2674,11 @@ ddPaymentFormBean.setPaymentList(ddPaymentFormBeans);
 			dashboardCountBean.setUpfrontChargesPending(Integer.parseInt(rowData[1]
 					.toString()));
 			dashboardCountBean.setFullPaymentPending(Integer.parseInt(rowData[2]
+					.toString()));
+			
+			dashboardCountBean.setFullPaymentCompleted(Integer.parseInt(rowData[3]
+					.toString()));
+			dashboardCountBean.setExecution(Integer.parseInt(rowData[4]
 					.toString()));
 
 			/*dashboardCountBean.setApprovedApplication(Integer.parseInt(rowData[3]
@@ -3153,6 +3158,35 @@ DashboardCountBean dashboardBean;
 		
 	return new DashboardDaoImpl().eePaymentCompletedApproved(paymentFormBean);
 	}
+	
+	@POST
+	@Path("/eePaymentCompletedMoveToExecution")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String eePaymentCompletedMoveToExecution(DDPaymentFormBean dDPaymentFormBean) {
+		Session	session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = session.beginTransaction();
+	try{
+		transaction.begin();
+		CompanyDtl  companyDtl = (CompanyDtl) session.get(CompanyDtl.class, dDPaymentFormBean.getAppId());
+		companyDtl.setActive(2);
+		companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,5));
+		session.update(companyDtl);
+		transaction.commit();
+		
+	}
+	catch(Exception e){
+		e.printStackTrace();
+		transaction.rollback();
+		return "Application not Saved";
+	}
+	finally{
+		session.close();
+	}
+			return "Application Moved to Execution";
+
+		}
+
+
 	
 	
 	@POST

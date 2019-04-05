@@ -133,6 +133,9 @@ $(window).load(function(){
 	var upfrontChargesCount = parseInt(localStorage.getItem("localStorage_upfrontChargesPending"));
 	var fullPaymentCount = parseInt(localStorage.getItem("localStorage_fullPaymentPending"));
 	
+	var fullPaymentCompletedCount = parseInt(localStorage.getItem("localStorage_fullPaymentCompleted"));
+	var executionCount = parseInt(localStorage.getItem("localStorage_execution"));
+	
 	
 
 	var data = [ {
@@ -144,9 +147,15 @@ $(window).load(function(){
 	}, {
 		"Compliants" : "Full Payment Pending",
 		"Count" : fullPaymentCount
+	}, {
+		"Compliants" : "Full Payment Completed",
+		"Count" : fullPaymentCompletedCount
+	}, {
+		"Compliants" : "Execution",
+		"Count" : executionCount
 	}	];
 
-	fnPlotPieChart(data, "compliantDashboard", "Total Pending Application:" + (applicationFeeCount + upfrontChargesCount + fullPaymentCount));
+	fnPlotPieChart(data, "compliantDashboard", "Total Application:" + (applicationFeeCount + upfrontChargesCount + fullPaymentCount + fullPaymentCompletedCount + executionCount));
 
 });
 	</script>

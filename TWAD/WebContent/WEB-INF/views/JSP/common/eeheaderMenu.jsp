@@ -193,10 +193,14 @@ $(function(){
 			$('#applicationFeeCount').text(response.applicationFeePending);
 			$('#upfrontChargesCount').text(response.upfrontChargesPending);
 			$('#fullPaymentCount').text(response.fullPaymentPending);
+			$('#fullPaymentCompletedCount').text(response.fullPaymentCompleted);
+			$('#executionCount').text(response.execution);
 			
 			localStorage.setItem("localStorage_applicationFeePending",response.applicationFeePending);
 			localStorage.setItem("localStorage_upfrontChargesPending",response.upfrontChargesPending);
 			localStorage.setItem("localStorage_fullPaymentPending",response.fullPaymentPending);
+			localStorage.setItem("localStorage_fullPaymentCompleted",response.fullPaymentCompleted);
+			localStorage.setItem("localStorage_execution",response.execution);
 			
 			
 		}
@@ -303,8 +307,8 @@ $(function(){
 		 <li><a href="eeApplicationFeePending.do">Application Fee Pending &nbsp; <span id="applicationFeeCount"></span> </a> </li>
 	    <li><a href="eeUpfrontChargesPending.do">Upfront Charges Pending &nbsp; <span id="upfrontChargesCount"></span> </a> </li>
 		<li><a href="eeFullPaymentPending.do">Full Payment Pending &nbsp; <span id="fullPaymentCount"></span> </a></li>
-		<li><a href="eeFullPaymentCompleted.do">Full Payment Completed</a></li>
-		<li><a href="eeExecution.do">Execution</a></li>
+		<li><a href="eeFullPaymentCompleted.do">Full Payment Completed &nbsp; <span id="fullPaymentCompletedCount"></span></a></li>
+		<li><a href="eeExecution.do">Execution &nbsp; <span id="executionCount"></span></a></li>
 		<li><a href="eeViewAll.do">View All Application </a> </li>  
 		
 </ul>

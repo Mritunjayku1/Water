@@ -82,10 +82,26 @@ function validateAddForm() {
 	   	            timeout: 600000,
 	   	            success: function (response) {
 	   	         	alert(response);
-	   	         	window.location.reload();
+	   	         	
+	   	         
+	   	         	//window.location.reload();
 
 	   	            },
 	   	        });
+	   	        
+	   	     $.ajax({
+	 			type:"POST",
+	 			url:"eePaymentCompletedMoveToExecution.do",
+	 			async:false,
+	 			data:{
+	 				'appId':$('#appId').val()
+	 			},
+	 			success:function(response){
+	 				alert(response);
+	 				
+	 				window.location.reload();
+	 			}
+	 		});
 			}
 		});
 });
@@ -148,7 +164,7 @@ function validateAddForm() {
                                             <th style="color:black !important"><b>DD Bank Name</b></th>
                                            <!--  <th style="color:black !important"><b>Payment Status</b></th> -->
                                              <th style="color:black !important"><b>Registered Date</b></th>
-                                             <th style="color:black !important"><b>Management Comments</b></th>
+                                             <!-- <th style="color:black !important"><b>Management Comments</b></th> -->
                                               <th></th>
                                         
                                         </tr>
@@ -172,8 +188,8 @@ function validateAddForm() {
                                                  <%--   <td>${app.getPaymentStatusDisplay()}</td> --%>
                                            
                                              <td class="center">${app.getCreateTs()}</td>
-                                              <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
-                                              
+                                            <%--   <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
+                                             --%>  
                                              <td class="center"><input type="button"
 												name="approveBtn" id="${app.getAppId()}"
 												value="Send SMS/ Email" /></td>

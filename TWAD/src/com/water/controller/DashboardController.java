@@ -1669,7 +1669,27 @@ public class DashboardController {
 
 	}
 	
+	@RequestMapping(value = "/eePaymentCompletedMoveToExecution", method = RequestMethod.POST)
+	@ResponseBody
+	public String eePaymentCompletedMoveToExecution(DDPaymentFormBean dDPaymentFormBean)
+			throws JSONException {
 
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(dDPaymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eePaymentCompletedMoveToExecution",
+
+				HttpMethod.POST, entity, String.class);
+
+		return out.getBody().toString();
+
+	}
 	
 	
 	@RequestMapping(value = "/ddPaymentApproved", method = RequestMethod.POST)

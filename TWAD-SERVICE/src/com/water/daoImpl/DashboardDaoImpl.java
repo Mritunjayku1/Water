@@ -3196,6 +3196,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 4))
+					 .add(Restrictions.eq("paymentType.paymentTypeId",3))
 					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
 					
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
@@ -3249,7 +3250,8 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 				           )
 			
 					 .add(Restrictions.eq("companyDtl.active", 2))
-					 .add(Restrictions.eq("eeStatus.statusId", 4))
+					 .add(Restrictions.eq("eeStatus.statusId", 5))
+					 .add(Restrictions.eq("paymentType.paymentTypeId",3))
 					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					

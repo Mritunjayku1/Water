@@ -15,6 +15,8 @@ public class DashboardCountBean {
 	private Integer upfrontChargesPending;
 	private Integer fullPaymentPending;
 
+	private Integer fullPaymentCompleted;
+	private Integer execution;
    
 	public Integer getApplicationFeePending() {
 		return applicationFeePending;
@@ -153,6 +155,22 @@ public class DashboardCountBean {
 
 	public void setRejectedApplication(Integer rejectedApplication) {
 		this.rejectedApplication = rejectedApplication;
+	}
+
+	public Integer getFullPaymentCompleted() {
+		return fullPaymentCompleted;
+	}
+
+	public void setFullPaymentCompleted(Integer fullPaymentCompleted) {
+		this.fullPaymentCompleted = fullPaymentCompleted;
+	}
+
+	public Integer getExecution() {
+		return execution;
+	}
+
+	public void setExecution(Integer execution) {
+		this.execution = execution;
 	}
 
 }
