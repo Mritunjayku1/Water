@@ -15,7 +15,7 @@
 /* Full-width input fields */
 input[type=text],input[type=password] {
 	width: 20%;
-	padding: 12px 20px;
+	padding: 5px 5px;
 	margin: 8px 0;
 	display: inline-block;
 	border: 1px solid #ccc;
@@ -250,6 +250,7 @@ height:25px !important;
 
 $(function(){
 	var appId="";
+	$(".receiptDate").val($.datepicker.formatDate('dd-mm-yy', new Date()));
 	$('.paymentClass').click(function(){
 		appId = $(this).attr('id');
 		$(".ui-dialog-content").dialog("close");
@@ -266,7 +267,10 @@ $(function(){
 			 $.ajax({
 				type:"POST",
 				url:"mcApprovePayment.do",
-				data:{'appId':appId,'mcUser':$("input[name='mcUser']:checked").val(),'referenceFile':$('#referenceFileId').val(),'referenceDate':$('#referenceDateId').val()},
+				data:{
+					'receiptDate':$('#receiptDate_'+appId).val(),
+					'paymentDesc':$('#managementComments_'+appId).val(),
+					'appId':appId,'mcUser':$("input[name='mcUser']:checked").val(),'referenceFile':$('#referenceFileId').val(),'referenceDate':$('#referenceDateId').val()},
 				success:function(response){
 					alert(response);
 					window.location.reload();
@@ -438,9 +442,9 @@ $(function(){
                                           
                                           
                                               <th style="color:black !important"><b>DPR Estimated Cost</b></th>
-                                               <th style="color:black !important"><b>GST Percent</b></th>
+                                              <!--  <th style="color:black !important"><b>GST Percent</b></th>
                                                  <th style="color:black !important"><b>GST Amount</b></th>
-                                                   <th style="color:black !important"><b>Total Amount</b></th>
+                                                   <th style="color:black !important"><b>Total Amount</b></th> -->
                                                     <th style="color:black !important"><b>Date</b></th>
                                                      <th style="color:black !important"><b>Remarks</b></th>
                                               
@@ -464,11 +468,11 @@ $(function(){
                                            
                                            <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
                                          
-                                         <td class="center">${app.getPaymentAmount()}</td>
-                                         <td class="center">${app.getGstPercent()}</td>
-                                         <td class="center">${app.getGstAmount()}</td>
                                          <td class="center">${app.getTotalAmount()}</td>
-                                          <td class="center"></td>
+                                        <%--  <td class="center">${app.getGstPercent()}</td>
+                                         <td class="center">${app.getGstAmount()}</td>
+                                         <td class="center">${app.getTotalAmount()}</td> --%>
+                                          <td><input type="text" title="dd-mm-yyyy" id="receiptDate_${app.getAppId()}"  class="receiptDate" style="width: 100px;height: 25px;"/></td>
                                            <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
                                          
                                              

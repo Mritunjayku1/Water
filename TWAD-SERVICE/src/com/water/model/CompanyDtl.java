@@ -201,10 +201,14 @@ public class CompanyDtl implements Serializable {
 	@Column(name = "EE_UPFRONT_REFERENCE_DATE", nullable = true, length = 26)
 	private String eeUpfrontReferenceDate;
 	
+	@Column(name = "MC_RECEIPT_DATE", nullable = true, length = 26)
+	private String mcReceiptDate;
 	@Column(name = "MC_REFERENCE_File", nullable = true, length = 26)
 	private String mcReferenceFile;
 	@Column(name = "MC_REFERENCE_DATE", nullable = true, length = 26)
 	private String mcReferenceDate;
+	@Column(name = "MC_REMARKS", nullable = true, length = 26)
+	private String mcRemarks;
 	
 	
 	@Column(name = "MC_USER",nullable = true, length = 100)
@@ -914,6 +918,26 @@ public class CompanyDtl implements Serializable {
 
 	public void setEeUpfrontReceiptDate(String eeUpfrontReceiptDate) {
 		this.eeUpfrontReceiptDate = eeUpfrontReceiptDate;
+	}
+
+
+	public String getMcReceiptDate() {
+		return mcReceiptDate;
+	}
+
+
+	public void setMcReceiptDate(String mcReceiptDate) {
+		this.mcReceiptDate = mcReceiptDate;
+	}
+
+
+	public String getMcRemarks() {
+		return mcRemarks;
+	}
+
+
+	public void setMcRemarks(String mcRemarks) {
+		this.mcRemarks = mcRemarks;
 	}
 
 

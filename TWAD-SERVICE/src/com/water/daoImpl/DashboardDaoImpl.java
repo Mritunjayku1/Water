@@ -23,15 +23,19 @@ import org.hibernate.type.StringType;
 import com.water.bean.AppFormBean;
 import com.water.bean.ApplicationBean;
 import com.water.bean.CategoryFormBean;
+import com.water.bean.CircleDivisionFormBean;
 import com.water.bean.CmwWaterConnBean;
 import com.water.bean.CompanyDtlBean;
 import com.water.bean.ConnectionFormBean;
 import com.water.bean.DDPaymentFormBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
+import com.water.bean.DivisionSubDivisionFormBean;
 import com.water.bean.EmployeeFormBean;
 import com.water.bean.OfficeFormBean;
 import com.water.bean.PaymentFormBean;
+import com.water.bean.RegionCircleFormBean;
+import com.water.bean.RegionFormBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneDivisionFormBean;
 import com.water.dao.DashboardDao;
@@ -41,14 +45,18 @@ import com.water.model.CompanyPaymentDtl;
 import com.water.model.EmployeeDetails;
 import com.water.model.HeaderListTable;
 import com.water.model.MasterCategory;
+import com.water.model.MasterCircle;
 import com.water.model.MasterDistrict;
 import com.water.model.MasterDivision;
+import com.water.model.MasterHODivision;
 import com.water.model.MasterOffice;
 import com.water.model.MasterPayment;
 import com.water.model.MasterPaymentType;
 import com.water.model.MasterReconnection;
+import com.water.model.MasterRegion;
 import com.water.model.MasterRole;
 import com.water.model.MasterStatus;
+import com.water.model.MasterSubDivision;
 import com.water.model.MasterTaluk;
 import com.water.model.MasterVillage;
 import com.water.model.MasterZone;
@@ -2151,7 +2159,7 @@ public String addPayment(PaymentFormBean paymentFormBean ){
 
 public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	Session session = sessionFactory.openSession();
-	
+	try{
 	Transaction tx1 =  session.beginTransaction();
 	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
 	companyDtl.setActive(2);
@@ -2192,7 +2200,16 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	masterPayment.setCreateUserId("Administrator");
 	session.save(masterPayment);
 	tx.commit();*/
-		return "Payment Added Successfully";
+	
+}
+catch(Exception e){
+	e.printStackTrace();
+	return "Pre-Feasability not Added";
+}
+finally{
+	session.close();
+}
+		return "Pre-Feasability details Saved";
 	}
 
 
@@ -2242,12 +2259,12 @@ public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
 	}
 	catch(Exception e){
 		e.printStackTrace();
-		return "Prefeasibility not Added";
+		return "Pre-Feasability not Added";
 	}
 	finally{
 		session.close();
 	}
-		return "Prefeasibility Added Successfully";
+		return "Pre-Feasability Added Successfully";
 	}
 
 public String eeSaveHeaderList(PaymentFormBean paymentFormBean ){
@@ -2366,6 +2383,8 @@ public String mcApprovePayment(PaymentFormBean paymentFormBean ){
 	companyDtl.setMcUser(paymentFormBean.getMcUser());
 	companyDtl.setMcReferenceFile(paymentFormBean.getReferenceFile());
 	companyDtl.setMcReferenceDate(paymentFormBean.getReferenceDate());
+	companyDtl.setMcReceiptDate(paymentFormBean.getReceiptDate());
+	companyDtl.setMcRemarks(paymentFormBean.getPaymentDesc());
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
@@ -2844,6 +2863,349 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 		.setResultTransformer(Transformers.aliasToBean(TalukVillageFormBean.class));
 			return cr.list();
 		}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+public String addRegion(RegionFormBean regionFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterRegion masterRegion = new MasterRegion();
+	masterRegion.setRegionName(regionFormBean.getRegionName());
+	masterRegion.setUpdateTs(new Date());
+	masterRegion.setCreateTs(new Date());
+	masterRegion.setUpdateUserId("Administrator");
+	masterRegion.setCreateUserId("Administrator");
+	session.save(masterRegion);
+	tx.commit();
+		return "Region Added Successfully";
+	}
+public String editRegion(RegionFormBean regionFormBean ){
+	Session session = sessionFactory.openSession();
+	Transaction tx =  session.beginTransaction();
+	MasterRegion masterRegion = (MasterRegion)session.get(MasterRegion.class,Integer.parseInt(regionFormBean.getRegionId()));
+	masterRegion.setRegionName(regionFormBean.getRegionName());
+	
+	masterRegion.setUpdateTs(new Date());
+	session.update(masterRegion);
+	tx.commit();
+		return "Region Updated Successfully";
+	}
+	
+	public String deleteRegion(RegionFormBean regionFormBean ){
+		Session session = sessionFactory.openSession();
+		try{
+		String[] categoryArray = regionFormBean.getRegionId().split(",");
+			for (int i = 0; i < categoryArray.length; i++) {
+
+				Transaction tx = session.beginTransaction();
+				int userid = Integer.parseInt(categoryArray[i]);
+				MasterRegion masterRegion = (MasterRegion) session.get(MasterRegion.class, userid);
+				session.delete(masterRegion);
+
+				tx.commit();
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return "Region can't be deleted, First delete Village and Taluk then district";
+		}
+		finally {
+			session.close();
+		}
+			return "Region deleted Successfully";
+		}
+	public List<MasterRegion> getRegionDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterRegion.class,"app");
+			return cr.list();
+		}
+	
+
+	
+	
+	
+	
+	
+	
+	
+
+public String addCircle(RegionCircleFormBean districtCircleFormBean ){
+	
+	String[] talukArray = districtCircleFormBean.getCircleName().split(",");
+	
+	for(int i=0;i<talukArray.length;i++){
+	
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterCircle masterCircle = new MasterCircle();
+	masterCircle.setRegionId((MasterRegion)session2.get(MasterRegion.class,Integer.parseInt(districtCircleFormBean.getRegionCircleId())));
+	masterCircle.setCircleName(talukArray[i]);
+	masterCircle.setUpdateTs(new Date());
+	masterCircle.setCreateTs(new Date());
+	masterCircle.setUpdateUserId("Administrator");
+	masterCircle.setCreateUserId("Administrator");
+	
+	session2.save(masterCircle);
+	tx2.commit();
+	}
+		return "Circle Added Successfully";
+	}
+public String editCircle(RegionCircleFormBean districtCircleFormBean ){
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterCircle masterCircle = (MasterCircle)session2.get(MasterCircle.class,Integer.parseInt(districtCircleFormBean.getRegionCircleId()));
+	masterCircle.setCircleName(districtCircleFormBean.getCircleName());
+	masterCircle.setUpdateTs(new Date());
+	masterCircle.setUpdateUserId("Administrator");
+	session2.update(masterCircle);
+	tx2.commit();
+		return "Circle Updated Successfully";
+	}
+	
+	public String deleteCircle(RegionCircleFormBean districtCircleFormBean ){
+		Session session = sessionFactory.openSession();
+		try{
+		String[] talukArray = districtCircleFormBean.getRegionCircleId().split(",");
+		
+			for (int i = 0; i < talukArray.length; i++) {
+
+				Transaction tx = session.beginTransaction();
+				int talukid = Integer.parseInt(talukArray[i]);
+				MasterCircle masterCircle = (MasterCircle) session.get(MasterCircle.class, talukid);
+				session.delete(masterCircle);
+
+				tx.commit();
+			}
+		
+		}catch(Exception e){
+			e.printStackTrace();
+			return "Circle can't be deleted, First delete Village then Circle";
+		}
+		finally {
+			session.close();
+		}
+			return "Circle deleted Successfully";
+		}
+	public List<RegionCircleFormBean> getCircleDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterCircle.class,"app")
+				.createCriteria("app.regionId","region")
+				.setProjection(Projections.projectionList()
+			            .add(Projections.property("region.regionName"),"regionName")
+			            .add(Projections.property("app.circleName"),"circleName")  
+			            
+			            .add(Projections.property("region.regionId"),"regionId")  
+			            .add(Projections.property("app.circleId"),"circleId"))
+			
+		.setResultTransformer(Transformers.aliasToBean(RegionCircleFormBean.class));
+			return cr.list();
+		}
+	
+	
+
+	
+	
+	
+	
+	
+	
+
+public String addHODivision(CircleDivisionFormBean circleDivisionFormBean ){
+	
+	String[] divisionArray = circleDivisionFormBean.getDivisionName().split(",");
+	
+	for(int i=0;i<divisionArray.length;i++){
+	
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterHODivision masterDivision = new MasterHODivision();
+	masterDivision.setCircleId((MasterCircle)session2.get(MasterCircle.class,Integer.parseInt(circleDivisionFormBean.getCircleDivisionId())));
+	masterDivision.setDivisionName(divisionArray[i]);
+
+	masterDivision.setUpdateTs(new Date());
+	masterDivision.setCreateTs(new Date());
+	masterDivision.setUpdateUserId("Administrator");
+	masterDivision.setCreateUserId("Administrator");
+	
+	session2.save(masterDivision);
+	tx2.commit();
+	}
+		return "Division Added Successfully";
+	}
+public String editHODivision(CircleDivisionFormBean circleDivisionFormBean ){
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterHODivision masterDivision = (MasterHODivision)session2.get(MasterHODivision.class,Integer.parseInt(circleDivisionFormBean.getCircleDivisionId()));
+	masterDivision.setDivisionName(circleDivisionFormBean.getDivisionName());
+	masterDivision.setUpdateTs(new Date());
+	masterDivision.setUpdateUserId("Administrator");
+	session2.update(masterDivision);
+	tx2.commit();
+		return "Division Updated Successfully";
+	}
+	
+	public String deleteHODivision(CircleDivisionFormBean talukDivisionFormBean ){
+		Session session = sessionFactory.openSession();
+		try{
+		String[] divisionArray = talukDivisionFormBean.getCircleDivisionId().split(",");
+		
+			for (int i = 0; i < divisionArray.length; i++) {
+
+				Transaction tx = session.beginTransaction();
+				int divisionid = Integer.parseInt(divisionArray[i]);
+				MasterDivision masterDivision = (MasterDivision) session.get(MasterDivision.class, divisionid);
+				session.delete(masterDivision);
+				tx.commit();
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return "Division isn't deleted";
+		}
+		finally{
+			session.close();
+		}
+			return "Division deleted Successfully";
+		}
+	public List<CircleDivisionFormBean> getHODivisionDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterHODivision.class,"app")
+				.createCriteria("app.circleId","circle")
+				.setProjection(Projections.projectionList()
+			            .add(Projections.property("circle.circleName"),"circleName")
+			            .add(Projections.property("app.divisionName"),"divisionName")  
+			            
+			            
+			            .add(Projections.property("circle.circleId"),"circleId")  
+			            .add(Projections.property("app.divisionId"),"divisionId"))
+			
+		.setResultTransformer(Transformers.aliasToBean(CircleDivisionFormBean.class));
+			return cr.list();
+		}
+
+	
+	
+
+public String addSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFormBean ){
+	
+	String[] villageArray = divisionSubDivisionFormBean.getSubDivisionName().split(",");
+	
+	for(int i=0;i<villageArray.length;i++){
+	
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterSubDivision masterSubDivision = new MasterSubDivision();
+	masterSubDivision.setDivisionId((MasterHODivision)session2.get(MasterHODivision.class,Integer.parseInt(divisionSubDivisionFormBean.getDivisionSubDivisionId())));
+	masterSubDivision.setSubDivisionName(villageArray[i]);
+
+	masterSubDivision.setUpdateTs(new Date());
+	masterSubDivision.setCreateTs(new Date());
+	masterSubDivision.setUpdateUserId("Administrator");
+	masterSubDivision.setCreateUserId("Administrator");
+	
+	session2.save(masterSubDivision);
+	tx2.commit();
+	}
+		return "SubDivision Added Successfully";
+	}
+public String editSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFormBean ){
+	Session session2 = sessionFactory.openSession();
+	Transaction tx2 =  session2.beginTransaction();
+	
+	MasterSubDivision masterSubDivision = (MasterSubDivision)session2.get(MasterSubDivision.class,Integer.parseInt(divisionSubDivisionFormBean.getDivisionSubDivisionId()));
+	masterSubDivision.setSubDivisionName(divisionSubDivisionFormBean.getSubDivisionName());
+	masterSubDivision.setUpdateTs(new Date());
+	masterSubDivision.setUpdateUserId("Administrator");
+	session2.update(masterSubDivision);
+	tx2.commit();
+		return "SubDivision Updated Successfully";
+	}
+	
+	public String deleteSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFormBean ){
+		Session session = sessionFactory.openSession();
+		try{
+		String[] villageArray = divisionSubDivisionFormBean.getDivisionSubDivisionId().split(",");
+		
+			for (int i = 0; i < villageArray.length; i++) {
+
+				Transaction tx = session.beginTransaction();
+				int villageid = Integer.parseInt(villageArray[i]);
+				MasterSubDivision masterSubDivision = (MasterSubDivision) session.get(MasterSubDivision.class, villageid);
+				session.delete(masterSubDivision);
+				tx.commit();
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			return "SubDivision isn't deleted";
+		}
+		finally{
+			session.close();
+		}
+			return "SubDivision deleted Successfully";
+		}
+	public List<DivisionSubDivisionFormBean> getSubDivisionDtl(){
+		Session session = sessionFactory.openSession();
+		Criteria cr = session.createCriteria(MasterSubDivision.class,"app")
+				.createCriteria("app.divisionId","division")
+				.setProjection(Projections.projectionList()
+			            .add(Projections.property("division.divisionName"),"divisionName")
+			            .add(Projections.property("app.subDivisionName"),"subDivisionName")  
+			            
+			            
+			            .add(Projections.property("division.divisionId"),"divisionId")  
+			            .add(Projections.property("app.subDivisionId"),"subDivisionId"))
+			
+		.setResultTransformer(Transformers.aliasToBean(DivisionSubDivisionFormBean.class));
+			return cr.list();
+		}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public List<DDPaymentFormBean> getFixedPaymentAmount(){
 		Session session = sessionFactory.openSession();

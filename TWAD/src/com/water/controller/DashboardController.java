@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -65,6 +64,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.water.bean.AppFormBean;
 import com.water.bean.ApplicationBean;
 import com.water.bean.CategoryFormBean;
+import com.water.bean.CircleDivisionFormBean;
 import com.water.bean.CompanyDtlBean;
 import com.water.bean.ComplaintBean;
 import com.water.bean.ConnectionFormBean;
@@ -74,10 +74,13 @@ import com.water.bean.DashboardBeanList;
 import com.water.bean.DashboardCountBean;
 import com.water.bean.DistrictFormBean;
 import com.water.bean.DistrictTalukFormBean;
+import com.water.bean.DivisionSubDivisionFormBean;
 import com.water.bean.EmployeeFormBean;
 import com.water.bean.OfficeFormBean;
 import com.water.bean.OracleDbBean;
 import com.water.bean.PaymentFormBean;
+import com.water.bean.RegionCircleFormBean;
+import com.water.bean.RegionFormBean;
 import com.water.bean.TalukVillageFormBean;
 import com.water.bean.ZoneConstants;
 import com.water.bean.ZoneDivisionFormBean;
@@ -2389,6 +2392,220 @@ public class DashboardController {
 
 	
 	
+	@RequestMapping(value = "/regionManagement", method = RequestMethod.GET)
+	public ModelAndView regionManagement() throws JsonSyntaxException, JSONException, IOException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getRegionDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<RegionFormBean> regionFormBeanList = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			RegionFormBean regionFormBean = gson.fromJson(
+					jsonArray.getString(i), RegionFormBean.class);
+			regionFormBeanList.add(regionFormBean);
+		}
+
+		updateRegionFile(regionFormBeanList);
+		
+		model.put("regionDtl", regionFormBeanList);
+
+		return new ModelAndView("regionManagement", "list", model);
+	}
+
+
+	@RequestMapping(value = "/regionCircleManagement", method = RequestMethod.GET)
+	public ModelAndView regionCircleManagement() throws JSONException, IOException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getRegionDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		Gson gson1 = new Gson();
+
+
+		Map<String,String> regionMap = new LinkedHashMap<>();
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			RegionFormBean regionFormBean = gson1.fromJson(
+					jsonArray1.getString(i), RegionFormBean.class);
+			if(!regionMap.containsKey(String.valueOf(regionFormBean.getRegionId()))){
+				regionMap.put(String.valueOf(regionFormBean.getRegionId()), regionFormBean.getRegionName());
+				}
+		}
+		
+		
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getCircleDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<RegionCircleFormBean> regionCircleFormBeanList = new ArrayList<>();
+
+		
+		for (int i = 0; i < jsonArray.length(); i++) {
+			RegionCircleFormBean regionCircleFormBean = gson.fromJson(
+					jsonArray.getString(i), RegionCircleFormBean.class);
+			regionCircleFormBeanList.add(regionCircleFormBean);
+		}
+
+		updateRegionCircleFile(regionCircleFormBeanList);
+		
+		model.put("regionCircleDtl", regionCircleFormBeanList);
+		model.put("regionMap", regionMap);
+
+		return new ModelAndView("regionCircleManagement", "list", model);
+	}
+	
+	@RequestMapping(value = "/circleDivisionManagement", method = RequestMethod.GET)
+	public ModelAndView circleDivisionManagement() throws JSONException, IOException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+		
+		
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getCircleDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		Gson gson1 = new Gson();
+
+
+		Map<String,String> circleMap = new LinkedHashMap<>();
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			RegionCircleFormBean districtCircleFormBean = gson1.fromJson(
+					jsonArray1.getString(i), RegionCircleFormBean.class);
+			if(!circleMap.containsKey(String.valueOf(districtCircleFormBean.getCircleId()))){
+				circleMap.put(String.valueOf(districtCircleFormBean.getCircleId()), districtCircleFormBean.getCircleName());
+				}
+		}
+	
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getHODivisionDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<CircleDivisionFormBean> circleDivisionFormBeanList = new ArrayList<>();
+
+		
+		for (int i = 0; i < jsonArray.length(); i++) {
+			CircleDivisionFormBean circleDivisionFormBean = gson.fromJson(
+					jsonArray.getString(i), CircleDivisionFormBean.class);
+			
+			
+			
+			circleDivisionFormBeanList.add(circleDivisionFormBean);
+		}
+
+		updateCircleDivisionFile(circleDivisionFormBeanList);
+		
+		model.put("circleDivisionDtl", circleDivisionFormBeanList);
+		model.put("circleMap", circleMap);
+
+		return new ModelAndView("circleDivisionManagement", "list", model);
+	}
+
+
+	@RequestMapping(value = "/divisionSubDivisionManagement", method = RequestMethod.GET)
+	public ModelAndView divisionSubDivisionManagement() throws JSONException, IOException {
+
+		Map<String, Object> model = new HashMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(headers);
+		
+		
+		ResponseEntity<String> out1 = restTemplate.exchange(
+				WaterDashboardService + "getHODivisionDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
+
+		Gson gson1 = new Gson();
+
+
+		Map<String,String> divisionMap = new LinkedHashMap<>();
+		for (int i = 0; i < jsonArray1.length(); i++) {
+			DivisionSubDivisionFormBean districtDivisionFormBean = gson1.fromJson(
+					jsonArray1.getString(i), DivisionSubDivisionFormBean.class);
+			if(!divisionMap.containsKey(String.valueOf(districtDivisionFormBean.getDivisionId()))){
+				divisionMap.put(String.valueOf(districtDivisionFormBean.getDivisionId()), districtDivisionFormBean.getDivisionName());
+				}
+		}
+			
+ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getSubDivisionDtl",
+				HttpMethod.POST, entity, String.class);
+
+		JSONArray jsonArray = new JSONArray(out.getBody().toString());
+
+		gson = new Gson();
+
+		List<DivisionSubDivisionFormBean> divisionSubDivisionFormBeanList = new ArrayList<>();
+
+		
+		for (int i = 0; i < jsonArray.length(); i++) {
+			DivisionSubDivisionFormBean divisionSubDivisionFormBean = gson.fromJson(
+					jsonArray.getString(i), DivisionSubDivisionFormBean.class);
+			
+			
+			
+			divisionSubDivisionFormBeanList.add(divisionSubDivisionFormBean);
+		}
+
+		//updateDivisionSubDivisionFile(divisionSubDivisionFormBeanList);
+		
+		model.put("divisionSubDivisionDtl", divisionSubDivisionFormBeanList);
+		model.put("divisionMap", divisionMap);
+
+		return new ModelAndView("divisionSubDivisionManagement", "list", model);
+	}
+
+	
+	
 	
 	
 	
@@ -2605,6 +2822,180 @@ public class DashboardController {
 	}
 	
 	
+	public void updateRegionFile(List<RegionFormBean> regionFormBeanList)
+			throws IOException, JSONException {
+
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String fullPath = URLDecoder.decode(path, "UTF-8");
+		String pathArr[] = fullPath.split("WEB-INF/");
+
+		try {
+
+			FileWriter fw = new FileWriter(pathArr[0] + "library/test2.json");
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			List<JSONObject> regionList = new ArrayList<>();
+			JSONArray jsonArray = new JSONArray();
+			for (RegionFormBean regionFormBean : regionFormBeanList) {
+
+				JSONObject regionJsonObject = new JSONObject();
+				regionJsonObject.put("id", regionFormBean.getRegionId());
+				regionJsonObject.put("label", regionFormBean.getRegionName());
+				regionJsonObject.put("value", regionFormBean.getRegionName());
+				
+				regionList.add(regionJsonObject);
+
+			}
+			
+			bw.write(regionList.toString());
+			bw.close();
+			fw.close();
+
+			File newFile = new File(pathArr[0] + "library/test2.json");
+			File oldFile = new File(pathArr[0] + "library/Region.json");
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+			newFile.renameTo(oldFile);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+	}
+	
+	public void updateRegionCircleFile(List<RegionCircleFormBean> circleFormBeanList)
+			throws IOException, JSONException {
+
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String fullPath = URLDecoder.decode(path, "UTF-8");
+		String pathArr[] = fullPath.split("WEB-INF/");
+
+		try {
+
+		FileWriter fw = new FileWriter(pathArr[0] + "library/test2.json");
+			
+			
+			BufferedWriter bw = new BufferedWriter(fw);
+			JSONObject regionCircleJsonObject = new JSONObject();
+			List<JSONObject> circleList = null;
+			for (RegionCircleFormBean regionCircleFormBean : circleFormBeanList) {
+
+				if(regionCircleJsonObject.has(regionCircleFormBean.getRegionId()+"")){
+					JSONArray regionCircleList = (JSONArray)regionCircleJsonObject.get(regionCircleFormBean.getRegionId()+"");
+					JSONObject circleJsonObject = new JSONObject();
+					circleJsonObject.put("id", regionCircleFormBean.getCircleId()+"");
+					circleJsonObject.put("label", regionCircleFormBean.getCircleName());
+					circleJsonObject.put("value", regionCircleFormBean.getCircleName());
+					
+					regionCircleList.put(circleJsonObject);
+				}
+				else{
+				circleList = new ArrayList<>();
+				JSONObject circleJsonObject = new JSONObject();
+				circleJsonObject.put("id", regionCircleFormBean.getCircleId()+"");
+				circleJsonObject.put("label", regionCircleFormBean.getCircleName());
+				circleJsonObject.put("value", regionCircleFormBean.getCircleName());
+				
+				circleList.add(circleJsonObject);
+				regionCircleJsonObject.put(regionCircleFormBean.getRegionId()+"", circleList);
+				}
+
+			}
+			
+			bw.write(regionCircleJsonObject.toString());
+			bw.close();
+			fw.close();
+
+			File newFile = new File(pathArr[0] + "library/test2.json");
+			File oldFile = new File(pathArr[0] + "library/Circle.json");
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+			newFile.renameTo(oldFile);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+	}
+	
+	public void updateCircleDivisionFile(List<CircleDivisionFormBean> divisionFormBeanList)
+			throws IOException, JSONException {
+
+		String path = this.getClass().getClassLoader().getResource("").getPath();
+		String fullPath = URLDecoder.decode(path, "UTF-8");
+		String pathArr[] = fullPath.split("WEB-INF/");
+
+		try {
+
+			FileWriter fw = new FileWriter(pathArr[0] + "library/test2.json");
+			BufferedWriter bw = new BufferedWriter(fw);
+
+			JSONObject circleDivisionJsonObject = new JSONObject();
+			List<JSONObject> divisionList = null;
+			for (CircleDivisionFormBean circleDivisionFormBean : divisionFormBeanList) {
+				
+                if(circleDivisionJsonObject.has(circleDivisionFormBean.getCircleId()+"")){
+					JSONArray circleDivisionList = (JSONArray)circleDivisionJsonObject.get(circleDivisionFormBean.getCircleId()+"");
+					JSONObject divisionJsonObject = new JSONObject();
+					divisionJsonObject.put("id", circleDivisionFormBean.getDivisionId()+"");
+					divisionJsonObject.put("label", circleDivisionFormBean.getDivisionName());
+					divisionJsonObject.put("value", circleDivisionFormBean.getDivisionName());
+					
+					circleDivisionList.put(divisionJsonObject);
+				}
+				else{
+					divisionList = new ArrayList<>();
+				JSONObject divisionJsonObject = new JSONObject();
+				divisionJsonObject.put("id", circleDivisionFormBean.getDivisionId()+"");
+				divisionJsonObject.put("label", circleDivisionFormBean.getDivisionName());
+				divisionJsonObject.put("value", circleDivisionFormBean.getDivisionName());
+				
+				divisionList.add(divisionJsonObject);
+				circleDivisionJsonObject.put(circleDivisionFormBean.getCircleId()+"", divisionList);
+				}
+
+			}
+			
+			bw.write(circleDivisionJsonObject.toString());
+			bw.close();
+			fw.close();
+
+			File newFile = new File(pathArr[0] + "library/test2.json");
+			File oldFile = new File(pathArr[0] + "library/Division.json");
+			if (oldFile.exists()) {
+				oldFile.delete();
+			}
+			newFile.renameTo(oldFile);
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public void updateOfficeFile(List<OfficeFormBean> officeFormBeanList)
 			throws IOException, JSONException {
 
@@ -2618,7 +3009,7 @@ public class DashboardController {
 			BufferedWriter bw = new BufferedWriter(fw);
 
 			List<JSONObject> officeList = new ArrayList<>();
-			JSONArray jsonArray = new JSONArray();
+			//JSONArray jsonArray = new JSONArray();
 			for (OfficeFormBean officeFormBean : officeFormBeanList) {
 
 				JSONObject officeJsonObject = new JSONObject();
@@ -3409,6 +3800,258 @@ public class DashboardController {
 	
 	
 
+	@RequestMapping(value = "/addRegion", method = RequestMethod.POST)
+	@ResponseBody
+	public String addRegion(RegionFormBean regionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(regionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "addRegion", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/editRegion", method = RequestMethod.POST)
+	@ResponseBody
+	public String editRegion(RegionFormBean regionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(regionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "editRegion", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	@RequestMapping(value = "/deleteRegion", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteRegion(RegionFormBean regionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(regionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "deleteRegion", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+	
+	
+
+	@RequestMapping(value = "/addCircle", method = RequestMethod.POST)
+	@ResponseBody
+	public String addCircle(RegionCircleFormBean regionCircleFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(regionCircleFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "addCircle", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/editCircle", method = RequestMethod.POST)
+	@ResponseBody
+	public String editCircle(RegionCircleFormBean regionCircleFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(regionCircleFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "editCircle", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	@RequestMapping(value = "/deleteCircle", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteCircle(RegionCircleFormBean regionCircleFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(regionCircleFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "deleteCircle", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	@RequestMapping(value = "/addHODivision", method = RequestMethod.POST)
+	@ResponseBody
+	public String addHODivision(CircleDivisionFormBean circleDivisionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(circleDivisionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "addHODivision", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/editHODivision", method = RequestMethod.POST)
+	@ResponseBody
+	public String editHODivision(CircleDivisionFormBean circleDivisionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(circleDivisionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "editHODivision", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	@RequestMapping(value = "/deleteHODivision", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteHODivision(CircleDivisionFormBean CircleDivisionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(CircleDivisionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "deleteHODivision", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+
+	@RequestMapping(value = "/addSubDivision", method = RequestMethod.POST)
+	@ResponseBody
+	public String addSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(divisionSubDivisionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "addSubDivision", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+	
+
+	@RequestMapping(value = "/editSubDivision", method = RequestMethod.POST)
+	@ResponseBody
+	public String editSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(divisionSubDivisionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "editSubDivision", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	@RequestMapping(value = "/deleteSubDivision", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(divisionSubDivisionFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "deleteSubDivision", HttpMethod.POST,
+				entity, String.class);
+
+		String res = out.getBody();
+		return res;
+	}
+
+	
+
+	
+
 	@RequestMapping(value = "/addDistrict", method = RequestMethod.POST)
 	@ResponseBody
 	public String addDistrict(DistrictFormBean districtFormBean) {
@@ -3529,17 +4172,6 @@ public class DashboardController {
 	}
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	@RequestMapping(value = "/addVillage", method = RequestMethod.POST)
 	@ResponseBody
 	public String addVillage(TalukVillageFormBean VillageVillageFormBean) {
@@ -3581,14 +4213,14 @@ public class DashboardController {
 
 	@RequestMapping(value = "/deleteVillage", method = RequestMethod.POST)
 	@ResponseBody
-	public String deleteVillage(TalukVillageFormBean talukVillageFormBean) {
+	public String deleteVillage(TalukVillageFormBean circleVillageFormBean) {
 
 		RestTemplate restTemplate = new RestTemplate();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<?> entity = new HttpEntity(talukVillageFormBean,headers);
+		HttpEntity<?> entity = new HttpEntity(circleVillageFormBean,headers);
 
 		ResponseEntity<String> out = restTemplate.exchange(
 				WaterDashboardService + "deleteVillage", HttpMethod.POST,
@@ -3598,7 +4230,8 @@ public class DashboardController {
 		return res;
 	}
 
-
+	
+	
 	
 	//New method by Mahalingam
 	

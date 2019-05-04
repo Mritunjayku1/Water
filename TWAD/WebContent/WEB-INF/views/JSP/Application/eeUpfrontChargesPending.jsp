@@ -359,7 +359,7 @@ function validateAddForm() {
 <input type="hidden" name="appId" id="appId" value=''/>
 <img class="imgClose" src="library/img/Close_SMS.png"
 			style="width: 40px; border-width: 0px; float: right; margin-top: -11px; margin-right: -5px; cursor: pointer;">
-		<h2 class="bg_heading">Add Payment Details</h2>
+		<h2 class="bg_heading">Pre-Feasability Details</h2>
 		<table id="paymentTable" style="margin-left: 30px;margin-top: 20px;">
 <%-- 		<tr><td><span><b>Payment Type:</b></span><span style="color: red;">*</span></td><td>
 				<select  id="paymentTypeId">

@@ -73,5 +73,19 @@
 		<mapping class="com.water.model.TransctionMaster"></mapping>
 		<mapping class="com.water.model.ReqMldToCost"></mapping>
    <mapping class="com.water.model.MasterGst"></mapping>
+   <mapping class="com.water.model.CompanyPaymentDtl"></mapping>
+		<mapping class="com.water.model.CompanyEEPaymentDtl"></mapping>
+		<mapping class="com.water.model.CompanyDtl"></mapping>
+		<mapping class="com.water.model.MasterDistrict"></mapping>
+		<mapping class="com.water.model.MasterTaluk"></mapping>
+		<mapping class="com.water.model.MasterVillage"></mapping>
+		<mapping class="com.water.model.MasterOffice"></mapping>
+	    <mapping class="com.water.model.MasterPaymentType"></mapping>
+		<mapping class="com.water.model.MasterPayment"></mapping>
+		<mapping class="com.water.model.HeaderListTable"></mapping>
+		<mapping class="com.water.model.MasterRegion"></mapping>
+		<mapping class="com.water.model.MasterCircle"></mapping>
+		<mapping class="com.water.model.MasterHODivision"></mapping>
+		<mapping class="com.water.model.MasterSubDivision"></mapping>
 	</session-factory>
 </hibernate-configuration>

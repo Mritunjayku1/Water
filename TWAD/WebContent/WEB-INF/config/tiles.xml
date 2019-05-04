@@ -124,6 +124,25 @@
 		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/talukVillageManagement.jsp"></put-attribute>
 	</definition>
+	
+	<definition name="regionManagement" extends="ConfigrationManagement.definition">
+		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/regionManagement.jsp"></put-attribute>
+		
+	</definition><definition name="regionCircleManagement" extends="ConfigrationManagement.definition">
+		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/regionCircleManagement.jsp"></put-attribute>
+	</definition>
+	<definition name="circleDivisionManagement" extends="ConfigrationManagement.definition">
+		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/circleDivisionManagement.jsp"></put-attribute>
+	</definition>
+	<definition name="divisionSubDivisionManagement" extends="ConfigrationManagement.definition">
+		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/divisionSubDivisionManagement.jsp"></put-attribute>
+	</definition>
+	
+	
     <definition name="officeLocation" extends="ConfigrationManagement.definition">
 		<put-attribute name="title" value="E-Water | Configration Management"></put-attribute>
 		<put-attribute name="body" value="/WEB-INF/views/JSP/Form/officeLocation.jsp"></put-attribute>

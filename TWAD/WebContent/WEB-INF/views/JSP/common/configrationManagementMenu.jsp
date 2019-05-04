@@ -37,6 +37,7 @@
 	position: relative;
 	float: left;
 	z-index: 1;
+	background-color: #1589FF;
 }
 
 #HDropdown-orange-classic li a {
@@ -183,14 +184,28 @@ $(function(){
 		if(url.indexOf("talukVillageManagement")>0){
 			$('ul li:nth-child(6)').addClass('selectionClass');
 			}
-		if(url.indexOf("officeLocation")>0){
+		if(url.indexOf("regionManagement")>0){
 			$('ul li:nth-child(7)').addClass('selectionClass');
 			}
-		if(url.indexOf("paymentType.do")>0){
+		if(url.indexOf("regionCircleManagement")>0){
 			$('ul li:nth-child(8)').addClass('selectionClass');
 			}
-		if(url.indexOf("payment.do")>0){
+		if(url.indexOf("circleDivisionManagement")>0){
 			$('ul li:nth-child(9)').addClass('selectionClass');
+			}
+		if(url.indexOf("divisionSubDivisionManagement")>0){
+			$('ul li:nth-child(10)').addClass('selectionClass');
+			}
+		
+		
+		if(url.indexOf("officeLocation")>0){
+			$('ul li:nth-child(11)').addClass('selectionClass');
+			}
+		if(url.indexOf("paymentType.do")>0){
+			$('ul li:nth-child(12)').addClass('selectionClass');
+			}
+		if(url.indexOf("payment.do")>0){
+			$('ul li:nth-child(13)').addClass('selectionClass');
 			}
 });
 
@@ -209,6 +224,10 @@ $(function(){
 	 <li><a href="districtManagement.do">District </a></li> 
 	  <li><a href="districtTalukManagement.do">District/Taluk </a></li> 
 	   <li><a href="talukVillageManagement.do">Taluk/Village </a></li>
+	    <li><a href="regionManagement.do">Region </a></li> 
+	  <li><a href="regionCircleManagement.do">Region/Circle </a></li> 
+	   <li><a href="circleDivisionManagement.do">Circle/Division </a></li>
+	     <li><a href="divisionSubDivisionManagement.do">Division/SubDivision </a></li>
 	    <li><a href="officeLocation.do">Office Location</a></li> 
 	     <li><a href="paymentType.do">Payment Type</a></li> 
 	      <li><a href="payment.do">Payment</a></li> 

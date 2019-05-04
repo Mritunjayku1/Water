@@ -44,6 +44,27 @@ $(function(){
 		var approvedAppRef = $(this).attr('id');
 		var appId = approvedAppRef.split("_");
 		var managementComments=$('#managementComments_'+appId[1]).val();
+		var regionId= $("#regionSearch_"+appId[1]).attr('item_id');
+		if(regionId == null || regionId=='')
+		{
+		alert("Please select Region !")
+		return false;
+		}
+		var circleId= $("#circleSearch_"+appId[1]).attr('item_id');
+		if(circleId == null || circleId=='')
+		{
+		alert("Please select Circle !")
+		return false;
+		}
+		var divisionId= $("#divisionSearch_"+appId[1]).attr('item_id');
+		if(divisionId == null || divisionId=='')
+		{
+		alert("Please select Division !")
+		return false;
+		}
+		
+		
+		
 		var officeId= $("#officeSearch_"+appId[1]).attr('item_id');
 		if(officeId == null || officeId=='')
 		{
@@ -59,7 +80,14 @@ $(function(){
 		$.ajax({
 			type:"POST",
 			url:"registeredApplicationApproved.do",
-			data:{'appId':appId[1],'managementComments':managementComments,'officeName':officeId},
+			data:{
+				'appId':appId[1],
+				'managementComments':managementComments,
+				'region':regionId,
+				'circle':circleId,
+				'division':divisionId,
+				'officeName':officeId
+				},
 			success:function(response){
 				alert(response);
 				window.location.reload();
@@ -95,19 +123,19 @@ $(function(){
 	   var acList = "";
 	   
 	   var searchId = "";
-	   $('.officeSearchClass').focus(function(){
+	   $('.regionSearchClass').focus(function(){
 		   var searchIdArr = $(this).attr("id").split("_");
 	    	searchId = searchIdArr[1];
 	    	
 	   });
 	  
 	                     
-	                      $('.officeSearchClass').autocomplete({
+	                      $('.regionSearchClass').autocomplete({
 	                    	    source: function (request, response) {
 	                    	    	  $.ajax({
 	                  					type: "GET",
 	                  					async:false,
-	                  					url: "library/Office.json",
+	                  					url: "library/Region.json",
 	                  					success: function (
 	                  						response) {
 	                  						acList=response;
@@ -125,10 +153,121 @@ $(function(){
 	                    	    },
 	                      
 	                      select: function (event, ui) {
-	                          $("#officeSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
+	                          $("#regionSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
 	                      }
 	                      
 	                    	});
+	                      
+	                      
+	                      
+	                      $('.circleSearchClass').focus(function(){
+	               		   var searchIdArr = $(this).attr("id").split("_");
+	               	    	searchId = searchIdArr[1];
+	               	    	
+	               	   });
+	               	  
+	               	                     
+	               	                      $('.circleSearchClass').autocomplete({
+	               	                    	    source: function (request, response) {
+	               	                    	    	  $.ajax({
+	               	                  					type: "GET",
+	               	                  					async:false,
+	               	                  					url: "library/Circle.json",
+	               	                  					success: function (
+	               	                  						response) {
+	               	                  						acList=response[$("#regionSearch_"+searchId).attr('item_id')];
+	               	                  					}
+	               	                  	    	  
+	               	                  	    	  });
+	               	                    	        var matches = $.map(acList, function (acItem) {
+	               	                    	        	var searchTerm = request.term.replace(/%/g,".*");
+	               	                    	        	var patt = new RegExp("^"+searchTerm.toLowerCase()+".*$","ig");
+	               	                    	        	  if(patt.test(acItem.value.toLowerCase())){
+	               	                    	                return acItem;
+	               	                    	            }
+	               	                    	        });
+	               	                    	        response(matches);
+	               	                    	    },
+	               	                      
+	               	                      select: function (event, ui) {
+	               	                          $("#circleSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
+	               	                      }
+	               	                      
+	               	                    	});
+	               	
+	               	                      
+	               	                   $('.divisionSearchClass').focus(function(){
+	               	         		   var searchIdArr = $(this).attr("id").split("_");
+	               	         	    	searchId = searchIdArr[1];
+	               	         	    	
+	               	         	   });
+	               	         	  
+	               	         	                     
+	               	         	                      $('.divisionSearchClass').autocomplete({
+	               	         	                    	    source: function (request, response) {
+	               	         	                    	    	  $.ajax({
+	               	         	                  					type: "GET",
+	               	         	                  					async:false,
+	               	         	                  					url: "library/Division.json",
+	               	         	                  					success: function (
+	               	         	                  						response) {
+	               	         	                  						acList=response[$("#circleSearch_"+searchId).attr('item_id')];
+	               	         	                  					}
+	               	         	                  	    	  
+	               	         	                  	    	  });
+	               	         	                    	        var matches = $.map(acList, function (acItem) {
+	               	         	                    	        	var searchTerm = request.term.replace(/%/g,".*");
+	               	         	                    	        	var patt = new RegExp("^"+searchTerm.toLowerCase()+".*$","ig");
+	               	         	                    	        	  if(patt.test(acItem.value.toLowerCase())){
+	               	         	                    	                return acItem;
+	               	         	                    	            }
+	               	         	                    	        });
+	               	         	                    	        response(matches);
+	               	         	                    	    },
+	               	         	                      
+	               	         	                      select: function (event, ui) {
+	               	         	                          $("#divisionSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
+	               	         	                      }
+	               	         	                      
+	               	         	                    	});
+	               	         	
+	               	         	                      
+	               	         	                  $('.officeSearchClass').focus(function(){
+	               	         	       		   var searchIdArr = $(this).attr("id").split("_");
+	               	         	       	    	searchId = searchIdArr[1];
+	               	         	       	    	
+	               	         	       	   });
+	               	         	       	  
+	               	         	       	                     
+	               	         	       	                      $('.officeSearchClass').autocomplete({
+	               	         	       	                    	    source: function (request, response) {
+	               	         	       	                    	    	  $.ajax({
+	               	         	       	                  					type: "GET",
+	               	         	       	                  					async:false,
+	               	         	       	                  					url: "library/Office.json",
+	               	         	       	                  					success: function (
+	               	         	       	                  						response) {
+	               	         	       	                  						acList=response;
+	               	         	       	                  					}
+	               	         	       	                  	    	  
+	               	         	       	                  	    	  });
+	               	         	       	                    	        var matches = $.map(acList, function (acItem) {
+	               	         	       	                    	        	var searchTerm = request.term.replace(/%/g,".*");
+	               	         	       	                    	        	var patt = new RegExp("^"+searchTerm.toLowerCase()+".*$","ig");
+	               	         	       	                    	        	  if(patt.test(acItem.value.toLowerCase())){
+	               	         	       	                    	                return acItem;
+	               	         	       	                    	            }
+	               	         	       	                    	        });
+	               	         	       	                    	        response(matches);
+	               	         	       	                    	    },
+	               	         	       	                      
+	               	         	       	                      select: function (event, ui) {
+	               	         	       	                          $("#officeSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
+	               	         	       	                      }
+	               	         	       	                      
+	               	         	       	                    	});
+	               	         	       	
+	                      
 	                      
 	                      
 });
@@ -138,7 +277,7 @@ $(function(){
 <tr>
 		<td colspan='8'
 			style='text-align: center; background-color: #FCFCF4; font-size: 17px; height: 10px; color: #800000; font-weight: bold;'>
-			Pending Applications</td>
+			Registered Applications</td>
 	</tr>
 </table>
 
@@ -153,7 +292,7 @@ $(function(){
 
 
                 <div class="row">
-                <div class="col-lg-12">
+                <div>
                     <div class="panel panel-default">
                         
                         <div class="panel-body">
@@ -164,14 +303,16 @@ $(function(){
                                            <!--  <th style="color:black !important"></th> -->
                                             <th style="color:black !important"><b>App Ref#</b></th>
                                             <th style="color:black !important"><b> Name of Company</b></th>
-                                              <th style="color:black !important"><b> District</b></th>
-                                                <th style="color:black !important"><b>Taluk</b></th>
-                                                  <th style="color:black !important"><b> Village</b></th>
-                                          
-                                             <th style="color:black !important"><b>Registered Date</b></th>
-                                              <th style="color:black !important"><b>Office Name</b></th>
-                                             <th style="color:black !important"><b>Remarks</b></th>
-                                              <th></th>
+                                            <th style="color:black !important"><b> District</b></th>
+                                            <th style="color:black !important"><b>Taluk</b></th>
+                                            <th style="color:black !important"><b> Village</b></th>
+                                            <th style="color:black !important"><b>Region</b></th>
+                                            <th style="color:black !important"><b>Circle</b></th>
+                                            <th style="color:black !important"><b>Division</b></th>
+                                            <th style="color:black !important"><b>Office Name</b></th>
+                                            <th style="color:black !important"><b>Registered Date</b></th>
+                                            <th style="color:black !important"><b>Remarks</b></th>
+                                            <th></th>
                                         
                                         </tr>
                                     </thead>
@@ -189,25 +330,35 @@ $(function(){
                                               <td>${app.getTaluk()}</td>
                                                <td>${app.getVillage()}</td>
                                            
-                                             <td class="center">${app.getCreateTs()}</td>
+                                            
+                                             
                                               <td class="center">
-                                              
-                                              <div class="ui-widget">
-                                                <input class="officeSearchClass" id="officeSearch_${app.getAppId()}" title="To get all Office Name type % only" />
+                                               <div class="ui-widget">
+                                                <input style="width:90px;" class="regionSearchClass" id="regionSearch_${app.getAppId()}" title="To get all Region type '%' only" />
                                                </div>
- 
+                                              </td>
                                               
-                                             <%--  <select style="width: 200px;" id="officeId_${app.getAppId()}">
-				                           <option value="">--Select Office Name--</option>
-                                    <c:forEach items="${list.officeDtl}" var="office" varStatus="count">
-                                        <option value="${office.getOfficeId()}">${office.getOfficeName()}</option>
-                                    </c:forEach>
-
-				
-				</select>
-                                              --%> 
+                                               <td class="center">
+                                               <div class="ui-widget">
+                                                <input style="width:90px;" class="circleSearchClass" id="circleSearch_${app.getAppId()}" title="To get all Circle type '%' only" />
+                                               </div>
+                                              </td>
+                                              
+                                               <td class="center">
+                                               <div class="ui-widget">
+                                                <input style="width:90px;" class="divisionSearchClass" id="divisionSearch_${app.getAppId()}" title="To get all Division type '%' only" />
+                                               </div>
                                               </td>
                                              
+                                             
+                                             
+                                             
+                                              <td class="center">
+                                               <div class="ui-widget">
+                                                <input  style="width:90px;" class="officeSearchClass" id="officeSearch_${app.getAppId()}" title="To get all Office Name type '%' only" />
+                                               </div>
+                                              </td>
+                                              <td class="center">${app.getCreateTs()}</td>
                                               <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
                                               <td class="center">
                                               <input type="button" class="paymentClass" id="approved_${app.getAppId()}" name="approvedBtn" style="width: auto;" value="Accept"/>
