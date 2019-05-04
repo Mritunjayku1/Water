@@ -94,10 +94,10 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 						<tr>
 							<td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px"
 								height="106px" style="margin-left: 50px;"></td>
-							<td width="50%" align="center"><img src="library/img/middleImage.png" width="560px"
-								height="67px"></td>
-							<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
-								height="130px" style="margin-right: 50px;"></td>
+							 <td width="50%" align="center"><img src="library/img/middleImage.png" width="770px"
+								height="50px"></td>
+							<!-- <td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px" style="margin-right: 50px;"></td> -->
 							<td></td>
 						</tr>
 					</tbody>
@@ -113,7 +113,7 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	</tr>
 	
 </tbody></table>
-<table width="35%" id="ackTable" align="center" style="font-size: 20px;">
+<table width="50%" id="ackTable" align="center" style="font-size: 20px;">
 
 <tr><td align="left" width="50%"><b> Name of the Applicant</b></td><td  width="50%">:<span><%=request.getParameter("applicantName")%></span></td></tr>
 <tr><td align="left"><b>Application Reference No</b></td><td>:<span><%=request.getParameter("applicationRef")%></span></td></tr>

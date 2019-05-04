@@ -437,10 +437,12 @@ $(function(){
                                             <th style="color:black !important"><b>Correspondence Address</b></th>
                                           
                                           
-                                              <th style="color:black !important"><b>Payment Amount</b></th>
+                                              <th style="color:black !important"><b>DPR Estimated Cost</b></th>
                                                <th style="color:black !important"><b>GST Percent</b></th>
                                                  <th style="color:black !important"><b>GST Amount</b></th>
                                                    <th style="color:black !important"><b>Total Amount</b></th>
+                                                    <th style="color:black !important"><b>Date</b></th>
+                                                     <th style="color:black !important"><b>Remarks</b></th>
                                               
                                              
                                             <th style="color:black !important"></th>
@@ -466,6 +468,8 @@ $(function(){
                                          <td class="center">${app.getGstPercent()}</td>
                                          <td class="center">${app.getGstAmount()}</td>
                                          <td class="center">${app.getTotalAmount()}</td>
+                                          <td class="center"></td>
+                                           <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
                                          
                                              
 											<td><button

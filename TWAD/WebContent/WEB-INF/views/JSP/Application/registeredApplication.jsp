@@ -50,11 +50,11 @@ $(function(){
 		alert("Please select Office Name !")
 		return false;
 		}
-		if(managementComments == null || managementComments=='')
+		/* if(managementComments == null || managementComments=='')
 		{
 		alert("Please enter the Comments !")
 		return false;
-		}
+		} */
 		if(confirm("Are you sure want to Approve ? ")){
 		$.ajax({
 			type:"POST",
@@ -170,7 +170,7 @@ $(function(){
                                           
                                              <th style="color:black !important"><b>Registered Date</b></th>
                                               <th style="color:black !important"><b>Office Name</b></th>
-                                             <th style="color:black !important"><b>Management Comments</b></th>
+                                             <th style="color:black !important"><b>Remarks</b></th>
                                               <th></th>
                                         
                                         </tr>
@@ -210,8 +210,8 @@ $(function(){
                                              
                                               <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
                                               <td class="center">
-                                              <input type="button" class="paymentClass" id="approved_${app.getAppId()}" name="approvedBtn" style="width: auto;" value="Approved"/>
-											  <input type="button" class="cancelbtn" id="rejected_${app.getAppId()}" name="rejectedBtn" style="width: auto;" value="Rejected"/>
+                                              <input type="button" class="paymentClass" id="approved_${app.getAppId()}" name="approvedBtn" style="width: auto;" value="Accept"/>
+											  <input type="button" class="cancelbtn" id="rejected_${app.getAppId()}" name="rejectedBtn" style="width: auto;" value="Reject"/>
 											  </td>
                                            
                                         </tr>	 

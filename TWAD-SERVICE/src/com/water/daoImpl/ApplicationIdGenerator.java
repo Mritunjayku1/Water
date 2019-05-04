@@ -25,7 +25,7 @@ public class ApplicationIdGenerator implements IdentifierGenerator{
         Integer year = Calendar.getInstance().get(Calendar.YEAR);
        // int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
       // String prefix = "WE"+year.toString();
-       String prefix = "WI"+year.toString();
+       String prefix = "TWAD"+year.toString();
         Connection connection = session.connection();
 
         try {

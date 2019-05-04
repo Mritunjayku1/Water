@@ -111,6 +111,74 @@ function validateAddForm() {
 	$(function() {
 		var appId="";
 		var companyPaymentDtlID="";
+		
+		
+		var headerList = [];
+		
+		$.ajax({
+			type:"GET",
+			url:"getHeaderList.do",
+			async:false,
+			data:{
+				
+				'appId':'2'
+				
+			},
+			success:function(response){
+				headerList=response.split(',');
+			}
+		});
+		
+		
+		$('#dataTables-example').find('th[class]').hide();
+		$('#dataTables-example').find('td[class]').hide();
+		for (var i = 0; i < headerList.length; i++) {
+			 $('.'+headerList[i]).show();
+		}
+		
+		$('#showHeaderList').click(function(){
+			$('#headerListId').css('display','block');
+			for (var i = 0; i < headerList.length; i++) {
+				 $('#'+headerList[i]).attr('checked',true);
+			}
+		});
+		
+		$('#previewHeaderButton').click(function(){
+			$('#dataTables-example').find('th[class]').hide();
+			$('#dataTables-example').find('td[class]').hide();
+		    $('#headerListId td input:checkbox:checked').each(function(){
+			   var id=$(this).attr('id');
+			   $('.'+id).show();
+			   $('#headerListId').css('display','none');
+		});	
+		});
+		
+		$('#saveHeaderButton').click(function(){
+			var headerList = "";
+			 $('#headerListId td input:checkbox:checked').each(function(){
+				   headerList= headerList +","+$(this).attr('id');
+			 });
+			$.ajax({
+				type:"POST",
+				url:"eeSaveHeaderList.do",
+				async:false,
+				data:{
+					
+					'appId':'2',
+					'paymentDesc':headerList.substring(1)
+					
+				},
+				success:function(response){
+					alert(response);
+					window.location.reload();
+				}
+			});
+		});
+		
+		$(".receiptDate").val($.datepicker.formatDate('dd-mm-yy', new Date()));
+		
+		
+		
 		$('input[name="approveBtn"]').click(function(){
 			var appIdArray = $(this).attr("id").split("_");
 			appId =  appIdArray[1];
@@ -125,9 +193,9 @@ function validateAddForm() {
 			$('#appId').val(appId);
 			$(".ui-dialog-content").dialog("close");
 			$( "#addDialog" ).dialog({ 'width':'600px','modal':'true'});
-			$('#paymentTypeId option[value="1"]').attr('disabled',true);
+			/* $('#paymentTypeId option[value="1"]').attr('disabled',true);
 			$('#paymentTypeId option[value="2"]').attr('disabled',true);
-			$('#paymentTypeId option[value="3"]').attr('selected',true);
+			$('#paymentTypeId option[value="3"]').attr('selected',true); */
 			$('#paymentAmountId').focus();
 			
 			$.ajax({
@@ -149,7 +217,7 @@ function validateAddForm() {
 			
 		}); 
 		
-		
+/* 		
 		$('#paymentAmountId').blur(function(){
 			var paymentAmount = $(this).val();
 			var gstAmount = $('#gstAmountId').val();
@@ -183,7 +251,7 @@ function validateAddForm() {
 				$('#totalAmountId').val(0);
 			}
 		});
-
+ */
 
 		$('#paymentSaveBtnId').click(function(){
 			if(validateAddForm()){
@@ -218,14 +286,13 @@ function validateAddForm() {
 				data:{
 					
 					'appId':appId,
-					'paymentType':$('#paymentTypeId').val(),
-					'paymentAmount':$('#paymentAmountId').val(),
-					'gstPercent':$('#gstPercentId').val(),
-					'gstAmount':$('#gstAmountId').val(),
 					'totalAmount':$('#totalAmountId').val(),
+					'receiptDate':$('#receiptDate_'+appId).val(),
+					'inspectedDate':$('#inspectionDateId').val(),
+					'referenceFile':$('#referenceFileId').val(),
+					'referenceDate':$('#referenceDateId').val(),
 					'paymentDesc':$('#paymentDescId').val(),
-					'companyPaymentDtlID':companyPaymentDtlID,
-					'inspectedDate':$('.inspectionDate').val()
+					'companyPaymentDtlID':companyPaymentDtlID
 					
 				},
 				success:function(response){
@@ -294,7 +361,7 @@ function validateAddForm() {
 			style="width: 40px; border-width: 0px; float: right; margin-top: -11px; margin-right: -5px; cursor: pointer;">
 		<h2 class="bg_heading">Add Payment Details</h2>
 		<table id="paymentTable" style="margin-left: 30px;margin-top: 20px;">
-		<tr><td><span><b>Payment Type:</b></span><span style="color: red;">*</span></td><td>
+<%-- 		<tr><td><span><b>Payment Type:</b></span><span style="color: red;">*</span></td><td>
 				<select  id="paymentTypeId">
 				 <option value="">--Select Payment Type--</option>
                                     <c:forEach items="${list.paymentTypeDtl}" var="app" varStatus="count">
@@ -311,31 +378,120 @@ function validateAddForm() {
 
 <tr><td><span><b>GST Amount:</b></span></td><td>
 				<input placeholder="Ex: 12" type="text" id="gstAmountId" name="gstAmount" readonly="readonly" value="0" style="background-color: lightgrey;"/></td></tr>
-
+ --%>
 <tr><td><span><b>Total Amount:</b></span></td><td>
-				<input placeholder="Ex: 123" type="text" id="totalAmountId" name="totalAmount" readonly="readonly" value="0" style="background-color: lightgrey;"/></td></tr>
-<tr><td><span><b>Inspected Date:</b></span></td><td>
-				<input placeholder="Ex: DD-MM-YYYY" type="text" class="inspectionDate" readonly="readonly"  style="background-color: lightgrey;"/></td></tr>
+				<input placeholder="Ex: 123" type="text" id="totalAmountId" name="totalAmount" /></td></tr>
+<tr><td><span><b>Inspection Date:</b></span></td><td>
+<input placeholder="Ex: DD-MM-YYYY" type="text" class="inspectionDate"  id="inspectionDateId" name="inspectionDate" readonly="readonly"  style="background-color: lightgrey;"/>
+</td></tr>
+
+<tr><td><span><b>Reference File:</b></span></td><td>
+			<input placeholder="Reference File" type="text" id="referenceFileId" name="referenceFile"  /></td></tr>
+
+<tr><td><span><b>Reference Date:</b></span></td><td>
+<input placeholder="Ex: DD-MM-YYYY" type="text" class="inspectionDate"  id="referenceDateId" name="referenceDate" readonly="readonly"  style="background-color: lightgrey;"/>
+</td></tr>
 
 
 <tr><td colspan="2"><hr style="margin: 0px;width: 95%;"/></td></tr>
 
-<tr><td><span><b>DPR report:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr>
+<tr><td><span><b>Upload Pre feasibility report:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr>
+
+<!-- <tr><td><span><b>Upload consent form:</b></span></td><td><input type="file" name="file" accept=".doc,.docx,.dwg,.pdf,.txt,.xlsx,.xls"></td></tr> -->
 
 <tr><td colspan="2"><hr  style="margin-top: 5px;width: 95%;"/></td></tr>
-
+ 
 <tr><td><span><b>Comments:</b></span></td><td>
-				<input placeholder="Ex: ABC" type="text" id="paymentDescId" name="paymentDesc" style=""/></td></tr>
-			<tr><td colspan="2" align="center" height="70px">	<input type="button" value="Save" id="paymentSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/></td></tr>
-		
-		
+			<input placeholder="Ex: ABC" type="text" id="paymentDescId" name="paymentDesc" style=""/></td></tr>
+		<tr><td colspan="2" align="center" height="70px">	<input type="button" value="Save" id="paymentSaveBtnId"/> <input type="button" value="Close"  class="closeBtn"/></td></tr>
+	
+	
 
-		</table>
-		
+	</table>
 		</form>		
 		</div>
 		
+	<div id="headerListId" style="position: absolute;left:375px;top:285px;z-index:200;display:none;background-color: #FCFCF4; width:600px;">
 
+	<table  width="100%" class="table table-striped table-bordered table-hover">
+	<tr> <td colspan="6">  </td></tr>
+		<tr>
+			<td width="5%" ><input type="checkbox" id="class1" /></td>
+			<td width="27%" style="color: black !important"><b>App Ref#</b></td>
+			<td width="5%"><input type="checkbox" id="class11" /></td>
+			<td width="27%" style="color: black !important"><b>Branch Name</b></td>
+			<td width="5%"><input type="checkbox" id="class10" /></td>
+		    <td width="27%" style="color: black !important"><b>Receipt Date</b></td>
+		   
+			
+		</tr>
+		<tr>
+	        <td><input type="checkbox" id="class2" /></td>
+		    <td style="color: black !important"><b>Name of Company</b></td>
+		    <td><input type="checkbox" id="class12" /></td>
+			<td style="color: black !important"><b>Mobile Number</b></td>
+			 <td><input type="checkbox" id="class20" /></td>
+			<td style="color: black !important"><b>Work Type</b></td>
+		</tr>
+		<tr>
+                                            
+		    <td><input type="checkbox" id="class3" /></td>
+		    <td style="color: black !important"><b>Name of Person</b></td>
+		    <td><input type="checkbox" id="class13" /></td>
+			<td style="color: black !important"><b>Email Id</b></td>
+			 <td><input type="checkbox" id="class9" /></td>
+		    <td style="color: black !important"><b>Payment Status</b></td>
+		    
+		</tr>
+		<tr>
+                                             
+		    <td><input type="checkbox" id="class4" /></td>
+		    <td style="color: black !important"><b>Office Name</b></td>
+		    <td><input type="checkbox" id="class14" /></td>
+			<td style="color: black !important"><b>District</b></td>
+			<td><input type="checkbox" id="class19" /></td>
+		    <td style="color: black !important"><b>REQs of water</b></td>
+		</tr>
+		<tr>
+                                              
+		    <td><input type="checkbox" id="class5" /></td>
+		    <td style="color: black !important"><b>Total Payment Amount</b></td>
+		    <td><input type="checkbox" id="class15" /></td>
+			<td style="color: black !important"><b>Taluk</b></td>
+			<td><input type="checkbox" id="class8" /></td>
+		    <td style="color: black !important"><b>DD Bank Name</b></td>
+		  
+		</tr>
+		<tr>
+                                            
+		    <td><input type="checkbox" id="class6" /></td>
+		    <td style="color: black !important"><b>DD NO</b></td>
+		    <td><input type="checkbox" id="class16" /></td>
+			<td style="color: black !important"><b>Village</b></td>
+			 <td><input type="checkbox" id="class18" /></td>
+			<td style="color: black !important"><b>Is this New Connection?</b></td>
+		</tr>
+		<tr>
+                                            
+		    <td><input type="checkbox" id="class7" /></td>
+		    <td style="color: black !important"><b>DD Date</b></td>
+		    <td><input type="checkbox" id="class17" /></td>
+			<td style="color: black !important"><b>Survey Field No</b></td>
+			 <td><input type="checkbox" id="class21" /></td>
+			<td style="color: black !important"><b>Site Address</b></td>
+		</tr>
+		<tr>
+                                             
+		   
+		</tr>
+		
+		
+		<tr><td colspan="6" style="text-align: center;"><input type="Button" value="Preview Header" id="previewHeaderButton"/><input type="Button" value="Save Header" id="saveHeaderButton" style="margin-left: 10px;"/></td></tr>
+	
+	
+	</table>
+	
+	</div>
 <table class='table-bordered table table-striped display'
 	style='width: 100%; font-size: 28px;'>
 <tr>
@@ -360,21 +516,23 @@ function validateAddForm() {
                     <div class="panel panel-default">
                         
                         <div class="panel-body">
+                         <div  id="showHeaderList" title="Update Table Header" style="position: absolute;top:20px;left:600px;z-index:100"><input type="button" value="Modify Table Header"/></div>
                             <div class="table-responsive">
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
                                            <!--  <th style="color:black !important"></th> -->
-                                            <th style="color:black !important"><b>App Ref#</b></th>
-                                            <th style="color:black !important"><b> Name of Company</b></th>
-                                             <th style="color:black !important"><b> Name of Person</b></th>
-                                            <th style="color:black !important"><b>Total Payment Amount</b></th>
-                                            <th style="color:black !important"><b>DD NO</b></th>
-                                             <th style="color:black !important"><b>DD Date</b></th>
-                                            <th style="color:black !important"><b>DD Bank Name</b></th>
-                                            <th style="color:black !important"><b>Payment Status</b></th>
-                                             <th style="color:black !important"><b>Registered Date</b></th>
-                                            
+                                             <th class="class1" style="color:black !important"><b>App Ref#</b></th>
+                                            <th class="class2" style="color:black !important"><b>Name of Company</b></th>
+                                             <th class="class3" style="color:black !important"><b>Name of Person</b></th>
+                                              <th class="class4" style="color:black !important"><b>Office Name</b></th>
+                                            <th class="class5" style="color:black !important"><b>Total Payment Amount</b></th>
+                                            <th class="class6" style="color:black !important"><b>DD NO</b></th>
+                                             <th class="class7" style="color:black !important"><b>DD Date</b></th>
+                                            <th class="class8" style="color:black !important"><b>DD Bank Name</b></th>
+                                            <th class="class9" style="color:black !important"><b>Payment Status</b></th>
+                                             <th class="class10" style="color:black !important"><b>Receipt Date</b></th>
+                           
                                               <th></th>
                                         
                                         </tr>
@@ -386,22 +544,22 @@ function validateAddForm() {
           							
           									 
           								<tr class="odd gradeX">
-          							<td > <a href="EEViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
-                                            <td>${app.getLegCompName()}</td>
+                                           <td class="class1" > <a href="EEViewForm.do?appId=${app.getAppId()}" style="color: rgb(128,128,128)">${app.getAppId()}</a></td>
+                                            <td class="class2" >${app.getLegCompName()}</td>
                                             
-                                             <td>${app.getContactPersonName()}</td>
-                                               <td>${app.getPaymentAmount()}</td>
-                                                <td id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
-                                                 <td>${app.getDdDate()}</td>
-                                                  <td>${app.getDdBankName()}</td>
-                                                   <td>${app.getPaymentStatusDisplay()}</td>
+                                             <td class="class3" >${app.getContactPersonName()}</td>
+                                             <td class="class4" >${app.getOfficeName()}</td>
+                                               <td class="class5" >${app.getPaymentAmount()}</td>
+                                                <td class="class6"  id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
+                                                 <td class="class7" >${app.getDdDate()}</td>
+                                                  <td class="class8" >${app.getDdBankName()}</td>
+                                                   <td class="class9" >${app.getPaymentStatusDisplay()}</td>
                                            
-                                             <td class="center">${app.getCreateTs()}</td>
-                                             <%--  <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td> --%>
-                                             <td class="center">
+                                             <td class="class10" class="center"><input type="text" title="dd-mm-yyyy" id="receiptDate_${app.getAppId()}"  class="receiptDate" style="width: 100px;height: 25px;"/></td>
+                                             <td>
 											<input type="button"
 												name="approveBtn" id="approved_${app.getAppId()}_${app.getCompanyPaymentDtlID()}"
-												value="Add Payment..." /></td>
+												value="Accept Payment..." /></td>
                                            
                                         </tr>	 
           									 

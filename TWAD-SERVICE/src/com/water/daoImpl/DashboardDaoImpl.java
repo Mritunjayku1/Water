@@ -17,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.CharacterType;
 import org.hibernate.type.IntegerType;
+import org.hibernate.type.LongType;
 import org.hibernate.type.StringType;
 
 import com.water.bean.AppFormBean;
@@ -38,6 +39,7 @@ import com.water.model.Application;
 import com.water.model.CompanyDtl;
 import com.water.model.CompanyPaymentDtl;
 import com.water.model.EmployeeDetails;
+import com.water.model.HeaderListTable;
 import com.water.model.MasterCategory;
 import com.water.model.MasterDistrict;
 import com.water.model.MasterDivision;
@@ -2155,6 +2157,8 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	companyDtl.setActive(2);
 	companyDtl.setPaymentStatus(0);
 	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,2));
+	companyDtl.setEeReceiptDate(paymentFormBean.getReceiptDate());
+	companyDtl.setEeInspectionDate(paymentFormBean.getInspectedDate());
 	companyDtl.setEeReferenceFile(paymentFormBean.getReferenceFile());
 	companyDtl.setEeReferenceDate(paymentFormBean.getReferenceDate());
 	
@@ -2172,7 +2176,7 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	transaction.commit();
 	
 	
-	Transaction tx =  session.beginTransaction();
+	/*Transaction tx =  session.beginTransaction();
 	MasterPayment masterPayment = new MasterPayment();
 	masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId()));
 	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
@@ -2187,20 +2191,24 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	masterPayment.setUpdateUserId("Administrator");
 	masterPayment.setCreateUserId("Administrator");
 	session.save(masterPayment);
-	tx.commit();
+	tx.commit();*/
 		return "Payment Added Successfully";
 	}
 
 
 public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
 	Session session = sessionFactory.openSession();
-	
+	try{
 	Transaction tx1 =  session.beginTransaction();
 	CompanyDtl companyDtl = (CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId());
 	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,3));
 	companyDtl.setActive(3);
-	companyDtl.setInspectionDate(paymentFormBean.getInspectedDate());
+	//companyDtl.setInspectionDate(paymentFormBean.getInspectedDate());
 	companyDtl.setPaymentStatus(0);
+	companyDtl.setEeUpfrontReceiptDate(paymentFormBean.getReceiptDate());
+	companyDtl.setEeUpfrontInspectionDate(paymentFormBean.getInspectedDate());
+	companyDtl.setEeUpfrontReferenceFile(paymentFormBean.getReferenceFile());
+	companyDtl.setEeUpfrontReferenceDate(paymentFormBean.getReferenceDate());
 	companyDtl.setUpdateTs(new Date());
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
@@ -2218,11 +2226,11 @@ public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
 	Transaction tx =  session.beginTransaction();
 	MasterPayment masterPayment = new MasterPayment();
 	masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId()));
-	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
-	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
+	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,3));
+	/*masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
 	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
 	masterPayment.setGstAmount(paymentFormBean.getGstAmount());
-	masterPayment.setGstPercent(paymentFormBean.getGstPercent());
+	masterPayment.setGstPercent(paymentFormBean.getGstPercent());*/
 	masterPayment.setTotalAmount(paymentFormBean.getTotalAmount());
 	masterPayment.setStatusFlag('A');
 	masterPayment.setUpdateTs(new Date());
@@ -2231,9 +2239,37 @@ public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
 	masterPayment.setCreateUserId("Administrator");
 	session.save(masterPayment);
 	tx.commit();
-		return "Payment Added Successfully";
+	}
+	catch(Exception e){
+		e.printStackTrace();
+		return "Prefeasibility not Added";
+	}
+	finally{
+		session.close();
+	}
+		return "Prefeasibility Added Successfully";
 	}
 
+public String eeSaveHeaderList(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Transaction tx1 =  session.beginTransaction();
+	HeaderListTable headerListTable = (HeaderListTable)session.get(HeaderListTable.class,Integer.parseInt(paymentFormBean.getAppId()));
+	headerListTable.setHeaderList(paymentFormBean.getPaymentDesc());
+	
+	session.update(headerListTable);
+	tx1.commit();
+			return "Header Modified Successfully";
+	}
+
+public String getHeaderList(PaymentFormBean paymentFormBean ){
+	Session session = sessionFactory.openSession();
+	
+	Criteria cr = session.createCriteria(HeaderListTable.class,"app")
+			.add(Restrictions.eq("app.headerId", Integer.parseInt(paymentFormBean.getAppId())));
+	List<HeaderListTable> headerList = cr.list();
+			return headerList.get(0).getHeaderList();
+	}
 
 
 public String eePaymentPendingApproved(PaymentFormBean paymentFormBean ){
@@ -2843,12 +2879,16 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 		try {
 			
 			String query = "select CompanyPaytDtl. COMPANY_PAYMENTDTL_ID as companyPaymentDtlID, paymenttyp4_.PAYMENT_TYPE as paymentType, "
-					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
-					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
-					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
-					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ " CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
+					+ " CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
+					+ " CompanyPaytDtl.DD_BANK_NAME as ddBankName,CompanyPaytDtl.DD_BANK_BRANCH as ddBankBranch, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
+					+ " companydtl1_.CON_PERSON_NAME as contactPersonName, office2_.OFFICE_NAME as  officeName, companydtl1_.PAYMENT_STATUS as paymentStatus,"
+					+ " companydtl1_.MOBILE_NUMBER as mobileNum,companydtl1_.EMAIL_ADDR as emailAddr,companydtl1_.PINCODE as pincode,companydtl1_.SURVEY_FIELDNO as surveyFieldNo,"
+					+ " companydtl1_.REQ_KLD as reqMld, category1_.CATEGORY_NAME as categoryType, district1_.DISTRICT_NAME as district,taluk1_.TALUK_NAME as taluk, village1_.VILLAGE_NAME as village,  companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
-					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ " MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ " left outer join MASTER_CATEGORY category1_ on companydtl1_.OFFICE_ID=category1_.CATEGORY_ID left outer join MASTER_DISTRICT district1_ on companydtl1_.OFFICE_ID=district1_.DISTRICT_ID "
+					+ "left outer join MASTER_TALUK taluk1_ on companydtl1_.OFFICE_ID=taluk1_.TALUK_ID left outer join MASTER_VILLAGE village1_ on companydtl1_.OFFICE_ID=village1_.VILLAGE_ID "
 					+ "where eestatus3_.STATUS_ID=1 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query);
@@ -2862,13 +2902,33 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			sqlQuery.addScalar("ddNo", new StringType());
 			sqlQuery.addScalar("ddDate", new StringType());
 			sqlQuery.addScalar("ddBankName", new StringType());
+			sqlQuery.addScalar("ddBankBranch", new StringType());
 			
 			sqlQuery.addScalar("createDate", new StringType());
 			sqlQuery.addScalar("legCompName", new StringType());
 			sqlQuery.addScalar("contactPersonName", new StringType());
+			sqlQuery.addScalar("officeName", new StringType());
 			sqlQuery.addScalar("paymentStatus", new IntegerType());
 			
-			sqlQuery.addScalar("appId", new StringType());
+			
+			sqlQuery.addScalar("mobileNum", new LongType());
+			sqlQuery.addScalar("emailAddr", new StringType());
+			/*sqlQuery.addScalar("doorNo", new StringType());
+			sqlQuery.addScalar("plotNo", new StringType());
+			sqlQuery.addScalar("streetName", new StringType());
+			sqlQuery.addScalar("location", new StringType());*/
+			sqlQuery.addScalar("pincode", new StringType());
+			sqlQuery.addScalar("surveyFieldNo", new StringType());
+			/*sqlQuery.addScalar("isNewConnection", new StringType());*/
+			sqlQuery.addScalar("reqMld", new StringType());
+			sqlQuery.addScalar("categoryType", new StringType());
+			sqlQuery.addScalar("district", new StringType());
+			sqlQuery.addScalar("taluk", new StringType());
+			sqlQuery.addScalar("village", new StringType());
+			
+			//sqlQuery.addScalar("workType", new StringType());
+			
+sqlQuery.addScalar("appId", new StringType());
 			
 			sqlQuery.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
@@ -2897,7 +2957,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
 					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
-					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ "companydtl1_.CON_PERSON_NAME as contactPersonName,office2_.OFFICE_NAME as  officeName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
 					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
 					+ "where eestatus3_.STATUS_ID=2 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
@@ -2917,6 +2977,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			sqlQuery.addScalar("createDate", new StringType());
 			sqlQuery.addScalar("legCompName", new StringType());
 			sqlQuery.addScalar("contactPersonName", new StringType());
+			sqlQuery.addScalar("officeName", new StringType());
 			sqlQuery.addScalar("paymentStatus", new IntegerType());
 			
 			sqlQuery.addScalar("appId", new StringType());
@@ -2947,7 +3008,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
 					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
-					+ "companydtl1_.CON_PERSON_NAME as contactPersonName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ "companydtl1_.CON_PERSON_NAME as contactPersonName,office2_.OFFICE_NAME as  officeName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
 					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
 					+ "where eestatus3_.STATUS_ID=3 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
@@ -2967,6 +3028,7 @@ public String editVillage(TalukVillageFormBean talukVillageFormBean ){
 			sqlQuery.addScalar("createDate", new StringType());
 			sqlQuery.addScalar("legCompName", new StringType());
 			sqlQuery.addScalar("contactPersonName", new StringType());
+			sqlQuery.addScalar("officeName", new StringType());
 			sqlQuery.addScalar("paymentStatus", new IntegerType());
 			
 			sqlQuery.addScalar("appId", new StringType());

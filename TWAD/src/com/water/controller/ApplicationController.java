@@ -100,7 +100,7 @@ public class ApplicationController {
 		
 		@RequestMapping(value = "/getDDAmount", method = RequestMethod.GET)
 		@ResponseBody
-		public String getDDAmount(String appId,String mobileNum,String paymentType) throws JsonGenerationException, JsonMappingException, IOException {
+		public String getDDAmount(String appId,String mobileNum) throws JsonGenerationException, JsonMappingException, IOException {
 
 			List<AppFormBean> list = new  ArrayList<>();
 			
@@ -109,7 +109,7 @@ public class ApplicationController {
 			
 			appFormBean.setAppId(appId);
 			appFormBean.setMobileNum(Long.parseLong(mobileNum));
-			appFormBean.setPaymentType(Integer.parseInt(paymentType));
+			//appFormBean.setPaymentType(Integer.parseInt(paymentType));
 			
 			
 			HttpHeaders headers = new HttpHeaders();
@@ -1268,7 +1268,7 @@ appbean.setReqMld(String.valueOf(MldId));
 	
 	
 @RequestMapping(value = "/checkApplicationStatus", method = RequestMethod.GET)
-public ModelAndView checkApplicationStatus( @RequestParam String appId ,  @RequestParam String mobileNum) {
+public ModelAndView checkApplicationStatus( @RequestParam String appId/* ,  @RequestParam String mobileNum*/) {
 	if(appId !=null && !appId.equals("") ){
 
 		DDPaymentFormBean ddPaymentFormBean = new DDPaymentFormBean();
@@ -1291,8 +1291,8 @@ public ModelAndView checkApplicationStatus( @RequestParam String appId ,  @Reque
 		
 		ddPaymentFormBean = output.getBody();
 		
-		if(null != ddPaymentFormBean.getMobileNum() && ddPaymentFormBean.getMobileNum()==Long.parseLong(mobileNum))
-		{
+		/*if(null != ddPaymentFormBean.getMobileNum() && ddPaymentFormBean.getMobileNum()==Long.parseLong(mobileNum))
+		{*/
 		model.put("application", ddPaymentFormBean);
 		File folder = new File("c:/EC/"+appId);
 		File[] listOfFiles = folder.listFiles();
@@ -1319,10 +1319,10 @@ public ModelAndView checkApplicationStatus( @RequestParam String appId ,  @Reque
 
 		
 		
-		}
+		/*}
 		else{
 			model.put("application", "Data not found");
-		}
+		}*/
 		
 		//model.put("categoryCount", publicdashboard());
 		return new ModelAndView("checkApplicationStatus", "list", model);

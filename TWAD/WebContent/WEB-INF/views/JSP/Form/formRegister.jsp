@@ -612,8 +612,8 @@ window.onbeforeunload = function () {
                 <tbody>
                     <tr>
                         <td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px" height="106px" style="margin-left: 50px;"></td>
-                        <td width="50%" align="center"><img src="library/img/middleImage.png" width="560px" height="67px"></td>
-                        <td width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px" height="130px" style="margin-right: 50px;"></td>
+                        <td width="50%" align="center"><img src="library/img/middleImage.png" width="770px" height="50px"></td>
+                       <!-- <td width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px" height="130px" style="margin-right: 50px;"></td> -->
                         <td></td>
                     </tr>
                 </tbody>

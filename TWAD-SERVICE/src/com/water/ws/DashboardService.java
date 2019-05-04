@@ -3129,6 +3129,24 @@ DashboardCountBean dashboardBean;
 	}
 	
 	@POST
+	@Path("eeSaveHeaderList")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String eeSaveHeaderList(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().eeSaveHeaderList(paymentFormBean);
+	}
+	
+	@POST
+	@Path("getHeaderList")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String getHeaderList(PaymentFormBean paymentFormBean) {
+		
+	return new DashboardDaoImpl().getHeaderList(paymentFormBean);
+	}
+	
+	@POST
 	@Path("eeAddFullPayment")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)

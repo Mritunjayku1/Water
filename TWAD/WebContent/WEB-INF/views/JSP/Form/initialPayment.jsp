@@ -96,9 +96,10 @@ $(document).ready(function(){
 	    var paymentDDNoId = $('#paymentDDNoId');
 	    var paymentDDDateId = $('#paymentDDDateId');
 	    var paymentDDBankNameId = $('#paymentDDBankNameId');
+	    var paymentDDBranchNameId = $('#paymentDDBranchNameId');
 	    var flag = true;
 	
-	    var inputVal = new Array(paymentTypeId,appId,mobileNumId,paymentDDAmountId,paymentDDNoId,paymentDDDateId,paymentDDBankNameId);
+	    var inputVal = new Array(paymentTypeId,appId,mobileNumId,paymentDDAmountId,paymentDDNoId,paymentDDDateId,paymentDDBankNameId,paymentDDBranchNameId);
 		
 
 	     $('.error').hide();
@@ -149,6 +150,8 @@ $(document).ready(function(){
 					$('#ddAckCompanyName').val(response.legCompName);
 					$('#ddAckDDAmount').val(response.paymentAmount);
 					$('#ddAckDDNo').val(response.ddNo);
+					$('#ddAckDDBankName').val(response.ddBankName);
+					$('#ddAckDDBranchName').val(response.ddBankBranch);
 					$('#ddAckDDDate').val(response.ddDate);
 					$('#ddAckPaymentType').val(response.paymentType);
 				    $('#ddAckHiddenForm').submit();
@@ -159,8 +162,10 @@ $(document).ready(function(){
 		}
 		});
 	
+	$('#paymentTypeId option').attr('disabled',true);
 	
 	$('#appId,#mobileNumId').blur(function(){
+		$('#paymentTypeId option').attr('disabled',true);
 		var appId = $('#appId').val();
 		var mobileNumId = $('#mobileNumId').val();
 		var paymentTypeId = $('#paymentTypeId').val();
@@ -170,12 +175,16 @@ $(document).ready(function(){
 				url : "getDDAmount.do",
 				/* contentType: "application/json;charset=utf-8",
 		        dataType: "json", */
-				data : {"appId":appId,"mobileNum":mobileNumId,"paymentType":paymentTypeId},
+				data : {"appId":appId,"mobileNum":mobileNumId/* ,"paymentType":paymentTypeId */},
 				async : false,
                 success : function(response) {
                 	response = JSON.parse(response);
 					$('#legCompNameId').val(response.legCompName);
 					$('#paymentDDAmountId').val(response.totalAmount);
+					
+					var paymentType=response.paymentType;
+					$('#paymentTypeId option[value='+paymentType+']').attr('selected',true);
+					$('#paymentTypeId option[value='+paymentType+']').removeAttr('disabled');
 					
 				}
 				});
@@ -185,23 +194,23 @@ $(document).ready(function(){
 		}
 	});
 	
-$('#paymentTypeId').change(function(){
+/* $('#paymentTypeId').change(function(){
 		if($(this).val()!=""){
 			$('#mobileNumId').blur();
 		}
 		else{
 			return false;
 		}
-});
+}); */
 	
 	
-$(document).keydown(function (event) {
+/* $(document).keydown(function (event) {
     if (event.keyCode == 123) { // Prevent F12
         return false;
     } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
         return false;
     }
-}); 
+});  */
 	
 	});
 	
@@ -210,7 +219,7 @@ $(document).keydown(function (event) {
 </script>
 
 </head>
-<body oncontextmenu="return false;">
+<body>
 
 
 <table align="center" style="width: 1200px; font-size: 28px;background-color: white;">
@@ -222,10 +231,10 @@ $(document).keydown(function (event) {
 						<tr>
 							<td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px"
 								height="106px" style="margin-left: 50px;"></td>
-							<td width="50%" align="center"><img src="library/img/middleImage.png" width="560px"
-								height="67px"></td>
-							<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
-								height="130px" style="margin-right: 50px;"></td>
+							 <td width="50%" align="center"><img src="library/img/middleImage.png" width="770px"
+								height="50px"></td>
+							<!--<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px" style="margin-right: 50px;"></td> -->
 							<td></td>
 						</tr>
 					</tbody>
@@ -263,22 +272,28 @@ $(document).keydown(function (event) {
 	<form id="formId" style="width:970px;margin-left: 195px;">
 	<table id="initialId" width="100%" align="center" style="margin-left: 0px;">	
 	
-<tr><td class="tdPadding" width="50%"><b>Payment Type:</b><span style="color:red;">*</span></td><td>
-<select  id="paymentTypeId" name="paymentType">
-				 <option value="">--Select Payment Type--</option>
-                                    <c:forEach items="${list.paymentTypeDtl}" var="app" varStatus="count">
-                                        <option value="${app.getPaymentId()}">${app.getPaymentType()}</option>
-                                    </c:forEach>
-                </select>
+	<tr><td class="tdPadding" width="50%"><b>Enter Application Ref:</b><span style="color:red;">*</span></td><td><input type="text" placeholder ="Enter Application Ref" id="appId" name="appId" value=""/></td></tr>
 
-</td></tr>	
-<tr><td class="tdPadding" width="50%"><b>Enter Application Ref:</b><span style="color:red;">*</span></td><td><input type="text" placeholder ="Enter Application Ref" id="appId" name="appId" value=""/></td></tr>
- <tr><td  class="tdPadding" width="50%">
+<tr><td  class="tdPadding" width="50%">
  
                                 <label><b>Mobile Number:</b></label> <span style="color: red;">*</span></td><td>
                                 <input placeholder="Ex: 1234567891" type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' id="mobileNumId" name="mobileNum" maxlength="10" data-toggle="popover" data-trigger="focus" data-placement="right" title="Enter Mobile No." />
                            
  </td></tr>
+<tr><td class="tdPadding" width="50%"><b>Payment Type:</b><span style="color:red;">*</span></td><td>
+<select id="paymentTypeId" name="paymentType">
+                                    
+                                        <option value="1">Application Fee</option>
+                                    
+                                        <option value="2">Upfront Charges</option>
+                                    
+                                        <option value="3">Full Payment</option>
+                                    
+                </select>
+
+</td></tr>	
+
+ 
  <tr><td  class="tdPadding" width="50%">
   
                                 <label><b>Legal Name of Company:</b></label></td><td>
@@ -298,6 +313,7 @@ $(document).keydown(function (event) {
  <tr><td class="tdPadding" width="50%"><b>DD NO:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="123456" title="Please Enter DD No" id="paymentDDNoId" name="ddNo"/></td></tr>
  <tr><td class="tdPadding" width="50%"><b>DD Date:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="DD-MM-YYYY" readonly title="Please Enter DD Date" class="ddDateClass" id="paymentDDDateId" name="ddDate"/></td></tr>
  <tr><td class="tdPadding" width="50%"><b>Bank Name:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="Ex Indian Bank" title="Please Enter Bank Name" id="paymentDDBankNameId" name="ddBankName"/></td></tr>
+  <tr><td class="tdPadding" width="50%"><b>Branch:</b><span style="color:red;">*</span></td><td><input type="text"  placeholder ="Enter Branch Name" title="Please Enter Branch Name" id="paymentDDBranchNameId" name="ddBankBranch"/></td></tr>
 
 <tr><td colspan="2" align="center" style="height: 50px;">
 <input type="button" id="submitPaymentId"   value="Submit"/> <a href="/TwadWeb/index.do">Back to Home Page </a>
@@ -314,6 +330,8 @@ $(document).keydown(function (event) {
     <input type="hidden" id="ddAckApplicantName" name="applicantName" value="" />
      <input type="hidden" id="ddAckDDAmount" name="ddAmount" value="" />
       <input type="hidden" id="ddAckDDNo" name="ddNo" value="" />
+      <input type="hidden" id="ddAckDDBankName" name="ddBankName" value="" />
+      <input type="hidden" id="ddAckDDBranchName" name="ddBranchName" value="" />
        <input type="hidden" id="ddAckDDDate" name="ddDate" value="" />
     <input type="hidden" id="ddAckPaymentType" name="paymentType" value="" />
 

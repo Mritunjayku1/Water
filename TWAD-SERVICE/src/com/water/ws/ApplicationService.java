@@ -242,6 +242,25 @@ public class ApplicationService {
 				MasterStatus.class, 1));
 		session.save(applicationDtls);
 		session.beginTransaction().commit();
+		
+		
+		Transaction tx =  session.beginTransaction();
+		MasterPayment masterPayment = new MasterPayment();
+		masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,applicationDtls.getAppId()));
+		masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,2));
+		masterPayment.setPaymentAmount(appFormBean.getUpfrontCharges()+"");
+		masterPayment.setGstAmount(appFormBean.getUpfrontCharges()+"");
+		masterPayment.setGstPercent(10+"");
+		masterPayment.setTotalAmount(appFormBean.getUpfrontCharges()+"");
+		masterPayment.setStatusFlag('A');
+		masterPayment.setUpdateTs(new Date());
+		masterPayment.setCreateTs(new Date());
+		masterPayment.setUpdateUserId("Administrator");
+		masterPayment.setCreateUserId("Administrator");
+		session.save(masterPayment);
+		tx.commit();
+		
+		
 
 		final Integer smsType = 1;
 		final String smsTemp="Thank%20you%20for%20Registering%20Water%20Connection%20Your%20TWAD%20App%20No%20"+appFormBean.getAppId();
@@ -491,6 +510,21 @@ public class ApplicationService {
 		AppFormBean appFormBeanRes = null;
 		Session session = sessionFactory.openSession();
 		
+		 Criteria crCom = session.createCriteria(CompanyDtl.class,"companyDtl")
+					.add(Restrictions.eq("companyDtl.appId", appFormBean.getAppId()))
+		            .add(Restrictions.eq("companyDtl.mobileNum", appFormBean.getMobileNum()));
+		 List<CompanyDtl> companyDtllist1 = crCom.list();
+		
+		 if(!companyDtllist1.isEmpty()){
+			 if(companyDtllist1.get(0).getEeStatus().getStatusId()==1 &&  companyDtllist1.get(0).getPaymentStatus()==0)
+			   appFormBean.setPaymentType(1);
+			 if(companyDtllist1.get(0).getEeStatus().getStatusId()==2 &&  companyDtllist1.get(0).getPaymentStatus()==0)
+			   appFormBean.setPaymentType(2);
+			 if(companyDtllist1.get(0).getEeStatus().getStatusId()==3 &&  companyDtllist1.get(0).getPaymentStatus()==0)
+			   appFormBean.setPaymentType(3);
+		 }
+		
+		
 		if(appFormBean.getPaymentType()==1){
 			Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
 					.createCriteria("masterPayment.paymentType","paymentType")
@@ -541,7 +575,7 @@ public class ApplicationService {
 				 
 				 
 		}
-		else{
+		else if(appFormBean.getPaymentType()==3){
 			Criteria cr = session.createCriteria(MasterPayment.class,"masterPayment")
 					.createCriteria("masterPayment.paymentType","paymentType")
 					.createCriteria("masterPayment.appId","companyDtl")
@@ -566,7 +600,7 @@ public class ApplicationService {
 				
 				 
 		}
-		
+		appFormBeanRes.setPaymentType(appFormBean.getPaymentType());
         return appFormBeanRes;
 
 	}

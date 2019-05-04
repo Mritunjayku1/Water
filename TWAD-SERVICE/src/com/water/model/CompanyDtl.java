@@ -183,10 +183,24 @@ public class CompanyDtl implements Serializable {
 	@Column(name = "CAF_ID", length = 100)
 	private String cafId;
 	
+	@Column(name = "EE_RECEIPT_DATE", nullable = true, length = 26)
+	private String eeReceiptDate;
+	@Column(name = "EE_INSPECTION_DATE", nullable = true, length = 26)
+	private String eeInspectionDate;
 	@Column(name = "EE_REFERENCE_File", nullable = true, length = 26)
 	private String eeReferenceFile;
 	@Column(name = "EE_REFERENCE_DATE", nullable = true, length = 26)
 	private String eeReferenceDate;
+	
+	@Column(name = "EE_UPFRONT_RECEIPT_DATE", nullable = true, length = 26)
+	private String eeUpfrontReceiptDate;
+	@Column(name = "EE_UPFRONT_INSPECTION_DATE", nullable = true, length = 26)
+	private String eeUpfrontInspectionDate;
+	@Column(name = "EE_UPFRONT_REFERENCE_File", nullable = true, length = 26)
+	private String eeUpfrontReferenceFile;
+	@Column(name = "EE_UPFRONT_REFERENCE_DATE", nullable = true, length = 26)
+	private String eeUpfrontReferenceDate;
+	
 	@Column(name = "MC_REFERENCE_File", nullable = true, length = 26)
 	private String mcReferenceFile;
 	@Column(name = "MC_REFERENCE_DATE", nullable = true, length = 26)
@@ -840,6 +854,66 @@ public class CompanyDtl implements Serializable {
 
 	public void setMcReferenceDate(String mcReferenceDate) {
 		this.mcReferenceDate = mcReferenceDate;
+	}
+
+
+	public String getEeInspectionDate() {
+		return eeInspectionDate;
+	}
+
+
+	public void setEeInspectionDate(String eeInspectionDate) {
+		this.eeInspectionDate = eeInspectionDate;
+	}
+
+
+	public String getEeUpfrontInspectionDate() {
+		return eeUpfrontInspectionDate;
+	}
+
+
+	public void setEeUpfrontInspectionDate(String eeUpfrontInspectionDate) {
+		this.eeUpfrontInspectionDate = eeUpfrontInspectionDate;
+	}
+
+
+	public String getEeUpfrontReferenceFile() {
+		return eeUpfrontReferenceFile;
+	}
+
+
+	public void setEeUpfrontReferenceFile(String eeUpfrontReferenceFile) {
+		this.eeUpfrontReferenceFile = eeUpfrontReferenceFile;
+	}
+
+
+	public String getEeUpfrontReferenceDate() {
+		return eeUpfrontReferenceDate;
+	}
+
+
+	public void setEeUpfrontReferenceDate(String eeUpfrontReferenceDate) {
+		this.eeUpfrontReferenceDate = eeUpfrontReferenceDate;
+	}
+
+
+	public String getEeReceiptDate() {
+		return eeReceiptDate;
+	}
+
+
+	public void setEeReceiptDate(String eeReceiptDate) {
+		this.eeReceiptDate = eeReceiptDate;
+	}
+
+
+	public String getEeUpfrontReceiptDate() {
+		return eeUpfrontReceiptDate;
+	}
+
+
+	public void setEeUpfrontReceiptDate(String eeUpfrontReceiptDate) {
+		this.eeUpfrontReceiptDate = eeUpfrontReceiptDate;
 	}
 
 

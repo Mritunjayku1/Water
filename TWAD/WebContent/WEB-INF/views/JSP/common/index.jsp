@@ -238,10 +238,10 @@ html,body {
 						<tr>
 							<td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px"
 								height="106px" style="margin-left: 50px;"></td>
-							<td width="50%" align="center"><img src="library/img/middleImage.png" width="560px"
-								height="67px"></td>
-							<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
-								height="130px" style="margin-right: 50px;"></td>
+							 <td width="50%" align="center"><img src="library/img/middleImage.png" width="770px"
+								height="50px"></td>
+							<!--<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px" style="margin-right: 50px;"></td> -->
 							<td></td>
 						</tr>
 					</tbody>
@@ -300,7 +300,7 @@ html,body {
 								</tbody>
 							</table>
 					</a></li>
-					<li class="dropdown-slide" style="background-color: #FED367; width: 100%; border-bottom: 2px solid #fff; border-right: none !important;"><a href="/TwadWeb/checkApplicationStatus.do?appId=&mobileNum=" class="dropdown-toggle" data-toggle="dropdown">
+					<li class="dropdown-slide" style="background-color: #FED367; width: 100%; border-bottom: 2px solid #fff; border-right: none !important;"><a href="/TwadWeb/checkApplicationStatus.do?appId=" class="dropdown-toggle" data-toggle="dropdown">
 							<table style="width: 100%;" id="applicationStatus">
 								<tbody>
 									<tr>

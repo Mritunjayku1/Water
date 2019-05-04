@@ -148,10 +148,10 @@
 		<tr style='background-color: white;'>
 			<td width="20%" align="center"><img src="library/img/twad_logo.gif" width="110px"
 								height="106px" style="margin-left: 50px;"></td>
-							<td width="40%" align="center"><img src="library/img/middleImage.png" width="560px"
-								height="67px"></td>
-							<td  width="20%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
-								height="130px"></td>
+							 <td width="40%" align="center"><img src="library/img/middleImage.png" width="770px"
+								height="50px"></td>
+						<!--	<td  width="20%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px"></td> -->
 			<td
 				style='text-align: right; width: 20%; color: #1589FF; text-shadow: 1px 7px 10px #a6a1a1; font-size: 14px;padding-right: 80px;'>
 				Hi! <c:out value="${sessionScope.LoginName}" /> <a href='signOut.do'

@@ -4308,6 +4308,46 @@ public class DashboardController {
 
 	}
 	
+	@RequestMapping(value = "/eeSaveHeaderList", method = RequestMethod.POST)
+	@ResponseBody
+	public String eeSaveHeaderList(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "eeSaveHeaderList", HttpMethod.POST,
+				entity, String.class);
+
+		
+		String res = out.getBody();
+		return res;
+	}
+	
+	@RequestMapping(value = "/getHeaderList", method = RequestMethod.GET)
+	@ResponseBody
+	public String getHeaderList(PaymentFormBean paymentFormBean) {
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<?> entity = new HttpEntity(paymentFormBean,headers);
+
+		ResponseEntity<String> out = restTemplate.exchange(
+				WaterDashboardService + "getHeaderList", HttpMethod.POST,
+				entity, String.class);
+
+		
+		String res = out.getBody();
+		return res;
+	}
+	
 	
 	
 	

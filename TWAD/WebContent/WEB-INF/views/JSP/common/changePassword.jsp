@@ -358,9 +358,24 @@ div[role="dialog"] {
 </HEAD>
 
 <BODY> 
-		 <Label style="text-align: center; font-family: alice; width: 100%; color: #1589FF; font-size: 39px; padding: 10px;border-bottom: 2px solid #1589FF;">
+		<!--  <Label style="text-align: center; font-family: alice; width: 100%; color: #1589FF; font-size: 39px; padding: 10px;border-bottom: 2px solid #1589FF;">
 		<img src='library/img/EC_logo.jpg' width="70px" height="70px"><font color="blue">  New Water Connections</font> 	
-			<br><span style='font-size:17px;font-weight: normal;'></span></Label> 
+			<br><span style='font-size:17px;font-weight: normal;'></span></Label>  -->
+			
+			<table	 height="130px" style='background-color: white;'>
+		<tr style='background-color: white;'>
+			<td width="20%" align="center"><img src="library/img/twad_logo.gif" width="110px"
+								height="106px" style="margin-left: 50px;"></td>
+							<td width="40%" align="center"><img src="library/img/middleImage.png" width="770px"
+								height="50px"></td>
+							<!-- <td  width="20%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px"></td> -->
+		
+		</tr>
+
+
+	</table>
+			
 	<!-- <DIV class="container" align="center">  -->
              <table width="100%"><tr><td align="center" width="100%">
 			

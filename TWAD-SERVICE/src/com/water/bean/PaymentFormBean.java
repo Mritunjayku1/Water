@@ -19,6 +19,7 @@ public class PaymentFormBean {
 	private String legCompName;
 	private String referenceFile;
 	private String referenceDate;
+	private String receiptDate;
 	
 	public String getReferenceFile() {
 		return referenceFile;
@@ -123,6 +124,12 @@ public class PaymentFormBean {
 	}
 	public void setContactPersonName(String contactPersonName) {
 		this.contactPersonName = contactPersonName;
+	}
+	public String getReceiptDate() {
+		return receiptDate;
+	}
+	public void setReceiptDate(String receiptDate) {
+		this.receiptDate = receiptDate;
 	}
 
 }

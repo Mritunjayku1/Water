@@ -71,10 +71,10 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 						<tr>
 							<td width="25%" align="center"><img src="library/img/twad_logo.gif" width="110px"
 								height="106px" style="margin-left: 50px;"></td>
-							<td width="50%" align="center"><img src="library/img/middleImage.png" width="560px"
-								height="67px"></td>
-							<td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
-								height="130px" style="margin-right: 50px;"></td>
+							<td width="50%" align="center"><img src="library/img/middleImage.png" width="770px"
+								height="50px"></td>
+							<!--  <td  width="25%" align="center"><img src="library/img/pic6_2.jpg" width="130px"
+								height="130px" style="margin-right: 50px;"></td> -->
 							<td></td>
 						</tr>
 					</tbody>
@@ -86,7 +86,7 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 <table id="statusHeader" align="center" class="table-bordered table table-striped display" style="width: 800px;">
 
 	<tbody><tr>
-		<td style="text-align: center; background-color: #FCFCF4; font-size: 25px; height: 10px; color: #800000; font-weight: bold;">Payment Receipt</td>
+		<td style="text-align: center; background-color: #FCFCF4; font-size: 25px; height: 10px; color: #800000; font-weight: bold;">Payment Details</td>
 	</tr>
 	
 </tbody></table>
@@ -111,6 +111,8 @@ pageContext.setAttribute("paymentType", paymentTypeMap.get(paymentType));
 <tr><td align="left"><b>DD Amount</b></td><td>:<span><%=request.getParameter("ddAmount")%></span></td></tr>
 <tr><td align="left" width="50%"><b> DD NO</b></td><td  width="50%">:<span><%=request.getParameter("ddNo")%></span></td></tr>
 <tr><td align="left"><b>DD Date</b></td><td>:<span><%=request.getParameter("ddDate")%></span></td></tr>
+<tr><td align="left"><b>Bank Name</b></td><td>:<span><%=request.getParameter("ddBankName")%></span></td></tr>
+<tr><td align="left"><b>Branch</b></td><td>:<span><%=request.getParameter("ddBranchName")%></span></td></tr>
 <tr><td align="left"><b>Payment Type</b></td><td>:<span>${paymentType}</span></td></tr>
 
 
