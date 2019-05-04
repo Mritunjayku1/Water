@@ -406,12 +406,12 @@ div[role="dialog"] {
 
 					<DIV class=""> 
 						<DIV class="form-group">
-							<form:input path="LoginName" autocomplete="off" autofocus="true" class="form-control" id="username" placeholder="User Name" required="true" value="EESOW" />
+							<form:input path="LoginName" autocomplete="off" autofocus="true" class="form-control" id="username" placeholder="User Name" required="true" value="" />
 						</DIV>
 					</DIV>
 					<DIV class="">
 						<DIV class="form-group  ">
-							<form:password path="LoginPassword" class="form-control" id="password" placeholder="Password" required="true" value="Mri@10101988" />
+							<form:password path="LoginPassword" class="form-control" id="password" placeholder="Password" required="true" value="" />
 						</DIV>
 					</DIV>
 					<DIV class="">
