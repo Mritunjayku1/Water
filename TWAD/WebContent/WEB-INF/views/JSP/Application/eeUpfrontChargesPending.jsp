@@ -446,7 +446,7 @@ function validateAddForm() {
 		<tr>
                                              
 		    <td><input type="checkbox" id="class4" /></td>
-		    <td style="color: black !important"><b>Office Name</b></td>
+		    <td style="color: black !important"><b>Division Name</b></td>
 		    <td><input type="checkbox" id="class14" /></td>
 			<td style="color: black !important"><b>District</b></td>
 			<td><input type="checkbox" id="class19" /></td>
@@ -525,7 +525,7 @@ function validateAddForm() {
                                              <th class="class1" style="color:black !important"><b>App Ref#</b></th>
                                             <th class="class2" style="color:black !important"><b>Name of Company</b></th>
                                              <th class="class3" style="color:black !important"><b>Name of Person</b></th>
-                                              <th class="class4" style="color:black !important"><b>Office Name</b></th>
+                                              <th class="class4" style="color:black !important"><b>Division Name</b></th>
                                             <th class="class5" style="color:black !important"><b>Total Payment Amount</b></th>
                                             <th class="class6" style="color:black !important"><b>DD NO</b></th>
                                              <th class="class7" style="color:black !important"><b>DD Date</b></th>
@@ -548,7 +548,7 @@ function validateAddForm() {
                                             <td class="class2" >${app.getLegCompName()}</td>
                                             
                                              <td class="class3" >${app.getContactPersonName()}</td>
-                                             <td class="class4" >${app.getOfficeName()}</td>
+                                             <td class="class4" >${app.getDivisionName()}</td>
                                                <td class="class5" >${app.getPaymentAmount()}</td>
                                                 <td class="class6"  id="ddNo_${app.getAppId()}">${app.getDdNo()}</td>
                                                  <td class="class7" >${app.getDdDate()}</td>

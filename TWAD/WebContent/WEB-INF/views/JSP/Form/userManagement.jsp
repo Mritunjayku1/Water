@@ -180,6 +180,83 @@ $(function(){
 	
 	
 	
+	  $.ajax({
+			type: "GET",
+			async:false,
+			url: "library/Region.json",
+			success: function (response) {	
+				var region = response;
+					var option = '<option value="">--Select--</option>';
+					if (region != undefined)
+						for (var i = 0; i < region.length; i++) {
+							option = option + '<option value="' + region[i].id + '">' +region[i].value +'</option>';
+						}
+					$('.regionSearchClass').find('option').remove();
+					$('.regionSearchClass').append(option);}
+	  
+	  });
+     
+  	  $('.regionSearchClass').change(function () {
+  		  var id = $(this).attr("id");
+  	  
+  		  $.ajax({
+ 					type: "GET",
+ 					async:false,
+ 					url: "library/Circle.json",
+ 					success: function (response)  {
+     						
+      					var regionSelectedValue =$("#"+id+" option:selected").val();
+					var circle = response[regionSelectedValue];
+					var option = '<option value="">--Select--</option>';
+					if (circle != undefined)
+						for (var i = 0; i < circle.length; i++) {
+
+							
+										option = option + '<option value="' + circle[i].id + '">' +circle[i].value +'</option>';
+							
+						}
+					$('.circleSearchClass').find('option').remove();
+					$('.circleSearchClass').append(option);
+      					}
+      	    	  
+ 	    	  
+ 	    	  });
+   	        
+  	  
+        });
+
+
+
+              
+               $('.circleSearchClass').change(function () { 
+             	  
+             	  var id = $(this).attr("id");
+	    	  
+             	  $.ajax({
+               
+     					type: "GET",
+        					async:false,
+        					url: "library/Division.json",
+        					success: function (response) {
+        						
+        					var circleSelectedValue =$("#"+id+" option:selected").val();
+						var division = response[circleSelectedValue];
+						var option = '<option value="">--Select--</option>';
+						if (division != undefined)
+							for (var i = 0; i < division.length; i++) {
+							option = option + '<option value="' + division[i].id + '">' +division[i].value +'</option>';
+							}
+						$('.divisionSearchClass').find('option').remove();
+						$('.divisionSearchClass').append(option);
+        					}
+        	    	  
+        	    	  });
+               
+             	});
+
+               
+	
+	
 	
 	
 	$("#all").click(function(){
@@ -208,7 +285,7 @@ $(function(){
 		$('#dataTables-example td input:checkbox:checked').each(function(){
 			$('#editUserId').val($(this).closest('tr').find('td:nth-child(1)').find('input[type="checkbox"]').attr('id').trim());
 			$('#editRoleId option[value="'+$(this).closest('tr').find('td:nth-child(3)').attr('id').trim()+'"]').attr('selected', 'selected');
-			$('#editOfficeId option[value="'+$(this).closest('tr').find('td:nth-child(4)').attr('id').trim()+'"]').attr('selected', 'selected');
+			$('#editDivisionId option[value="'+$(this).closest('tr').find('td:nth-child(4)').attr('id').trim()+'"]').attr('selected', 'selected');
 			$('#editUserNameId').val($(this).closest('tr').find('td:nth-child(5)').text());
 			$('#editPasswordId').val($(this).closest('tr').find('td:nth-child(6)').text());
 			$('#editNameId').val($(this).closest('tr').find('td:nth-child(7)').text());
@@ -238,7 +315,7 @@ $(function(){
 			url:"addNewUser.do",
 			data:{
 				'roleId':$('#roleId').val(),
-				'officeId':$('#officeId').val(),
+				'divisionId':$('#divisionId').val(),
 				'username':$('#userNameId').val(),
 				'name':$('#nameId').val(),
 				'password':$('#passwordId').val(),
@@ -260,7 +337,7 @@ $(function(){
 			url:"editUser.do",
 			data:{
 				'userId':$('#editUserId').val(),
-				'officeId':$('#editOfficeId').val(),
+				'divisionId':$('#editDivisionId').val(),
 				'roleId':$('#editRoleId').val(),
 				'username':$('#editUserNameId').val(),
 				'name':$('#editNameId').val(),
@@ -363,7 +440,7 @@ $(function(){
                                             <th style="color:black !important"><input type="checkbox" id="all" style="width:15px;"/></th>
                                             <th style="color:black !important"><b> #</b></th>
                                             <th style="color:black !important"><b>Role</b></th>
-                                             <th style="color:black !important"><b>Office Name</b></th>
+                                             <th style="color:black !important"><b>Division Name</b></th>
                                             <th style="color:black !important"><b>User Name</b></th>
                                              <th style="color:black !important"><b>Password</b></th> 
                                              <th style="color:black !important"><b>Name</b></th>
@@ -385,7 +462,7 @@ $(function(){
                                             <td><input type="checkbox" id="${app.getUserId()}" style="width:15px;"/></td>
                                             <td>${count.count}</td>
                                              <td id="${app.getRoleId()}">${app.getRole()}</td>
-                                             <td id="${app.getOfficeId()}">${app.getOffice()}</td>
+                                             <td id="${app.getDivisionId()}">${app.getDivision()}</td>
                                              <td>${app.getUsername()}</td>
                                               <td>*********</td> 
                                             <td class="center">${app.getName()}</td>
@@ -454,16 +531,14 @@ $(function(){
 				
 				</select><br/>
 				
-
-<span><b>Office Name:</b></span><span style="color: red;">*</span>
-				<select style="width: 200px;" id="officeId">
-				 <option value="">--Select Office Name--</option>
-                                    <c:forEach items="${list.officeDtl}" var="app" varStatus="count">
-                                        <option value="${app.getOfficeId()}">${app.getOfficeName()}</option>
-                                    </c:forEach>
-
+  <span><b>Region:</b></span><span style="color: red;">*</span>
+				<select class = "regionSearchClass" style="width: 200px;margin-left:35px; " id="regionId"></select><br/>
 				
-				</select><br/>
+				<span><b>Circle:</b></span><span style="color: red;">*</span>
+				<select class = "circleSearchClass" style="width: 200px;margin-left:44px;" id="circleId"></select><br/>
+				
+				<span><b>Division:</b></span><span style="color: red;">*</span>
+				<select class = "divisionSearchClass" style="width: 200px;margin-left:28px;" id="divisionId"></select><br/>
 
 
 <span><b>Username:</b></span><span style="color: red;">*</span>
@@ -500,15 +575,15 @@ $(function(){
 				<input type="hidden" id="editUserId"/>
 				
 				
-<span><b>Office Name:</b></span><span style="color: red;">*</span>
-				<select style="width: 200px;" id="editOfficeId">
-				 <option value="">--Select Office Name--</option>
-                                    <c:forEach items="${list.officeDtl}" var="app" varStatus="count">
-                                        <option value="${app.getOfficeId()}">${app.getOfficeName()}</option>
-                                    </c:forEach>
-
 				
-				</select><br/>
+                <span><b>Region:</b></span><span style="color: red;">*</span>
+				<select class = "regionSearchClass" style="width: 200px;margin-left:35px;" id="editRegionId"></select><br/>
+				
+				<span><b>Circle:</b></span><span style="color: red;">*</span>
+				<select class = "circleSearchClass" style="width: 200px;margin-left:44px;" id="editCircleId"></select><br/>
+				
+				<span><b>Division:</b></span><span style="color: red;">*</span>
+				<select class = "divisionSearchClass" style="width: 200px;margin-left:28px;" id="editDivisionId"></select><br/>
 				
 <span><b>Username:</b></span><span style="color: red;">&nbsp;</span>
 				<input placeholder="Ex: ABC" type="text" id="editUserNameId" name="userName" readonly style="margin-left: 17px;"/><br/>

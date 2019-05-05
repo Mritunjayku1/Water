@@ -29,7 +29,7 @@ public class DDPaymentFormBean {
 	private Long landLineNo;
 	private String emailAddr;
 	private String categoryType;
-	private String officeName;
+	private String divisionName;
 	private String addrPremSought;
 	private String doorNo;
 	private String plotNo;
@@ -58,6 +58,28 @@ public class DDPaymentFormBean {
 	private String paymentStatusDisplay;
 	private String createDate;
 	
+	private String region;
+	private String circle;
+	private String division;
+	
+	public String getRegion() {
+		return region;
+	}
+	public void setRegion(String region) {
+		this.region = region;
+	}
+	public String getCircle() {
+		return circle;
+	}
+	public void setCircle(String circle) {
+		this.circle = circle;
+	}
+	public String getDivision() {
+		return division;
+	}
+	public void setDivision(String division) {
+		this.division = division;
+	}
 	private List<DDPaymentFormBean> paymentList;
 	
 	public String getIsNewConnectionDisplay() {
@@ -321,11 +343,11 @@ public class DDPaymentFormBean {
 	public void setCompanyPaymentDtlID(Integer companyPaymentDtlID) {
 		this.companyPaymentDtlID = companyPaymentDtlID;
 	}
-	public String getOfficeName() {
-		return officeName;
+	public String getDivisionName() {
+		return divisionName;
 	}
-	public void setOfficeName(String officeName) {
-		this.officeName = officeName;
+	public void setDivisionName(String divisionName) {
+		this.divisionName = divisionName;
 	}
 	public Integer getPaymentStatus() {
 		return paymentStatus;

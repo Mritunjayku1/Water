@@ -1919,27 +1919,27 @@ public class DashboardController {
 		HttpEntity<?> entity = new HttpEntity(headers);
 		
 		
-
+/*
 		ResponseEntity<String> out1 = restTemplate.exchange(
-				WaterDashboardService + "getOfficeDtl",
+				WaterDashboardService + "getHODivisionDtl",
 				HttpMethod.POST, entity, String.class);
 
 		JSONArray jsonArray1 = new JSONArray(out1.getBody().toString());
 
 		gson = new Gson();
 
-		List<OfficeFormBean> officeFormBeanList = new ArrayList<>();
+		List<CircleDivisionFormBean> divisionFormBeanList = new ArrayList<>();
 
 		for (int i = 0; i < jsonArray1.length(); i++) {
-			OfficeFormBean officeFormBean = gson.fromJson(
-					jsonArray1.getString(i), OfficeFormBean.class);
-			officeFormBeanList.add(officeFormBean);
+			CircleDivisionFormBean divisionFormBean = gson.fromJson(
+					jsonArray1.getString(i), CircleDivisionFormBean.class);
+			divisionFormBeanList.add(divisionFormBean);
 		}
 
 		
 		
-		model.put("officeDtl", officeFormBeanList);
-		
+		model.put("divisionDtl", divisionFormBeanList);
+		*/
 
 		ResponseEntity<String> out = restTemplate.exchange(
 				WaterDashboardService + "getUserDtl",
@@ -4242,7 +4242,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -4433,7 +4433,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -4495,7 +4495,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		else{
 			return new ModelAndView("redirect:/adminLogin.do");
@@ -4537,7 +4537,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -4594,7 +4594,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 			throws JSONException {
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -4654,7 +4654,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 		
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -4737,7 +4737,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 		
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		else{
 			return new ModelAndView("redirect:/adminLogin.do");
@@ -4839,7 +4839,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 		
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 
@@ -4879,7 +4879,7 @@ ResponseEntity<String> out = restTemplate.exchange(
 		
 		CompanyDtlBean companyDtlBean = new CompanyDtlBean();
 		if(null != session.getAttribute("OfficeId")){
-		  companyDtlBean.setOffice(session.getAttribute("OfficeId").toString());
+		  companyDtlBean.setDivision(session.getAttribute("OfficeId").toString());
 		}
 		Map<String, Object> model = new HashMap<String, Object>();
 

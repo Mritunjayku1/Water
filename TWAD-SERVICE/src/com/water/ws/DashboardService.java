@@ -56,7 +56,9 @@ import com.water.model.ComplaintDetails;
 import com.water.model.Documents;
 import com.water.model.EmployeeDetails;
 import com.water.model.MasterCategory;
+import com.water.model.MasterCircle;
 import com.water.model.MasterDistrict;
+import com.water.model.MasterHODivision;
 import com.water.model.MasterOffice;
 import com.water.model.MasterPayment;
 import com.water.model.MasterPaymentType;
@@ -2051,7 +2053,9 @@ public class DashboardService {
 try{
 	transaction.begin();
 	CompanyDtl  companyDtl = (CompanyDtl) session.get(CompanyDtl.class, dDPaymentFormBean.getAppId());
-	companyDtl.setOffice((MasterOffice) session.get(MasterOffice.class, Integer.parseInt(dDPaymentFormBean.getOfficeName())));
+	companyDtl.setRegion((MasterRegion) session.get(MasterRegion.class, Integer.parseInt(dDPaymentFormBean.getRegion())));
+	companyDtl.setCircle((MasterCircle) session.get(MasterCircle.class, Integer.parseInt(dDPaymentFormBean.getCircle())));
+	companyDtl.setDivision((MasterHODivision) session.get(MasterHODivision.class, Integer.parseInt(dDPaymentFormBean.getDivision())));
 	companyDtl.setEeStatus( (MasterStatus)session.get(MasterStatus.class,1));
 	companyDtl.setActive(2);
 	companyDtl.setManagementComments(dDPaymentFormBean.getManagementComments());
@@ -2460,8 +2464,8 @@ ddPaymentFormBean.setContactPersonName(app.getContactPersonName());
 ddPaymentFormBean.setMobileNum(app.getMobileNum());
 ddPaymentFormBean.setEmailAddr(app.getEmailAddr());
 ddPaymentFormBean.setCategoryType(app.getCategoryType().getCategoryName());
-if(null != app.getOffice())
-ddPaymentFormBean.setOfficeName(app.getOffice().getOfficeName());
+if(null != app.getDivision())
+ddPaymentFormBean.setDivisionName(app.getDivision().getDivisionName());
 
 ddPaymentFormBean.setAddrPremSought(app.getAddrPremSought());
 ddPaymentFormBean.setDoorNo(app.getDoorNo());
@@ -2543,8 +2547,8 @@ ddPaymentFormBean.setContactPersonName(app.getContactPersonName());
 ddPaymentFormBean.setMobileNum(app.getMobileNum());
 ddPaymentFormBean.setEmailAddr(app.getEmailAddr());
 ddPaymentFormBean.setCategoryType(app.getCategoryType().getCategoryName());
-if(null != app.getOffice())
-ddPaymentFormBean.setOfficeName(app.getOffice().getOfficeName());
+if(null != app.getDivision())
+ddPaymentFormBean.setDivisionName(app.getDivision().getDivisionName());
 
 ddPaymentFormBean.setAddrPremSought(app.getAddrPremSought());
 
@@ -2958,9 +2962,9 @@ DashboardCountBean dashboardBean;
 			employeeFormBean.setPassword(employeeDetails.getLoginPassword());
 			employeeFormBean.setRole(employeeDetails.getUserRole().getRoleName());
 			employeeFormBean.setRoleId(String.valueOf(employeeDetails.getUserRole().getRoleId()));
-			if(employeeDetails.getUserOffice() != null){
-			employeeFormBean.setOffice(employeeDetails.getUserOffice().getOfficeName());
-			employeeFormBean.setOfficeId(String.valueOf(employeeDetails.getUserOffice().getOfficeId()));
+			if(employeeDetails.getUserDivision() != null){
+			employeeFormBean.setDivision(employeeDetails.getUserDivision().getDivisionName());
+			employeeFormBean.setDivisionId(String.valueOf(employeeDetails.getUserDivision().getDivisionId()));
 			}
 			employeeFormBean.setUserId(String.valueOf(employeeDetails.getUserId()));
 			employeeFormBean.setUsername(employeeDetails.getLoginUserName());

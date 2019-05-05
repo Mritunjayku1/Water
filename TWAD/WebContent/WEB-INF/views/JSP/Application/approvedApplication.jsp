@@ -45,7 +45,7 @@ $(function(){
 		var approvedAppRef = $(this).attr('id');
 		var appId = approvedAppRef.split("_");
 		var managementComments=$('#managementComments_'+appId[1]).val();
-		var officeId=$('#officeId_'+appId[1]).val();
+		var divisionId=$('#divisionId_'+appId[1]).val();
 		if(managementComments == null || managementComments=='')
 		{
 		alert("Please enter the Comments !")
@@ -55,7 +55,7 @@ $(function(){
 		$.ajax({
 			type:"POST",
 			url:"registeredApplicationApproved.do",
-			data:{'appId':appId[1],'managementComments':managementComments,'officeName':officeId},
+			data:{'appId':appId[1],'managementComments':managementComments,'divisionName':divisionId},
 			success:function(response){
 				alert(response);
 				window.location.reload();
@@ -124,7 +124,7 @@ $(function(){
                                            <!--  <th style="color:black !important"><b>Category Type</b></th>
                                             <th style="color:black !important"><b>Correspondence Address</b></th> -->
                                              <th style="color:black !important"><b>Registered Date</b></th>
-                                              <th style="color:black !important"><b>Office Name</b></th>
+                                              <th style="color:black !important"><b>Division Name</b></th>
                                              <th style="color:black !important"><b>Management Comments</b></th>
                                              
                                         
@@ -144,7 +144,7 @@ $(function(){
                                             <td class="center">${app.getCdoorNo()} ${app.getCplotNo()} ${app.getCstreetName()} ${app.getClocation()} ${app.getCpinCode()}</td>
                                            --%>
                                              <td class="center">${app.getCreateTs()}</td>
-                                              <td class="center">${app.getOfficeName()}</td>
+                                              <td class="center">${app.getDivisionName()}</td>
                                              
                                               <td class="center">${app.getManagementComments()}</td>
                                              

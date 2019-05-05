@@ -66,6 +66,20 @@ public class CompanyDtl implements Serializable {
 	@JoinColumn(name = "OFFICE_ID")
 	private MasterOffice office;
 	
+	@ManyToOne(targetEntity = MasterRegion.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "REGION_ID")
+	private MasterRegion region;
+	
+	@ManyToOne(targetEntity = MasterCircle.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "CIRCLE_ID")
+	private MasterCircle circle;
+	
+	@ManyToOne(targetEntity = MasterHODivision.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "DIVISION_ID")
+	private MasterHODivision division;
+	
+	
+	
 	@Column(name = "MANAGEMENT_COMMENTS", nullable = true, length = 100)
 	private String managementComments;
 
@@ -938,6 +952,36 @@ public class CompanyDtl implements Serializable {
 
 	public void setMcRemarks(String mcRemarks) {
 		this.mcRemarks = mcRemarks;
+	}
+
+
+	public MasterRegion getRegion() {
+		return region;
+	}
+
+
+	public void setRegion(MasterRegion region) {
+		this.region = region;
+	}
+
+
+	public MasterCircle getCircle() {
+		return circle;
+	}
+
+
+	public void setCircle(MasterCircle circle) {
+		this.circle = circle;
+	}
+
+
+	public MasterHODivision getDivision() {
+		return division;
+	}
+
+
+	public void setDivision(MasterHODivision division) {
+		this.division = division;
 	}
 
 

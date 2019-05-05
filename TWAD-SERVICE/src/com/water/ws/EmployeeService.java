@@ -85,8 +85,8 @@ public class EmployeeService {
 			loginreult.setLoginDetailID(list.getUserId());
 			loginreult.setLoginName(list.getUserFirstName());
 			loginreult.setRoleID(list.getUserRole().getRoleId());
-			if(null !=list.getUserOffice()){
-			 loginreult.setOfficeId(list.getUserOffice().getOfficeId()+"");
+			if(null !=list.getUserDivision()){
+			 loginreult.setDivisionId(list.getUserDivision().getDivisionId()+"");
 			}
 			//loginreult.setIsActive(list.getStatusFlag());
 			loginreult.setResult("success");

@@ -98,7 +98,7 @@ public class CompanyDtlBean {
 
 	private String updateUserId;
 	
-	private String office;
+	private String division;
 	
 	private Integer paymentStatus;
 
@@ -510,12 +510,12 @@ public class CompanyDtlBean {
 		this.updateUserId = updateUserId;
 	}
 
-	public String getOffice() {
-		return office;
+	public String getDivision() {
+		return division;
 	}
 
-	public void setOffice(String office) {
-		this.office = office;
+	public void setDivision(String division) {
+		this.division = division;
 	}
 
 	public Integer getPaymentStatus() {

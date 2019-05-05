@@ -1420,7 +1420,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.createAlias("companyDtl.district", "district")
 					.createAlias("companyDtl.taluk", "taluk")
 					.createAlias("companyDtl.village", "village")
-					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
+					.createAlias("companyDtl.division","division",JoinType.LEFT.ordinal())
 					.setProjection(Projections.projectionList()
 					.add(Projections.property("companyDtl.appId"),"appId")
 					.add(Projections.property("companyDtl.contactPersonName"),"contactPersonName")
@@ -1436,7 +1436,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.landLineNo"),"landLineNo")
 					.add(Projections.property("companyDtl.emailAddr"),"emailAddr")
 					.add(Projections.property("categoryType.categoryName"),"categoryType")
-					.add(Projections.property("office.officeName"),"officeName")
+					.add(Projections.property("division.divisionName"),"divisionName")
 					.add(Projections.property("companyDtl.addrPremSought"),"addrPremSought")
 					.add(Projections.property("companyDtl.doorNo"),"doorNo")
 					.add(Projections.property("companyDtl.plotNo"),"plotNo")
@@ -1455,7 +1455,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.workType"),"workType")
 				           
 				           )
-					.add(Restrictions.isNull("companyDtl.office"));
+					.add(Restrictions.isNull("companyDtl.division"));
 					cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -1490,7 +1490,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.createAlias("companyDtl.district", "district")
 					.createAlias("companyDtl.taluk", "taluk")
 					.createAlias("companyDtl.village", "village")
-					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
+					.createAlias("companyDtl.division","division",JoinType.LEFT.ordinal())
 					.setProjection(Projections.projectionList()
 					.add(Projections.property("companyDtl.appId"),"appId")
 					.add(Projections.property("companyDtl.contactPersonName"),"contactPersonName")
@@ -1506,7 +1506,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.landLineNo"),"landLineNo")
 					.add(Projections.property("companyDtl.emailAddr"),"emailAddr")
 					.add(Projections.property("categoryType.categoryName"),"categoryType")
-					.add(Projections.property("office.officeName"),"officeName")
+					.add(Projections.property("division.divisionName"),"divisionName")
 					.add(Projections.property("companyDtl.addrPremSought"),"addrPremSought")
 					.add(Projections.property("companyDtl.doorNo"),"doorNo")
 					.add(Projections.property("companyDtl.plotNo"),"plotNo")
@@ -1526,7 +1526,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.managementComments"),"managementComments")
 				           
 				           )
-					.add(Restrictions.isNotNull("companyDtl.office"));
+					.add(Restrictions.isNotNull("companyDtl.division"));
 					cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -1561,7 +1561,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.createAlias("companyDtl.district", "district")
 					.createAlias("companyDtl.taluk", "taluk")
 					.createAlias("companyDtl.village", "village")
-					.createAlias("companyDtl.office","office",JoinType.LEFT.ordinal())
+					.createAlias("companyDtl.division","division",JoinType.LEFT.ordinal())
 					.setProjection(Projections.projectionList()
 					.add(Projections.property("companyDtl.appId"),"appId")
 					.add(Projections.property("companyDtl.contactPersonName"),"contactPersonName")
@@ -1577,7 +1577,7 @@ public class DashboardDaoImpl implements DashboardDao {
 					.add(Projections.property("companyDtl.landLineNo"),"landLineNo")
 					.add(Projections.property("companyDtl.emailAddr"),"emailAddr")
 					.add(Projections.property("categoryType.categoryName"),"categoryType")
-					.add(Projections.property("office.officeName"),"officeName")
+					.add(Projections.property("division.divisionName"),"divisionName")
 					.add(Projections.property("companyDtl.addrPremSought"),"addrPremSought")
 					.add(Projections.property("companyDtl.doorNo"),"doorNo")
 					.add(Projections.property("companyDtl.plotNo"),"plotNo")
@@ -1928,8 +1928,8 @@ public String addNewUser(EmployeeFormBean employeeFormBean ){
 	Transaction tx =  session.beginTransaction();
 	EmployeeDetails employeeDetails = new EmployeeDetails();
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
-	if(null !=employeeFormBean.getOfficeId() && !employeeFormBean.getOfficeId().equals("")){
-	  employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
+	if(null !=employeeFormBean.getDivisionId() && !employeeFormBean.getDivisionId().equals("")){
+	  employeeDetails.setUserDivision((MasterHODivision)session.get(MasterHODivision.class,Integer.parseInt(employeeFormBean.getDivisionId())));
 	}
 	employeeDetails.setLoginUserName(employeeFormBean.getUsername());
 	employeeDetails.setLoginPassword(employeeFormBean.getPassword());
@@ -1953,8 +1953,8 @@ public String editUser(EmployeeFormBean employeeFormBean ){
 	EmployeeDetails employeeDetails = (EmployeeDetails)session.get(EmployeeDetails.class,Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserId(Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
-	if(null !=employeeFormBean.getOfficeId() && !employeeFormBean.getOfficeId().equals("")){
-	 employeeDetails.setUserOffice((MasterOffice)session.get(MasterOffice.class,Integer.parseInt(employeeFormBean.getOfficeId())));
+	if(null !=employeeFormBean.getDivisionId() && !employeeFormBean.getDivisionId().equals("")){
+	 employeeDetails.setUserDivision((MasterHODivision)session.get(MasterHODivision.class,Integer.parseInt(employeeFormBean.getDivisionId())));
 	}
 	 employeeDetails.setLoginUserName(employeeFormBean.getUsername());
 	employeeDetails.setLoginPassword(employeeFormBean.getPassword());
@@ -3244,14 +3244,14 @@ public String editSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFor
 					+ " CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ " CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
 					+ " CompanyPaytDtl.DD_BANK_NAME as ddBankName,CompanyPaytDtl.DD_BANK_BRANCH as ddBankBranch, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
-					+ " companydtl1_.CON_PERSON_NAME as contactPersonName, office2_.OFFICE_NAME as  officeName, companydtl1_.PAYMENT_STATUS as paymentStatus,"
+					+ " companydtl1_.CON_PERSON_NAME as contactPersonName, division2_.HO_DIVISION_NAME as  divisionName, companydtl1_.PAYMENT_STATUS as paymentStatus,"
 					+ " companydtl1_.MOBILE_NUMBER as mobileNum,companydtl1_.EMAIL_ADDR as emailAddr,companydtl1_.PINCODE as pincode,companydtl1_.SURVEY_FIELDNO as surveyFieldNo,"
 					+ " companydtl1_.REQ_KLD as reqMld, category1_.CATEGORY_NAME as categoryType, district1_.DISTRICT_NAME as district,taluk1_.TALUK_NAME as taluk, village1_.VILLAGE_NAME as village,  companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
-					+ " MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
-					+ " left outer join MASTER_CATEGORY category1_ on companydtl1_.OFFICE_ID=category1_.CATEGORY_ID left outer join MASTER_DISTRICT district1_ on companydtl1_.OFFICE_ID=district1_.DISTRICT_ID "
-					+ "left outer join MASTER_TALUK taluk1_ on companydtl1_.OFFICE_ID=taluk1_.TALUK_ID left outer join MASTER_VILLAGE village1_ on companydtl1_.OFFICE_ID=village1_.VILLAGE_ID "
-					+ "where eestatus3_.STATUS_ID=1 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
+					+ " MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_HO_DIVISION division2_ on companydtl1_.DIVISION_ID=division2_.HO_DIVISION_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ " left outer join MASTER_CATEGORY category1_ on companydtl1_.DIVISION_ID=category1_.CATEGORY_ID left outer join MASTER_DISTRICT district1_ on companydtl1_.DIVISION_ID=district1_.DISTRICT_ID "
+					+ "left outer join MASTER_TALUK taluk1_ on companydtl1_.DIVISION_ID=taluk1_.TALUK_ID left outer join MASTER_VILLAGE village1_ on companydtl1_.DIVISION_ID=village1_.VILLAGE_ID "
+					+ "where eestatus3_.STATUS_ID=1 and division2_.HO_DIVISION_ID="+Integer.parseInt(companyDtlBean.getDivision())+" and companydtl1_.ACTIVE=2";
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query);
 			
@@ -3269,7 +3269,7 @@ public String editSubDivision(DivisionSubDivisionFormBean divisionSubDivisionFor
 			sqlQuery.addScalar("createDate", new StringType());
 			sqlQuery.addScalar("legCompName", new StringType());
 			sqlQuery.addScalar("contactPersonName", new StringType());
-			sqlQuery.addScalar("officeName", new StringType());
+			sqlQuery.addScalar("divisionName", new StringType());
 			sqlQuery.addScalar("paymentStatus", new IntegerType());
 			
 			
@@ -3319,10 +3319,10 @@ sqlQuery.addScalar("appId", new StringType());
 					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
 					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
-					+ "companydtl1_.CON_PERSON_NAME as contactPersonName,office2_.OFFICE_NAME as  officeName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ "companydtl1_.CON_PERSON_NAME as contactPersonName,division2_.HO_DIVISION_NAME as  divisionName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
-					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
-					+ "where eestatus3_.STATUS_ID=2 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
+					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_HO_DIVISION division2_ on companydtl1_.DIVISION_ID=division2_.HO_DIVISION_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ "where eestatus3_.STATUS_ID=2 and division2_.HO_DIVISION_ID="+Integer.parseInt(companyDtlBean.getDivision())+" and companydtl1_.ACTIVE=2";
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query);
 			
@@ -3339,7 +3339,7 @@ sqlQuery.addScalar("appId", new StringType());
 			sqlQuery.addScalar("createDate", new StringType());
 			sqlQuery.addScalar("legCompName", new StringType());
 			sqlQuery.addScalar("contactPersonName", new StringType());
-			sqlQuery.addScalar("officeName", new StringType());
+			sqlQuery.addScalar("divisionName", new StringType());
 			sqlQuery.addScalar("paymentStatus", new IntegerType());
 			
 			sqlQuery.addScalar("appId", new StringType());
@@ -3370,10 +3370,10 @@ sqlQuery.addScalar("appId", new StringType());
 					+ "CompanyPaytDtl.PAYMENT_AMOUNT as paymentAmount, CompanyPaytDtl.MANAGEMENT_COMMENTS as managementComments, "
 					+ "CompanyPaytDtl.PAYMENT_STATUS_FLAG as paymentStatusFlag, CompanyPaytDtl.DD_NO as ddNo, CompanyPaytDtl.DD_DATE as ddDate, "
 					+ "CompanyPaytDtl.DD_BANK_NAME as ddBankName, CompanyPaytDtl.CREATE_TS as createDate, companydtl1_.LEG_COMP_NAME as legCompName, "
-					+ "companydtl1_.CON_PERSON_NAME as contactPersonName,office2_.OFFICE_NAME as  officeName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
+					+ "companydtl1_.CON_PERSON_NAME as contactPersonName,division2_.HO_DIVISION_NAME as  divisionName, companydtl1_.PAYMENT_STATUS as paymentStatus, companydtl1_.APP_ID as appId "
 					+ " from CompanyDtl companydtl1_ left outer join (select * from CompanyPaymentDtl where payment_status_flag='N') CompanyPaytDtl on CompanyPaytDtl.app_id=companydtl1_.app_id inner join "
-					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_OFFICE office2_ on companydtl1_.OFFICE_ID=office2_.OFFICE_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
-					+ "where eestatus3_.STATUS_ID=3 and office2_.OFFICE_ID="+Integer.parseInt(companyDtlBean.getOffice())+" and companydtl1_.ACTIVE=2";
+					+ "MASTER_STATUS eestatus3_ on companydtl1_.EE_STATUS=eestatus3_.STATUS_ID inner join MASTER_HO_DIVISION division2_ on companydtl1_.DIVISION_ID=division2_.HO_DIVISION_ID left outer join MASTER_PAYMENT_TYPE paymenttyp4_ on CompanyPaytDtl.PAYMENT_TYPE_ID=paymenttyp4_.PAYMENT_TYPE_ID "
+					+ "where eestatus3_.STATUS_ID=3 and division2_.HO_DIVISION_ID="+Integer.parseInt(companyDtlBean.getDivision())+" and companydtl1_.ACTIVE=2";
 			
 			SQLQuery sqlQuery = session.createSQLQuery(query);
 			
@@ -3390,7 +3390,7 @@ sqlQuery.addScalar("appId", new StringType());
 			sqlQuery.addScalar("createDate", new StringType());
 			sqlQuery.addScalar("legCompName", new StringType());
 			sqlQuery.addScalar("contactPersonName", new StringType());
-			sqlQuery.addScalar("officeName", new StringType());
+			sqlQuery.addScalar("divisionName", new StringType());
 			sqlQuery.addScalar("paymentStatus", new IntegerType());
 			
 			sqlQuery.addScalar("appId", new StringType());
@@ -3445,7 +3445,7 @@ sqlQuery.addScalar("appId", new StringType());
 				           )
 			         .add(Restrictions.eq("eeStatus.statusId", 1))
 			         /*.add(Restrictions.eq("companyPaymentDtl.paymentStatusFlag", 'N'))*/
-			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())))
+			         .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())))
 			         .add(Restrictions.eq("companyDtl.active", 2));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
@@ -3488,7 +3488,7 @@ sqlQuery.addScalar("appId", new StringType());
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 3))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -3528,7 +3528,7 @@ sqlQuery.addScalar("appId", new StringType());
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 4))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -3568,7 +3568,7 @@ sqlQuery.addScalar("appId", new StringType());
 				           )
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 5))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			
@@ -3621,7 +3621,7 @@ sqlQuery.addScalar("appId", new StringType());
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 4))
 					 .add(Restrictions.eq("paymentType.paymentTypeId",3))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())));
 					
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
@@ -3676,7 +3676,7 @@ sqlQuery.addScalar("appId", new StringType());
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 5))
 					 .add(Restrictions.eq("paymentType.paymentTypeId",3))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getOffice())));
+					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			

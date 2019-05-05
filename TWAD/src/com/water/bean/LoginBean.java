@@ -46,7 +46,7 @@ public class LoginBean {
 	private Date modifiedDate;
 
 	private String result;
-	private String officeId;
+	private String divisionId;
 
 	public Integer getLoginDetailID() {
 		return loginDetailID;
@@ -152,12 +152,12 @@ public class LoginBean {
 		this.userName = userName;
 	}
 
-	public String getOfficeId() {
-		return officeId;
+	public String getDivisionId() {
+		return divisionId;
 	}
 
-	public void setOfficeId(String officeId) {
-		this.officeId = officeId;
+	public void setDivisionId(String divisionId) {
+		this.divisionId = divisionId;
 	}
 
 }

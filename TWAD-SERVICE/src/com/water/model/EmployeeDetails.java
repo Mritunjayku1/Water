@@ -124,8 +124,8 @@ public class EmployeeDetails  implements Serializable{
     
     
     @ManyToOne(optional = true)
-    @JoinColumn(name = "OFFICE_ID")
-    private MasterOffice userOffice;
+    @JoinColumn(name = "DIVISION_ID")
+    private MasterHODivision userDivision;
     
     
     @ManyToOne(optional = false)
@@ -429,13 +429,13 @@ public class EmployeeDetails  implements Serializable{
 	}
 
 
-	public MasterOffice getUserOffice() {
-		return userOffice;
+	public MasterHODivision getUserDivision() {
+		return userDivision;
 	}
 
 
-	public void setUserOffice(MasterOffice userOffice) {
-		this.userOffice = userOffice;
+	public void setUserDivision(MasterHODivision userDivision) {
+		this.userDivision = userDivision;
 	}
  
 

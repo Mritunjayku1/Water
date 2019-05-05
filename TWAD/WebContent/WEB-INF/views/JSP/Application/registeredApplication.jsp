@@ -44,19 +44,19 @@ $(function(){
 		var approvedAppRef = $(this).attr('id');
 		var appId = approvedAppRef.split("_");
 		var managementComments=$('#managementComments_'+appId[1]).val();
-		var regionId= $("#regionSearch_"+appId[1]).attr('item_id');
+		var regionId=$("#regionSearch_"+appId[1]+" option:selected").val();
 		if(regionId == null || regionId=='')
 		{
 		alert("Please select Region !")
 		return false;
 		}
-		var circleId= $("#circleSearch_"+appId[1]).attr('item_id');
+		var circleId= $("#circleSearch_"+appId[1]+" option:selected").val();
 		if(circleId == null || circleId=='')
 		{
 		alert("Please select Circle !")
 		return false;
 		}
-		var divisionId= $("#divisionSearch_"+appId[1]).attr('item_id');
+		var divisionId= $("#divisionSearch_"+appId[1]+" option:selected").val();
 		if(divisionId == null || divisionId=='')
 		{
 		alert("Please select Division !")
@@ -64,18 +64,6 @@ $(function(){
 		}
 		
 		
-		
-		var officeId= $("#officeSearch_"+appId[1]).attr('item_id');
-		if(officeId == null || officeId=='')
-		{
-		alert("Please select Office Name !")
-		return false;
-		}
-		/* if(managementComments == null || managementComments=='')
-		{
-		alert("Please enter the Comments !")
-		return false;
-		} */
 		if(confirm("Are you sure want to Approve ? ")){
 		$.ajax({
 			type:"POST",
@@ -85,8 +73,7 @@ $(function(){
 				'managementComments':managementComments,
 				'region':regionId,
 				'circle':circleId,
-				'division':divisionId,
-				'officeName':officeId
+				'division':divisionId
 				},
 			success:function(response){
 				alert(response);
@@ -123,152 +110,88 @@ $(function(){
 	   var acList = "";
 	   
 	   var searchId = "";
-	   $('.regionSearchClass').focus(function(){
-		   var searchIdArr = $(this).attr("id").split("_");
-	    	searchId = searchIdArr[1];
-	    	
-	   });
+	 
 	  
 	                     
-	                      $('.regionSearchClass').autocomplete({
-	                    	    source: function (request, response) {
 	                    	    	  $.ajax({
 	                  					type: "GET",
 	                  					async:false,
 	                  					url: "library/Region.json",
-	                  					success: function (
-	                  						response) {
-	                  						acList=response;
-	                  					}
+	                  					success: function (response) {	
+        									var region = response;
+	         									var option = '<option value="">--Select--</option>';
+	         									if (region != undefined)
+	         										for (var i = 0; i < region.length; i++) {
+	         											option = option + '<option value="' + region[i].id + '">' +region[i].value +'</option>';
+	         										}
+	         									$('.regionSearchClass').find('option').remove();
+	         									$('.regionSearchClass').append(option);}
 	                  	    	  
 	                  	    	  });
-	                    	        var matches = $.map(acList, function (acItem) {
-	                    	        	var searchTerm = request.term.replace(/%/g,".*");
-	                    	        	var patt = new RegExp("^"+searchTerm.toLowerCase()+".*$","ig");
-	                    	        	  if(patt.test(acItem.value.toLowerCase())){
-	                    	                return acItem;
-	                    	            }
-	                    	        });
-	                    	        response(matches);
-	                    	    },
+	                    	       
+	                    	    	  $('.regionSearchClass').change(function () {
+	                    	    		  var searchIdArr = $(this).attr("id").split("_");
+	                    	  	    	  searchId = searchIdArr[1];
+	                    	    	  
+	                    	    		  $.ajax({
+         	                  					type: "GET",
+         	                  					async:false,
+         	                  					url: "library/Circle.json",
+         	                  					success: function (response)  {
+	         	                  						
+ 	         	                  					var regionSelectedValue =$("#regionSearch_"+searchId+" option:selected").val();
+ 	         									var circle = response[regionSelectedValue];
+ 	         									var option = '<option value="">--Select--</option>';
+ 	         									if (circle != undefined)
+ 	         										for (var i = 0; i < circle.length; i++) {
+
+ 	         											
+ 	         														option = option + '<option value="' + circle[i].id + '">' +circle[i].value +'</option>';
+ 	         											
+ 	         										}
+ 	         									$('#circleSearch_'+searchId).find('option').remove();
+ 	         									$('#circleSearch_'+searchId).append(option);
+ 	         	                  					}
+ 	         	                  	    	  
+         	                  	    	  
+         	                  	    	  });
+         	                    	        
+	                    	    	  
+	                    	          });
 	                      
-	                      select: function (event, ui) {
-	                          $("#regionSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
-	                      }
-	                      
-	                    	});
 	                      
 	                      
-	                      
-	                      $('.circleSearchClass').focus(function(){
-	               		   var searchIdArr = $(this).attr("id").split("_");
-	               	    	searchId = searchIdArr[1];
-	               	    	
-	               	   });
-	               	  
 	               	                     
-	               	                      $('.circleSearchClass').autocomplete({
-	               	                    	    source: function (request, response) {
-	               	                    	    	  $.ajax({
-	               	                  					type: "GET",
-	               	                  					async:false,
-	               	                  					url: "library/Circle.json",
-	               	                  					success: function (
-	               	                  						response) {
-	               	                  						acList=response[$("#regionSearch_"+searchId).attr('item_id')];
-	               	                  					}
-	               	                  	    	  
-	               	                  	    	  });
-	               	                    	        var matches = $.map(acList, function (acItem) {
-	               	                    	        	var searchTerm = request.term.replace(/%/g,".*");
-	               	                    	        	var patt = new RegExp("^"+searchTerm.toLowerCase()+".*$","ig");
-	               	                    	        	  if(patt.test(acItem.value.toLowerCase())){
-	               	                    	                return acItem;
-	               	                    	            }
-	               	                    	        });
-	               	                    	        response(matches);
-	               	                    	    },
+	               	                      $('.circleSearchClass').change(function () { 
+	               	                    	  
+	               	                    	  var searchIdArr = $(this).attr("id").split("_");
+		                    	  	    	  searchId = searchIdArr[1];
+		                    	    	  
+	               	                    	  $.ajax({
 	               	                      
-	               	                      select: function (event, ui) {
-	               	                          $("#circleSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
-	               	                      }
+	         	                  					type: "GET",
+   	         	                  					async:false,
+   	         	                  					url: "library/Division.json",
+   	         	                  					success: function (response) {
+   	         	                  						
+   	         	                  					var circleSelectedValue =$("#circleSearch_"+searchId+" option:selected").val();
+   	         									var division = response[circleSelectedValue];
+   	         									var option = '<option value="">--Select--</option>';
+   	         									if (division != undefined)
+   	         										for (var i = 0; i < division.length; i++) {
+   	         										option = option + '<option value="' + division[i].id + '">' +division[i].value +'</option>';
+   	         										}
+   	         									$('#divisionSearch_'+searchId).find('option').remove();
+   	         									$('#divisionSearch_'+searchId).append(option);
+   	         	                  					}
+   	         	                  	    	  
+   	         	                  	    	  });
 	               	                      
 	               	                    	});
 	               	
 	               	                      
-	               	                   $('.divisionSearchClass').focus(function(){
-	               	         		   var searchIdArr = $(this).attr("id").split("_");
-	               	         	    	searchId = searchIdArr[1];
-	               	         	    	
-	               	         	   });
-	               	         	  
-	               	         	                     
-	               	         	                      $('.divisionSearchClass').autocomplete({
-	               	         	                    	    source: function (request, response) {
-	               	         	                    	    	  $.ajax({
-	               	         	                  					type: "GET",
-	               	         	                  					async:false,
-	               	         	                  					url: "library/Division.json",
-	               	         	                  					success: function (
-	               	         	                  						response) {
-	               	         	                  						acList=response[$("#circleSearch_"+searchId).attr('item_id')];
-	               	         	                  					}
-	               	         	                  	    	  
-	               	         	                  	    	  });
-	               	         	                    	        var matches = $.map(acList, function (acItem) {
-	               	         	                    	        	var searchTerm = request.term.replace(/%/g,".*");
-	               	         	                    	        	var patt = new RegExp("^"+searchTerm.toLowerCase()+".*$","ig");
-	               	         	                    	        	  if(patt.test(acItem.value.toLowerCase())){
-	               	         	                    	                return acItem;
-	               	         	                    	            }
-	               	         	                    	        });
-	               	         	                    	        response(matches);
-	               	         	                    	    },
-	               	         	                      
-	               	         	                      select: function (event, ui) {
-	               	         	                          $("#divisionSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
-	               	         	                      }
-	               	         	                      
-	               	         	                    	});
-	               	         	
-	               	         	                      
-	               	         	                  $('.officeSearchClass').focus(function(){
-	               	         	       		   var searchIdArr = $(this).attr("id").split("_");
-	               	         	       	    	searchId = searchIdArr[1];
-	               	         	       	    	
-	               	         	       	   });
-	               	         	       	  
-	               	         	       	                     
-	               	         	       	                      $('.officeSearchClass').autocomplete({
-	               	         	       	                    	    source: function (request, response) {
-	               	         	       	                    	    	  $.ajax({
-	               	         	       	                  					type: "GET",
-	               	         	       	                  					async:false,
-	               	         	       	                  					url: "library/Office.json",
-	               	         	       	                  					success: function (
-	               	         	       	                  						response) {
-	               	         	       	                  						acList=response;
-	               	         	       	                  					}
-	               	         	       	                  	    	  
-	               	         	       	                  	    	  });
-	               	         	       	                    	        var matches = $.map(acList, function (acItem) {
-	               	         	       	                    	        	var searchTerm = request.term.replace(/%/g,".*");
-	               	         	       	                    	        	var patt = new RegExp("^"+searchTerm.toLowerCase()+".*$","ig");
-	               	         	       	                    	        	  if(patt.test(acItem.value.toLowerCase())){
-	               	         	       	                    	                return acItem;
-	               	         	       	                    	            }
-	               	         	       	                    	        });
-	               	         	       	                    	        response(matches);
-	               	         	       	                    	    },
-	               	         	       	                      
-	               	         	       	                      select: function (event, ui) {
-	               	         	       	                          $("#officeSearch_"+searchId).attr('item_id',ui.item.id); // save selected id to hidden input
-	               	         	       	                      }
-	               	         	       	                      
-	               	         	       	                    	});
-	               	         	       	
-	                      
-	                      
+	               	                  
+	               	         	              
 	                      
 });
 </script>
@@ -309,7 +232,6 @@ $(function(){
                                             <th style="color:black !important"><b>Region</b></th>
                                             <th style="color:black !important"><b>Circle</b></th>
                                             <th style="color:black !important"><b>Division</b></th>
-                                            <th style="color:black !important"><b>Office Name</b></th>
                                             <th style="color:black !important"><b>Registered Date</b></th>
                                             <th style="color:black !important"><b>Remarks</b></th>
                                             <th></th>
@@ -333,31 +255,20 @@ $(function(){
                                             
                                              
                                               <td class="center">
-                                               <div class="ui-widget">
-                                                <input style="width:90px;" class="regionSearchClass" id="regionSearch_${app.getAppId()}" title="To get all Region type '%' only" />
-                                               </div>
+                                             
+                                               <select  style="width:90px;" class="regionSearchClass" id="regionSearch_${app.getAppId()}"></select>
                                               </td>
                                               
                                                <td class="center">
-                                               <div class="ui-widget">
-                                                <input style="width:90px;" class="circleSearchClass" id="circleSearch_${app.getAppId()}" title="To get all Circle type '%' only" />
-                                               </div>
+                                              
+                                               <select style="width:90px;" class="circleSearchClass" id="circleSearch_${app.getAppId()}"></select>
                                               </td>
                                               
                                                <td class="center">
-                                               <div class="ui-widget">
-                                                <input style="width:90px;" class="divisionSearchClass" id="divisionSearch_${app.getAppId()}" title="To get all Division type '%' only" />
-                                               </div>
+                                             
+                                               <select style="width:90px;" class="divisionSearchClass" id="divisionSearch_${app.getAppId()}"> </select>
                                               </td>
                                              
-                                             
-                                             
-                                             
-                                              <td class="center">
-                                               <div class="ui-widget">
-                                                <input  style="width:90px;" class="officeSearchClass" id="officeSearch_${app.getAppId()}" title="To get all Office Name type '%' only" />
-                                               </div>
-                                              </td>
                                               <td class="center">${app.getCreateTs()}</td>
                                               <td class="center"><textarea id="managementComments_${app.getAppId()}" name="managementComments" style="width:100%;height:100%;"></textarea></td>
                                               <td class="center">

@@ -140,7 +140,7 @@ $(function(){
                                             <th style="color:black !important"><b>DD Bank Name</b></th>
                                             <th style="color:black !important"><b>Payment Status</b></th>
                                              <th style="color:black !important"><b>Registered Date</b></th>
-                                             <th style="color:black !important"><b>Management Comments</b></th>
+                                             <th style="color:black !important"><b>Remarks</b></th>
                                               <th></th>
                                         
                                         </tr>

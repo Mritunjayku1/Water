@@ -419,7 +419,7 @@ public class AdminController {
 						loginBean.getLoginDetailID());
 				session.setAttribute("LoginID", loginBean.getLoginDetailID());
 				session.setAttribute("LoginName", loginBean.getLoginName());
-				session.setAttribute("OfficeId", loginBean.getOfficeId());
+				session.setAttribute("OfficeId", loginBean.getDivisionId());
 				session.setAttribute("RoleID", loginBean.getRoleID());
 				if (loginBean.getRoleID() == 1) {
 				//	redirect = "CEhomePage";

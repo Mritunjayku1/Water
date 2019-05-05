@@ -83,10 +83,10 @@ public class SmsDataDaoImp implements SmsDatadao {
 		List<EmployeeDetails> SmsTemplate = new ArrayList<EmployeeDetails>();
 		
 		Criteria companyCriteria = session.createCriteria(EmployeeDetails.class,"e1")
-		.createCriteria("e1.userOffice","eo1");
+		.createCriteria("e1.userDivision","eo1");
 		//.createCriteria(CompanyDtl.class,"c1")
 		//.createCriteria("c1.office","co1");
-		companyCriteria.add(Restrictions.eq("eo1.officeId",officeId));
+		companyCriteria.add(Restrictions.eq("eo1.divisionId",officeId));
 		//companyCriteria.add(Restrictions.eq("appId", applicationId));
 		
 		/*ProjectionList properties = Projections.projectionList();
