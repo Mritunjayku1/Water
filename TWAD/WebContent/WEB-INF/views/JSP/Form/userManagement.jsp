@@ -404,6 +404,17 @@ $(function(){
 		}
 		
 	});
+	
+	/* $('#roleId,#editRoleId').change(function(){
+		var selectedRole = $(this).val();
+		if(selectedRole != 2){
+			$('.regionSearchClass option').attr('disabled',true);
+		}
+		else{
+			$('.regionSearchClass option').removeAttr('disabled');
+		}
+	}); */
+	
 });
 </script>
 <table class='table-bordered table table-striped display'

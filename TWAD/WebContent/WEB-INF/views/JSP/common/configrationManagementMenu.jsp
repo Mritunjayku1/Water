@@ -198,14 +198,12 @@ $(function(){
 			}
 		
 		
-		if(url.indexOf("officeLocation")>0){
+		
+		if(url.indexOf("paymentType.do")>0){
 			$('ul li:nth-child(11)').addClass('selectionClass');
 			}
-		if(url.indexOf("paymentType.do")>0){
-			$('ul li:nth-child(12)').addClass('selectionClass');
-			}
 		if(url.indexOf("payment.do")>0){
-			$('ul li:nth-child(13)').addClass('selectionClass');
+			$('ul li:nth-child(12)').addClass('selectionClass');
 			}
 });
 
@@ -228,7 +226,6 @@ $(function(){
 	  <li><a href="regionCircleManagement.do">Region/Circle </a></li> 
 	   <li><a href="circleDivisionManagement.do">Circle/Division </a></li>
 	     <li><a href="divisionSubDivisionManagement.do">Division/SubDivision </a></li>
-	    <li><a href="officeLocation.do">Office Location</a></li> 
 	     <li><a href="paymentType.do">Payment Type</a></li> 
 	      <li><a href="payment.do">Payment</a></li> 
 	   

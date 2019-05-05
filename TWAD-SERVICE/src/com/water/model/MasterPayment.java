@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.GenericGenerator;
+
 
 @Entity
 @Table(name="MASTER_PAYMENT")
@@ -31,7 +33,9 @@ public class MasterPayment  implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id
+	@GenericGenerator(name = "sequence_payment_id", strategy = "com.water.daoImpl.PaymentIdGenerator")
+	@GeneratedValue(generator = "sequence_payment_id")
 	@Column(name = "PAYMENT_ID", unique = true, nullable = false, precision = 10, scale = 0)
 	private Integer paymentId;
 	

@@ -1928,7 +1928,7 @@ public String addNewUser(EmployeeFormBean employeeFormBean ){
 	Transaction tx =  session.beginTransaction();
 	EmployeeDetails employeeDetails = new EmployeeDetails();
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
-	if(null !=employeeFormBean.getDivisionId() && !employeeFormBean.getDivisionId().equals("")){
+	if(null !=employeeFormBean.getDivisionId() && !employeeFormBean.getDivisionId().equals("") && !employeeFormBean.getDivisionId().equals("null") ){
 	  employeeDetails.setUserDivision((MasterHODivision)session.get(MasterHODivision.class,Integer.parseInt(employeeFormBean.getDivisionId())));
 	}
 	employeeDetails.setLoginUserName(employeeFormBean.getUsername());
@@ -1953,7 +1953,7 @@ public String editUser(EmployeeFormBean employeeFormBean ){
 	EmployeeDetails employeeDetails = (EmployeeDetails)session.get(EmployeeDetails.class,Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserId(Integer.parseInt(employeeFormBean.getUserId()));
 	employeeDetails.setUserRole((MasterRole)session.get(MasterRole.class,Integer.parseInt(employeeFormBean.getRoleId())));
-	if(null !=employeeFormBean.getDivisionId() && !employeeFormBean.getDivisionId().equals("")){
+	if(null !=employeeFormBean.getDivisionId() && !employeeFormBean.getDivisionId().equals("") && !employeeFormBean.getDivisionId().equals("null") ){
 	 employeeDetails.setUserDivision((MasterHODivision)session.get(MasterHODivision.class,Integer.parseInt(employeeFormBean.getDivisionId())));
 	}
 	 employeeDetails.setLoginUserName(employeeFormBean.getUsername());
