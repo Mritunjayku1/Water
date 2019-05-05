@@ -2183,7 +2183,7 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	session.update(companyPaymentDtl);
 	transaction.commit();
 	final Integer smsType = 4;
-	final String smsTemp="Your%20TWAD%20App%20No%20"+paymentFormBean.getAppId()+"%20received%20please%20pay%20upfrontcharges%20immeditely.";
+	final String smsTemp="Your%20TWAD%20App%20No%20"+paymentFormBean.getAppId()+"%20Application%20fee%20processed%20successfully,%20please%20pay%20upfrontcharges%20immeditely.";
 	
 	final String application_ID = paymentFormBean.getAppId();
 	Thread notify = new Thread(new Runnable() {
@@ -2253,7 +2253,8 @@ public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
 	tx.commit();
 	
 	final Integer smsType = 5;
-	final String smsTemp="Your%20"+paymentFormBean.getAppId()+"%20received%20upfrontcharges,%20you%20will%20get%20soon%20full%20payment.";
+	final String smsTemp="Your%20TWAD%20App%20No%20"+paymentFormBean.getAppId()+"%20upfrontcharges%20processed%20successfully,%20you%20will%20get%20soon%20full%20payment.";
+	
 	
 	final String application_ID = paymentFormBean.getAppId();
 	Thread notify = new Thread(new Runnable() {
@@ -2316,6 +2317,18 @@ public String eePaymentPendingApproved(PaymentFormBean paymentFormBean ){
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
 	tx1.commit();
+	final Integer smsType = 7;
+	final String smsTemp="your%20application%20"+paymentFormBean.getAppId()+"%20final%20Payment%20processed%20successfully.";
+	
+	final String application_ID = paymentFormBean.getAppId();
+	Thread notify = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			SMSBuilder obj = new SMSBuilder();
+			obj.getSmsTemplate(application_ID, smsType,smsTemp);
+		}
+	}, "notify");
+	notify.start();
 	
 		return "Payment Approved";
 	}
@@ -2398,7 +2411,7 @@ public String mcApprovePayment(PaymentFormBean paymentFormBean ){
 	session.update(companyDtl);
 	tx1.commit();
 	final Integer smsType = 6;
-	final String smsTemp="Final%20Approved%20successfully,Your%20received%20full%20payment%20Rs"+paymentFormBean.getTotalAmount()+",%20please%20pay%20immeditely.";
+	final String smsTemp="Final%20Approved%20successfully,Your%20received%20full%20payment,%20please%20pay%20immeditely.";
 	
 	final String application_ID = paymentFormBean.getAppId();
 	Thread notify = new Thread(new Runnable() {

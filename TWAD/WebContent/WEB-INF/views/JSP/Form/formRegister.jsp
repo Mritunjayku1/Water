@@ -109,17 +109,17 @@ window.onbeforeunload = function () {
 		
 		
 		
-		 $("#legCompNameId").val("Jay Test");
+		 $("#legCompNameId").val("");
 		$("#correspondenceAddrId").val("");
-		$("#contactPersonNameId").val("Jay");
-		$("#mobileNumId").val("9677096448");
-		$("#emailAddrId").val("mritunjayku1@gmail.com");
+		$("#contactPersonNameId").val("");
+		$("#mobileNumId").val("");
+		$("#emailAddrId").val("");
 		$("#categoryTypeId").val("1");
-		$("#reqMldId").val("1234");
+		$("#reqMldId").val("");
 		$("#workTypeId").val("1");
-		$("#pinCodeId").val("600560");
+		$("#pinCodeId").val("600100");
 		$("#isNewConnectionId").val("1");
-		$("#cpinCodeId").val("879787"); 
+		$("#cpinCodeId").val("600100"); 
 		
 		
 		$(document).keydown(function (event) {

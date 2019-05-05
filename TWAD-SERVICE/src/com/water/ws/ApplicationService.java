@@ -657,6 +657,17 @@ public class ApplicationService {
 		session.beginTransaction();
 		session.update(companyDtl);
 		session.beginTransaction().commit();
+		final Integer smsType = 3;
+		final String smsTemp="Application%20"+ddPaymentFormBean.getAppId()+",%20/DD%20Amount%20Successfully%20Submited.";
+		final String application_ID = ddPaymentFormBean.getAppId();
+		Thread notify = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				SMSBuilder obj = new SMSBuilder();
+				obj.getSmsTemplate(application_ID, smsType,smsTemp);
+			}
+		}, "notify");
+		notify.start();
 
 		/*final Integer smsType = 1;
 		final String smsTemp="";final String application_ID = ddPaymentFormBean.getAppId();

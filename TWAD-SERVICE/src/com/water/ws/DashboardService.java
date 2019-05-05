@@ -2204,6 +2204,7 @@ finally{
 		session.update(companyPaymentDtl);
 		transaction.commit();
 		
+		
 	}
 	catch(Exception e){
 		e.printStackTrace();
