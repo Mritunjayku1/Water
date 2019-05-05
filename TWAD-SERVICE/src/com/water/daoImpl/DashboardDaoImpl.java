@@ -2182,24 +2182,19 @@ public String eeAddPayment(PaymentFormBean paymentFormBean ){
 	companyPaymentDtl.setManagementComments(paymentFormBean.getPaymentTypeDesc());
 	session.update(companyPaymentDtl);
 	transaction.commit();
+	final Integer smsType = 4;
+	final String smsTemp="Your%20TWAD%20App%20No%20"+paymentFormBean.getAppId()+"%20received%20please%20pay%20upfrontcharges%20immeditely.";
 	
+	final String application_ID = paymentFormBean.getAppId();
+	Thread notify = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			SMSBuilder obj = new SMSBuilder();
+			obj.getSmsTemplate(application_ID, smsType,smsTemp);
+		}
+	}, "notify");
+	notify.start();
 	
-	/*Transaction tx =  session.beginTransaction();
-	MasterPayment masterPayment = new MasterPayment();
-	masterPayment.setAppId((CompanyDtl)session.get(CompanyDtl.class,paymentFormBean.getAppId()));
-	masterPayment.setPaymentType((MasterPaymentType)session.get(MasterPaymentType.class,Integer.parseInt(paymentFormBean.getPaymentType())));
-	masterPayment.setPaymentAmount(paymentFormBean.getPaymentAmount());
-	masterPayment.setPaymentDesc(paymentFormBean.getPaymentDesc());
-	masterPayment.setGstAmount(paymentFormBean.getGstAmount());
-	masterPayment.setGstPercent(paymentFormBean.getGstPercent());
-	masterPayment.setTotalAmount(paymentFormBean.getTotalAmount());
-	masterPayment.setStatusFlag('A');
-	masterPayment.setUpdateTs(new Date());
-	masterPayment.setCreateTs(new Date());
-	masterPayment.setUpdateUserId("Administrator");
-	masterPayment.setCreateUserId("Administrator");
-	session.save(masterPayment);
-	tx.commit();*/
 	
 }
 catch(Exception e){
@@ -2256,6 +2251,19 @@ public String eeAddFullPayment(PaymentFormBean paymentFormBean ){
 	masterPayment.setCreateUserId("Administrator");
 	session.save(masterPayment);
 	tx.commit();
+	
+	final Integer smsType = 5;
+	final String smsTemp="Your%20"+paymentFormBean.getAppId()+"%20received%20upfrontcharges,%20you%20will%20get%20soon%20full%20payment.";
+	
+	final String application_ID = paymentFormBean.getAppId();
+	Thread notify = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			SMSBuilder obj = new SMSBuilder();
+			obj.getSmsTemplate(application_ID, smsType,smsTemp);
+		}
+	}, "notify");
+	notify.start();
 	}
 	catch(Exception e){
 		e.printStackTrace();
@@ -2389,6 +2397,18 @@ public String mcApprovePayment(PaymentFormBean paymentFormBean ){
 	companyDtl.setUpdateUserId("Administrator");
 	session.update(companyDtl);
 	tx1.commit();
+	final Integer smsType = 6;
+	final String smsTemp="Final%20Approved%20successfully,Your%20received%20full%20payment%20Rs"+paymentFormBean.getTotalAmount()+",%20please%20pay%20immeditely.";
+	
+	final String application_ID = paymentFormBean.getAppId();
+	Thread notify = new Thread(new Runnable() {
+		@Override
+		public void run() {
+			SMSBuilder obj = new SMSBuilder();
+			obj.getSmsTemplate(application_ID, smsType,smsTemp);
+		}
+	}, "notify");
+	notify.start();
 		return "Payment Details Approved";
 	}
 

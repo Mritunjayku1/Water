@@ -52,13 +52,15 @@ INSERT INTO MASTER_ROLE(CREATE_TS,CREATE_USERID,ROLE_DESC,ROLE_NAME,STATUS_FLAG,
 INSERT INTO MASTER_ROLE(ROLE_ID,CREATE_TS,CREATE_USERID,ROLE_DESC,ROLE_NAME,STATUS_FLAG,UPDATE_TS,UPDATE_USERID) VALUES(4,'2017-06-03','Admin','Accountant','ACC','Y','2017-06-03','Admin');
 INSERT INTO MASTER_ROLE(ROLE_ID,CREATE_TS,CREATE_USERID,ROLE_DESC,ROLE_NAME,STATUS_FLAG,UPDATE_TS,UPDATE_USERID) VALUES(10,'2017-06-03','Admin','ConfigrationManagement','CM','Y','2017-06-03','Admin');
 insert into sms_temp values('1','2017-06-04 10:10:10','InitialLoad','OnlineSubmission.ftl','Y','2017-06-04 10:10:10','InitialLoad');
-insert into sms_temp values('2','2017-06-04 10:10:10','InitialLoad','Inspection.ftl','Y','2017-06-04 10:10:10','InitialLoad');
-insert into sms_temp values('3','2017-06-04 10:10:10','InitialLoad','afterInspection.ftl','Y','2017-06-04 10:10:10','InitialLoad');
-insert into sms_temp values('4','2017-06-04 10:10:10','InitialLoad','estimationcost.ftl','Y','2017-06-04 10:10:10','InitialLoad');
-insert into sms_temp values('5','2017-06-04 10:10:10','InitialLoad','acknowledgementReceipt.ftl','Y','2017-06-04 10:10:10','InitialLoad');
-insert into sms_temp values('6','2017-06-04 10:10:10','InitialLoad','CompletionConnection.ftl','Y','2017-06-04 10:10:10','InitialLoad');
-insert into sms_temp values('7','2017-06-04 10:10:10','InitialLoad','mcapproved.ftl','Y','2017-06-04 10:10:10','InitialLoad'); 
-insert into sms_temp values('8','2017-06-04 10:10:10','InitialLoad','mcrejected.ftl','Y','2017-06-04 10:10:10','InitialLoad');
+insert into sms_temp values('2','2017-06-04 10:10:10','InitialLoad','Ho.ftl','Y','2017-06-04 10:10:10','InitialLoad');
+insert into sms_temp values('3','2017-06-04 10:10:10','InitialLoad','acknowledgementAppReceipt.ftl','Y','2017-06-04 10:10:10','InitialLoad');
+insert into sms_temp values('4','2017-06-04 10:10:10','InitialLoad','eeupfrontcharges.ftl','Y','2017-06-04 10:10:10','InitialLoad');
+insert into sms_temp values('5','2017-06-04 10:10:10','InitialLoad','eeFullpayment.ftl','Y','2017-06-04 10:10:10','InitialLoad');
+insert into sms_temp values('6','2017-06-04 10:10:10','InitialLoad','mcapproved.ftl','Y','2017-06-04 10:10:10','InitialLoad'); 
+insert into sms_temp values('7','2017-06-04 10:10:10','InitialLoad','eeFullpaymentApproved.ftl','Y','2017-06-04 10:10:10','InitialLoad'); 
+insert into sms_temp values('8','2017-06-04 10:10:10','InitialLoad','eeFullPaymentCompleted.ftl','Y','2017-06-04 10:10:10','InitialLoad'); 
+insert into sms_temp values('9','2017-06-04 10:10:10','InitialLoad','eeExecution.ftl','Y','2017-06-04 10:10:10','InitialLoad'); 
+insert into sms_temp values('10','2017-06-04 10:10:10','InitialLoad','mcrejected.ftl','Y','2017-06-04 10:10:10','InitialLoad');
 
 INSERT INTO EMPLOYEE_DTL(user_last_name,user_first_name,update_ts,UPDATE_USERID,ADJSTD_HIRE_DATE,CREATE_TS,CREATE_USERID,DPT_NAME,EMAIL_ADDR,LOGIN_PASSWORD,LOGIN_USER_NAME,STATUS_FLAG,ROLE_ID,ZONE_ID)    VALUES ('CEUSERLAST','CEUSER','2017-06-03','Admin','2017-06-03','2017-06-03','Admin','ChiefExecutive','ce.lingam2k7@govt.com','CEUSER','CEUSER','Y',1,1);
 INSERT INTO EMPLOYEE_DTL(user_last_name,user_first_name,update_ts,UPDATE_USERID,ADJSTD_HIRE_DATE,CREATE_TS,CREATE_USERID,DPT_NAME,EMAIL_ADDR,LOGIN_PASSWORD,LOGIN_USER_NAME,STATUS_FLAG,ROLE_ID,ZONE_ID)    VALUES ('EEUSERLAST','EEUSER','2017-06-03','Admin','2017-06-03','2017-06-03','Admin','EngineerExecutive','ce.lingam2k7@govt.com','EEUSER','EEUSER','Y',2,2);  

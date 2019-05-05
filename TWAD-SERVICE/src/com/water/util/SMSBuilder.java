@@ -114,6 +114,7 @@ public class SMSBuilder {
 			HashMap<String, String> smsdtls = new HashMap<String, String>();
 			smsdtls.put("ToMobileNo", emp.getPhoneNum().toString());
 			smsdtls.put("EmailId", emp.getEmailAddr().toString());
+			smsdtls.put("Body", smsTemp);
 			
 			Message = getMsgBody(smsdtls.get("Body"), smsdtls);
 			mobnumber = getMsgBody(smsdtls.get("ToMobileNo"), smsdtls);

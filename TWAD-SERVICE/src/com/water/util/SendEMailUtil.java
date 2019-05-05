@@ -94,7 +94,7 @@ public class SendEMailUtil {
 		         InternetAddress.parse(to));
 
 		         // Set Subject: header field
-		         message.setSubject("CMWSSB- New water supply connection");
+		         message.setSubject("TWAD- New water supply connection");
 
 		         // Now set the actual message
 		         message.setText(body);

@@ -2064,11 +2064,15 @@ try{
 	
 	//maha addedd
 	
-	final Integer smsType=3;
+	
 	final Integer emailType=3;
 	final String status="test";
 	
-	final String smsTemp="ok";
+	
+	
+	final Integer smsType = 2;
+	final String smsTemp="Dear%20sir,%20Your%20"+dDPaymentFormBean.getAppId()+"%20Application%20Assigned%20to%20Executive%20Officer.";
+	final String smsTempEE="You%20have%20received%20Application"+dDPaymentFormBean.getAppId();
 	final String application_ID = dDPaymentFormBean.getAppId();
 	Thread notify = new Thread(new Runnable() {
 		@Override
@@ -2077,7 +2081,7 @@ try{
 			obj.getSmsTemplate(application_ID,smsType,smsTemp);
 			obj.getStatus(application_ID, status);
 			
-			obj.getSmsTemplatetoEE(application_ID,smsType,smsTemp);
+			obj.getSmsTemplatetoEE(application_ID,smsType,smsTempEE);
 			obj.getStatustoEE(application_ID, status);
 		}
 	}, "notify");
@@ -2109,6 +2113,30 @@ finally{
 		companyDtl.setManagementComments(dDPaymentFormBean.getManagementComments());
 		session.update(companyDtl);
 		transaction.commit();
+		
+		//maha addedd
+		
+		
+		final Integer emailType=3;
+		final String status="test";
+		
+		
+		
+		final Integer smsType = 2;
+		final String smsTemp="Dear%20sir,%20Your%20"+dDPaymentFormBean.getAppId()+"%20Application%20Rected%20from%20Executive%20Officer,Please%20contact%20Executive%20Officer%20for%20further%20clarification.";
+		
+		final String application_ID = dDPaymentFormBean.getAppId();
+		Thread notify = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				SMSBuilder obj = new SMSBuilder();
+				obj.getSmsTemplate(application_ID,smsType,smsTemp);
+				obj.getStatus(application_ID, status);
+				
+			
+			}
+		}, "notify");
+		notify.start();
 		
 	}
 	catch(Exception e){
