@@ -3600,7 +3600,7 @@ sqlQuery.addScalar("appId", new StringType());
 			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
 					.createCriteria("companyPaymentDtl.appId","companyDtl")
 					.createCriteria("companyPaymentDtl.paymentType","paymentType")
-					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.division","division")
 					.createCriteria("companyDtl.eeStatus","eeStatus")
 					.setProjection(Projections.projectionList()
 							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
@@ -3621,7 +3621,7 @@ sqlQuery.addScalar("appId", new StringType());
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 4))
 					 .add(Restrictions.eq("paymentType.paymentTypeId",3))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())));
+					 .add(Restrictions.eq("division.divisionId", Integer.parseInt(companyDtlBean.getDivision())));
 					
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
@@ -3654,7 +3654,7 @@ sqlQuery.addScalar("appId", new StringType());
 			Criteria cr = session.createCriteria(CompanyPaymentDtl.class,"companyPaymentDtl")
 					.createCriteria("companyPaymentDtl.appId","companyDtl")
 					.createCriteria("companyPaymentDtl.paymentType","paymentType")
-					.createCriteria("companyDtl.office","office")
+					.createCriteria("companyDtl.division","division")
 					.createCriteria("companyDtl.eeStatus","eeStatus")
 					.setProjection(Projections.projectionList()
 							 .add(Projections.property("companyPaymentDtl.companyPaymentDtlID"),"companyPaymentDtlID")
@@ -3676,7 +3676,7 @@ sqlQuery.addScalar("appId", new StringType());
 					 .add(Restrictions.eq("companyDtl.active", 2))
 					 .add(Restrictions.eq("eeStatus.statusId", 5))
 					 .add(Restrictions.eq("paymentType.paymentTypeId",3))
-					 .add(Restrictions.eq("office.officeId", Integer.parseInt(companyDtlBean.getDivision())));
+					 .add(Restrictions.eq("division.divisionId", Integer.parseInt(companyDtlBean.getDivision())));
 							 cr.setResultTransformer(Transformers.aliasToBean(DDPaymentFormBean.class));
 					
 			

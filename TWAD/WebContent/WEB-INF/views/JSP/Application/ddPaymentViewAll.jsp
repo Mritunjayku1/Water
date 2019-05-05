@@ -92,7 +92,7 @@ $(function(){
                                              <th style="color:black !important"><b>Site Address</b></th>
                                              <th style="color:black !important"><b>Mobile No</b></th>
                                              <th style="color:black !important"><b>Email</b></th>
-                                             <th style="color:black !important"><b>Office Name</b></th>
+                                             <th style="color:black !important"><b>Division Name</b></th>
                                              <th style="color:black !important"><b>REQs MLD</b></th> 
                                              <th style="color:black !important"><b>Status</b></th>
                                         
@@ -113,7 +113,7 @@ $(function(){
                                             <td class="center">${app.getDoorNo()} ${app.getPlotNo()} ${app.getStreetName()},${app.getPinCode()} </td>
                                           <td>${app.getMobileNum()}</td>
                                           <td>${app.getEmailAddr()}</td>
-                                             <td class="center">${app.getOfficeName()}</td>
+                                             <td class="center">${app.getDivisionName()}</td>
                                              <td class="center">${app.getReqMld()}</td>
                                               <td class="center"><textarea  name="managementComments" style="width:100%;height:100%;">${app.getManagementComments()}</textarea></td>
                                                 
